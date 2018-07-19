@@ -1,36 +1,53 @@
 package Uboat;
 
-import Enigma.*;
-import GameManager.Game;
+import Machine.EnigmaMachine;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.io.*;
+import java.util.*;
 
 public class Uboat {
     private String uboatName;
-    private EnigmaManager enigmaManager;
-    private List<Integer> managedGamesID;
+    //private EnigmaManager enigmaManager;
+    private Map<Integer, String> managedGamesAnswers;//key is gameID, value is the originalCode
 
     public Uboat(String _uboatName){
         uboatName = _uboatName;
-        enigmaManager = new EnigmaManager();
-        managedGamesID = new ArrayList<>();
+        //enigmaManager = new EnigmaManager();
+        managedGamesAnswers = new HashMap<>();
     }
 
-    //save the new game ID to the managedGames array
+    /*save the new game ID to the managedGames array
     public void createGame(String xmlPath){
         Integer gameID = 0;
         if(enigmaManager.createEnigmaMachineFromXMLFile(xmlPath))//success
         {
-            //need to set Configuration - rand or choose?
-            String code = "decide where do we get the code from";
+            //need to choose Configuration and code
+            String code = "";
             String precessedCode = enigmaManager.process(code);
+            int neededNumOfAlies = 1;
+            String battlefieldName = "";
+            //Game newGame = GameFactory.createGame(battlefieldName, neededNumOfAlies);
+            managedGames.put(battlefieldName,code);
         }
         else
         {
             String error = enigmaManager.getErrorInMachineBuilding();
         }
-        managedGamesID.add(gameID);
+    }*/
+
+    public void addGame(Integer gameId)
+    {
+        managedGamesAnswers.put(gameId,"Uninitialized");
     }
 
+    public void setGameCode(Integer gameID, EnigmaMachine machineCopy) {
+    }
+
+    public boolean isRightAnswer(Integer _gameID, String _answer) {
+        String answer = managedGamesAnswers.get(_gameID);
+        if(answer.equals( _answer))
+            return true;
+        else
+            return false;
+    }
 }

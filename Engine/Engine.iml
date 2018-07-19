@@ -8,5 +8,7 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="Machine" />
+    <orderEntry type="module" module-name="Alies" />
+    <orderEntry type="module" module-name="Uboat" />
   </component>
 </module>

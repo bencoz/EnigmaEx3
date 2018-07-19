@@ -8,10 +8,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
@@ -34,6 +31,9 @@ public class Alies {
     private ServerSocket agentServer;
     private SocketHandler socketHandler;
 
+    private BlockingQueue<AliesResponse> answerToUboat_Queue;
+
+    //TODO: change? need to get en and dic according to the chosen game
     public Alies(EnigmaMachine em, List<String> _dictionary) {
         machine = em;
         dictionary = _dictionary;
@@ -200,4 +200,13 @@ public class Alies {
             e.printStackTrace();
         }
     }
+
+    public void setAnswersQueue(BlockingQueue<AliesResponse> _answersToUboat_queue) {
+        answerToUboat_Queue = _answersToUboat_queue;
+    }
+
+    public void stopDeciphering() {
+        status.stopDeciphering();
+    }
+
 }
