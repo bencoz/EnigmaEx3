@@ -36,6 +36,20 @@ public class EnigmaComponentFactoryImpl implements EnigmaComponentFactory {
             return enigmaMachine;
         }
     }
+    public EnigmaMachine createEnigmaMachineFromXMLInputStream(InputStream inputStream) throws FileNotFoundException {
+        EnigmaMachineImpl enigmaMachine = null;
+        JAXBManager.Actual.Enigma res = null;
+
+        try {
+            JAXBManager.JAXBGenerated.Enigma enigma = deserializeFrom(inputStream);
+            res = makeEnigmaFromJAXB(enigma);
+            enigmaMachine = new EnigmaMachineImpl(res);
+        } catch (JAXBException e) {
+            e.printStackTrace();
+        } finally {
+            return enigmaMachine;
+        }
+    }
 
     private JAXBManager.Actual.Enigma makeEnigmaFromJAXB(JAXBManager.JAXBGenerated.Enigma enigma) {
         JAXBManager.Actual.Enigma res;

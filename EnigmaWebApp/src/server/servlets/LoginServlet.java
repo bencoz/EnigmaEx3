@@ -16,11 +16,14 @@ import static server.constants.Constants.USERTYPE;
 
 public class LoginServlet extends HttpServlet {
 
+
     // urls that starts with forward slash '/' are considered absolute
     // urls that doesn't start with forward slash '/' are considered relative to the place where this servlet request comes from
     // you can use absolute paths, but then you need to build them from scratch, starting from the context path
     // ( can be fetched from request.getContextPath() ) and then the 'absolute' path from it.
     // Each method with it's pros and cons...
+    private final String GAMES_LIST_URL = "../games/gamelist";
+    private final String NEW_GAME_URL = "../games/newgame.html";
     private final String CHAT_ROOM_URL = "../chatroom/chatroom.html";
     private final String SIGN_UP_URL = "../signup/singup.html";
     private final String LOGIN_ERROR_URL = "/pages/loginerror/login_attempt_after_error.jsp";  // must start with '/' since will be used in request dispatcher...
@@ -50,6 +53,7 @@ public class LoginServlet extends HttpServlet {
             } else {
                 //normalize the username value
                 usernameFromParameter = usernameFromParameter.trim();
+                userTypeFromParameter = userTypeFromParameter.trim();
                 if (userManager.isUserExists(usernameFromParameter)) {
                     String errorMessage = "Username " + usernameFromParameter + " already exists. Please enter a different username.";
                     // username already exists, forward the request back to index.jsp
@@ -70,7 +74,11 @@ public class LoginServlet extends HttpServlet {
 
                     //redirect the request to the chat room - in order to actually change the URL
                     System.out.println("On login, request URI is: " + request.getRequestURI());
-                    response.sendRedirect(CHAT_ROOM_URL);
+                    if (userTypeFromParameter == "Uboat")
+                        response.sendRedirect(NEW_GAME_URL);
+                    else
+                        response.sendRedirect(GAMES_LIST_URL);
+
                 }
             }
         } else {

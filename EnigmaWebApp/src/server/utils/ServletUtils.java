@@ -1,5 +1,6 @@
 package server.utils;
 
+import Enigma.EnigmaManager;
 import GameManager.GameManager;
 import Users.UserManager;
 
@@ -16,6 +17,7 @@ public class ServletUtils {
 	private static final String USER_MANAGER_ATTRIBUTE_NAME = "userManager";
 	private static final String CHAT_MANAGER_ATTRIBUTE_NAME = "chatManager";
 	private static final String GAME_MANAGER_ATTRIBUTE_NAME = "gameManager";
+	private static final String ENIGMA_MANAGER_ATTRIBUTE_NAME = "enigmaManager";
 
 	public static UserManager getUserManager(ServletContext servletContext) {
 		if (servletContext.getAttribute(USER_MANAGER_ATTRIBUTE_NAME) == null) {
@@ -48,4 +50,10 @@ public class ServletUtils {
 		}
 		return INT_PARAMETER_ERROR;
 	}
+
+    public static EnigmaManager getEnigmaManager(ServletContext servletContext) {
+		if (servletContext.getAttribute(ENIGMA_MANAGER_ATTRIBUTE_NAME) == null) {
+			servletContext.setAttribute(ENIGMA_MANAGER_ATTRIBUTE_NAME, new EnigmaManager());
+		}
+		return (EnigmaManager) servletContext.getAttribute(ENIGMA_MANAGER_ATTRIBUTE_NAME);    }
 }

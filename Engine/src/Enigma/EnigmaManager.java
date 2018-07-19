@@ -1,6 +1,7 @@
 package Enigma;
 
 import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.time.Instant;
 import java.util.Comparator;
 import java.util.List;
@@ -23,9 +24,9 @@ public class EnigmaManager
 
     /*In case of success create the wanted machine and save it (member) and return true.
         In case of failure updates the error string (member) and return false*/
-    public boolean createEnigmaMachineFromXMLFile(String path) {
+    public boolean createEnigmaMachineFromXMLInputStream(InputStream stream) {
         try {
-            machine = factory.createEnigmaMachineFromXMLFile(path);
+            machine = factory.createEnigmaMachineFromXMLInputStream(stream);
         } catch (FileNotFoundException e){
             errorInMachineBuilding = "Could not find XML file.";
         }
