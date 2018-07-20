@@ -2,9 +2,11 @@ package Enigma;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.lang.management.BufferPoolMXBean;
 import java.time.Instant;
 import java.util.Comparator;
 import java.util.List;
+
 import Machine.*;
 import Factory.*;
 import JAXBManager.Actual.*;
@@ -211,5 +213,14 @@ public class EnigmaManager
                 return false;
         }
         return true;
+    }
+
+    public Battlefield getBattlefield() {
+        return machine.getBattlefield();
+    }
+
+    public String getBattleName()
+    {
+        return machine.getBattlefield().getName();
     }
 }

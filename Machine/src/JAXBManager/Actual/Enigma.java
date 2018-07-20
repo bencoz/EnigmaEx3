@@ -5,6 +5,7 @@ import java.io.Serializable;
 public class Enigma implements Serializable {
     private Machine machine;
     private Decipher decipher;
+    private Battlefield battlefield;
 
     public Enigma() {
     }
@@ -24,4 +25,8 @@ public class Enigma implements Serializable {
     public Decipher getDecipher(){
         return decipher;
     }
+
+    public void setBattlefield(Battlefield battlefield) { this.battlefield = battlefield; }
+
+    public Battlefield getBattlefield() { return battlefield; }
 }

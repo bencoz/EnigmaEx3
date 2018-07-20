@@ -1,4 +1,4 @@
-package Alies;
+package Factory;
 
 public enum DifficultyLevel {
     Easy,

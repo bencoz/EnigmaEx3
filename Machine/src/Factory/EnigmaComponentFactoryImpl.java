@@ -15,10 +15,9 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 
-
 public class EnigmaComponentFactoryImpl implements EnigmaComponentFactory {
 
-    private final static String JAXB_PACKAGE_NAME = "EnigmaMachineFactory.JAXBManager.JAXBGenerated";
+    private final static String JAXB_PACKAGE_NAME = "JAXBManager.JAXBGenerated";
 
     public EnigmaMachine createEnigmaMachineFromXMLFile(String path) throws FileNotFoundException {
         EnigmaMachineImpl enigmaMachine = null;

@@ -5,7 +5,7 @@ package server.servlets;
 
 import Enigma.EnigmaManager;
 import GameManager.GameManager;
-import Machine.EnigmaMachine;
+import Machine.*;
 import Users.UserManager;
 import server.utils.ServletUtils;
 import server.utils.SessionUtils;
@@ -38,16 +38,16 @@ public class NewGameServlet extends HttpServlet {
         EnigmaManager enigmaManager = ServletUtils.getEnigmaManager(getServletContext());
         Part part = request.getPart("xmlFile");
         boolean isEnigmaBuildOK = enigmaManager.createEnigmaMachineFromXMLInputStream(part.getInputStream());
-//        boolean isGameNameExists = gameManager.isGameExist(enigmaManager.getBattlefiled.getName());
-//        if(!isEnigmaBuildOK) {
-//            String error = enigmaManager.getErrorInMachineBuilding();
-//            response.sendError(403, error); //TODO :: CHOOSE ERROR CODE PROPERLY
-//        } else if(isGameNameExists){
-//            response.sendError(403, "name already exists"); //TODO :: CHOOSE ERROR CODE PROPERLY
-//
-//        } else {
-//
-//        }
+        boolean isGameNameExists = gameManager.isGameExist(enigmaManager.getBattleName());
+        if(!isEnigmaBuildOK) {
+            String error = enigmaManager.getErrorInMachineBuilding();
+            response.sendError(403, error); //TODO :: CHOOSE ERROR CODE PROPERLY
+        } else if(isGameNameExists){
+            response.sendError(403, "name already exists"); //TODO :: CHOOSE ERROR CODE PROPERLY
+        } else {
+            gameManager.createGame(usernameFromSession, enigmaManager);
+            //TODO: response....(?)
+        }
     }
 
 }

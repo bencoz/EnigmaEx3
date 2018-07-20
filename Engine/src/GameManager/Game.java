@@ -2,6 +2,7 @@ package GameManager;
 
 import Alies.Alies;
 import Alies.AliesResponse;
+import Alies.DifficultyLevel;
 import Machine.EnigmaMachine;
 import Uboat.Uboat;
 import Users.User;
@@ -18,19 +19,18 @@ public class Game {
     private String winningAliesName = null;
     private Integer neededNumOfAlies;
     private Integer numOfAliesSigned = 0;
-    private Integer gameID = 0;
     private String battlefieldName;
     private BlockingQueue<AliesResponse> answersFromAlies_Queue;
     private GameStatus gameStatus;
+    private Factory.DifficultyLevel difficultyLevel;
 
     //copy of the machine and code for the playing alies
     private EnigmaMachine machine;
-    private String code;
+    private String encryptedCode;
 
     //private machineCopy; // for the playing alies to clone
 
-    public Game(Integer _ID, String _battlefieldName, Integer _neededNumOfAlies ){
-        gameID = _ID;
+    public Game(String _battlefieldName, Integer _neededNumOfAlies, Factory.DifficultyLevel difficultyLevel){
         battlefieldName = _battlefieldName;
         neededNumOfAlies = _neededNumOfAlies;
         answersFromAlies_Queue = new ArrayBlockingQueue<>(neededNumOfAlies);
@@ -85,9 +85,6 @@ public class Game {
         }
     }
 
-    public Integer getID() {
-        return gameID;
-    }
 
     public void setManagerAs(Uboat _managingUboat)
     {
@@ -99,10 +96,14 @@ public class Game {
     }
 
     public boolean isRightAnswer(String _answer){
-        return managingUboat.isRightAnswer(gameID, _answer);
+        return managingUboat.isRightAnswer(battlefieldName, _answer);
     }
 
     public void setAsInit(){
         gameStatus = GameStatus.WAITING;
+    }
+
+    public String getBattlefieldName() {
+        return battlefieldName;
     }
 }

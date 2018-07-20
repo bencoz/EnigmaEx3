@@ -1,10 +1,7 @@
 package JAXBManager;
 
 import JAXBManager.Actual.Machine;
-import JAXBManager.JAXBGenerated.Decipher;
-import JAXBManager.JAXBGenerated.Enigma;
-import JAXBManager.JAXBGenerated.Reflector;
-import JAXBManager.JAXBGenerated.Rotor;
+import JAXBManager.JAXBGenerated.*;
 
 import java.util.List;
 
@@ -22,6 +19,7 @@ public class JAXBToActual {
         List<Reflector> JAXBReflectors;
         List<Rotor> JAXBRotors;
         Decipher decipher = enigma.getDecipher();
+        Battlefield battlefield = enigma.getBattlefield();
         JAXBManager.Actual.Enigma res = new JAXBManager.Actual.Enigma();
         Machine machine = new Machine();
 
@@ -53,6 +51,11 @@ public class JAXBToActual {
             ActualDecipher.appedToDictionary(words.toUpperCase().split(" "));
 
             res.setDecipher(ActualDecipher);
+        }
+
+        if (battlefield != null){
+            JAXBManager.Actual.Battlefield ActualBattlefield = new JAXBManager.Actual.Battlefield(battlefield);
+            res.setBattlefield(ActualBattlefield);
         }
 
         res.setMachine(machine);

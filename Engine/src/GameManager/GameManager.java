@@ -1,47 +1,50 @@
 package GameManager;
 
-import Alies.Alies;
+import Alies.*;
+import Enigma.EnigmaManager;
+import Factory.DifficultyLevel;
 import Users.*;
 
 import java.util.*;
 import Uboat.*;
 
 public class GameManager {
-    private Map<Integer,Game> games; //key will be gameID
+    private Map<String,Game> games; //key will be battlefieldName
     private Map<String, Uboat> playingUboats;
     private Map<String, Alies> playingAlies;
+    private String error;
 
     public GameManager(){
         games = new HashMap<>();
         playingUboats = new HashMap<>();
         playingAlies = new HashMap<>();
+
     }
 
-    public void createGame(String managingUboat_name, String xmlPath)
-            //the managingUboat is the user how send the request to open the game
+    public void createGame(String managingUboat_name, EnigmaManager enigmaManager)
     {
-        Game newGame = GameFactory.createGameFromXml(xmlPath);
-        if(isGameExist(newGame)) {
-            //need to return error
-        }
-        else {
-            //search if managingUboat exist in the system and if not create him
-            Uboat managingUboat = findOrCreatePlayingUboat(managingUboat_name);
-            newGame.setManagerAs(managingUboat);
-            managingUboat.addGame(newGame.getID());
-        }
+        String battlefieldName = enigmaManager.getBattlefield().getName();
+        Integer neededNumOfAlies = enigmaManager.getBattlefield().getNumOfAllies();
+        DifficultyLevel difficultyLevel = enigmaManager.getBattlefield().getLevel();
+
+        Game newGame = new Game(battlefieldName, neededNumOfAlies, difficultyLevel);
+
+        //search if managingUboat exist in the system and if not create him
+        Uboat managingUboat = findOrCreatePlayingUboat(managingUboat_name);
+        newGame.setManagerAs(managingUboat);
+        managingUboat.addGame(newGame.getBattlefieldName());
     }
 
-    public void setGameCode(String _managingUboat_name, Integer _gameID){
+    /*public void setGameCode(String _managingUboat_name, Integer _gameID){
         Uboat managingUboat = findPlayingUboat(_managingUboat_name);
         Game currGame = findGame(_gameID);
         managingUboat.setGameCode(_gameID, currGame.getMachineCopy());//TODO: get config and code
-    }
+    }*/
 
-    private Game findGame(Integer _gameID) {
+    private Game findGame(String _battlefieldName) {
         Game resGame = null;
-        if(games.containsKey(_gameID)){
-            resGame = games.get(_gameID);
+        if(games.containsKey(_battlefieldName)){
+            resGame = games.get(_battlefieldName);
         }
         return resGame;
     }
@@ -69,10 +72,13 @@ public class GameManager {
         return resUboat;
     }
 
-    public boolean isGameExist(Game _game)
+    public boolean isGameExist(String battlefieldName)
             //compare battlefieldName
     {
-        return false;
+        boolean res = false;
+        if(games.containsKey(battlefieldName))
+            res = true;
+        return res;
     }
 
 }

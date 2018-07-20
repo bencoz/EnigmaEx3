@@ -1,10 +1,7 @@
 package Machine;
 
 import Builder.SecretBuilder;
-import JAXBManager.Actual.Decipher;
-import JAXBManager.Actual.Enigma;
-import JAXBManager.Actual.Reflector;
-import JAXBManager.Actual.Rotor;
+import JAXBManager.Actual.*;
 
 import java.util.List;
 import java.util.function.Consumer;
@@ -113,4 +110,6 @@ public interface EnigmaMachine {
     Decipher getDecipher();
 
     Enigma getEnigma();
+
+    Battlefield getBattlefield();
 }

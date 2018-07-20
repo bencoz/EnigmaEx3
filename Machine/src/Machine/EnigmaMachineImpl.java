@@ -29,6 +29,11 @@ public class EnigmaMachineImpl implements EnigmaMachine, Serializable {
     }
 
     @Override
+    public JAXBManager.Actual.Battlefield getBattlefield() {
+        return enigma.getBattlefield();
+    }
+
+    @Override
     public SecretBuilder createSecret() {
         return new SecretBuilder(this);
     }

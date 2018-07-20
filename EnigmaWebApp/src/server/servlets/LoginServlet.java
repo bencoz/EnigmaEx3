@@ -16,7 +16,6 @@ import static server.constants.Constants.USERTYPE;
 
 public class LoginServlet extends HttpServlet {
 
-
     // urls that starts with forward slash '/' are considered absolute
     // urls that doesn't start with forward slash '/' are considered relative to the place where this servlet request comes from
     // you can use absolute paths, but then you need to build them from scratch, starting from the context path
@@ -74,11 +73,10 @@ public class LoginServlet extends HttpServlet {
 
                     //redirect the request to the chat room - in order to actually change the URL
                     System.out.println("On login, request URI is: " + request.getRequestURI());
-                    if (userTypeFromParameter == "Uboat")
+                    if (userTypeFromParameter.equals("Uboat"))
                         response.sendRedirect(NEW_GAME_URL);
                     else
                         response.sendRedirect(GAMES_LIST_URL);
-
                 }
             }
         } else {
