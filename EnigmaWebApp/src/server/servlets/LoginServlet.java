@@ -22,7 +22,7 @@ public class LoginServlet extends HttpServlet {
     // ( can be fetched from request.getContextPath() ) and then the 'absolute' path from it.
     // Each method with it's pros and cons...
     private final String GAMES_LIST_URL = "../games/gamelist";
-    private final String NEW_GAME_URL = "../games/newgame.html";
+    private final String NEW_GAME_URL = "../games/uploadgame.html";
     private final String CHAT_ROOM_URL = "../chatroom/chatroom.html";
     private final String SIGN_UP_URL = "../signup/singup.html";
     private final String LOGIN_ERROR_URL = "/pages/loginerror/login_attempt_after_error.jsp";  // must start with '/' since will be used in request dispatcher...
