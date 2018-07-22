@@ -28,5 +28,6 @@
     <orderEntry type="library" scope="PROVIDED" name="Tomcat 8.5.23" level="application_server_libraries" />
     <orderEntry type="library" name="Java EE 6-Java EE 6" level="project" />
     <orderEntry type="library" name="com.google.code.gson:gson:2.1" level="project" />
+    <orderEntry type="module" module-name="Engine" />
   </component>
 </module>
