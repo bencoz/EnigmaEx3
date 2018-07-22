@@ -35,6 +35,26 @@ public class GameManager {
         managingUboat.addGame(newGame.getBattlefieldName());
     }
 
+    public void addAliesToGame(String _newAliesName, String _battlefieldName){
+        Alies newAlies = findOrCreatePlayingAlies(_newAliesName);
+        Game game = findGame(_battlefieldName);
+        game.addPlayingAlies(newAlies);
+    }
+
+    private Alies findOrCreatePlayingAlies(String _aliesName) {
+        Alies resAlies;
+        if(playingAlies.containsKey(_aliesName)) {
+            resAlies = playingAlies.get(_aliesName);
+        }
+        else{
+            resAlies = new Alies(_aliesName);
+            playingAlies.put(_aliesName, resAlies);
+        }
+        return resAlies;
+    }
+
+
+
     /*public void setGameCode(String _managingUboat_name, Integer _gameID){
         Uboat managingUboat = findPlayingUboat(_managingUboat_name);
         Game currGame = findGame(_gameID);
@@ -81,4 +101,9 @@ public class GameManager {
         return res;
     }
 
+    public void loadGameSettings(String _battleName, EnigmaManager enigmaManager, List<Integer> chosenRotorsID, List<Character> chosenRotorsLoc, Integer chosenReflectorID) {
+        Game game = findGame(_battleName);
+        enigmaManager.setMachineConfig(chosenRotorsID,chosenRotorsLoc,chosenReflectorID);
+        game.setMachineAs(enigmaManager.getMachine());
+    }
 }

@@ -7,6 +7,7 @@ import java.time.Instant;
 import java.util.Comparator;
 import java.util.List;
 
+import Builder.SecretBuilder;
 import Machine.*;
 import Factory.*;
 import JAXBManager.Actual.*;
@@ -222,5 +223,15 @@ public class EnigmaManager
     public String getBattleName()
     {
         return machine.getBattlefield().getName();
+    }
+
+    public void setMachineConfig(List<Integer> chosenRotorsID, List<Character> chosenRotorsLoc, Integer chosenReflectorID) {
+        SecretBuilder secretBuilder = machine.createSecret();
+        for(int i = 0; i < chosenRotorsID.size(); i++) {
+            secretBuilder.selectRotor(chosenRotorsID.get(i), chosenRotorsLoc.get(i));
+        }
+        secretBuilder.selectReflector(chosenReflectorID);
+        secretBuilder.create();
+        //currentCodeFormat = new CodeFormat(chosenRotorsID, chosenRotorsLoc, toRoman(chosenReflectorID));
     }
 }
