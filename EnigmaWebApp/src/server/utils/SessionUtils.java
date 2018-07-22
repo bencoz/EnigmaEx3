@@ -16,4 +16,8 @@ public class SessionUtils {
     public static void clearSession (HttpServletRequest request) {
         request.getSession().invalidate();
     }
+
+    public static String getBattleName(HttpServletRequest request) { //TODO:IMPLEMENT
+        return "";
+    }
 }

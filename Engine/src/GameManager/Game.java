@@ -26,6 +26,7 @@ public class Game {
 
     //copy of the machine and code for the playing alies
     private EnigmaMachine machine;
+    private List<String> dictionary;
     private String encryptedCode;
 
     //private machineCopy; // for the playing alies to clone
@@ -43,7 +44,7 @@ public class Game {
     public void addPlayingAlies(Alies _alies){
         playingAlies.add(_alies);
         numOfAliesSigned++;
-        _alies.setAnswersQueue(answersFromAlies_Queue);
+        _alies.setNewGameDetails(machine.deepCopy(),dictionary, answersFromAlies_Queue);
         if(numOfAliesSigned == neededNumOfAlies)
         {
             gameStatus = GameStatus.ACTIVE;

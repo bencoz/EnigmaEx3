@@ -13,6 +13,7 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
 public class Alies {
+    private String aliesName;
     private String codeToDecipher;
     private List<String> dictionary;
     private String excludeWords;
@@ -34,7 +35,11 @@ public class Alies {
     private BlockingQueue<AliesResponse> answerToUboat_Queue;
 
     //TODO: change? need to get en and dic according to the chosen game
-    public Alies(EnigmaMachine em, List<String> _dictionary) {
+    public Alies(String _name) {
+        aliesName = _name;
+    }
+
+    public void setNewGameDetails(EnigmaMachine em, List<String> _dictionary, BlockingQueue<AliesResponse> _answersFromAlies_Queue){
         machine = em;
         dictionary = _dictionary;
         excludeWords = em.getDecipher().getExcludeChars();
@@ -47,8 +52,11 @@ public class Alies {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        answerToUboat_Queue = _answersFromAlies_Queue;
         System.out.println("listening on port: " + agentServer.getLocalPort());
     }
+
+
     public void start(){
         this.decipheringStartTime = System.currentTimeMillis();
         activateAgents();
@@ -209,4 +217,7 @@ public class Alies {
         status.stopDeciphering();
     }
 
+    public void setMachineCopy(EnigmaMachine _machineCopy) {
+        machine = _machineCopy;
+    }
 }
