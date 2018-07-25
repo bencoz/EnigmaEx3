@@ -106,4 +106,8 @@ public class GameManager {
         enigmaManager.setMachineConfig(chosenRotorsID,chosenRotorsLoc,chosenReflectorID);
         game.setMachineAs(enigmaManager.getMachine());
     }
+
+    public Collection<Game> getGames(){
+        return games.values();
+    }
 }

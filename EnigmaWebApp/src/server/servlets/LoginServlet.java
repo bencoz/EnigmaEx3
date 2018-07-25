@@ -21,7 +21,7 @@ public class LoginServlet extends HttpServlet {
     // you can use absolute paths, but then you need to build them from scratch, starting from the context path
     // ( can be fetched from request.getContextPath() ) and then the 'absolute' path from it.
     // Each method with it's pros and cons...
-    private final String GAMES_LIST_URL = "../games/gamelist";
+    private final String GAMES_LIST_URL = "../games/gamelist.html";
     private final String NEW_GAME_URL = "../games/uploadgame.html";
     private final String CHAT_ROOM_URL = "../chatroom/chatroom.html";
     private final String SIGN_UP_URL = "../signup/singup.html";

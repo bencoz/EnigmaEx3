@@ -56,6 +56,8 @@ public class NewGameServlet extends HttpServlet {
         request.setAttribute("rotors", rotorsHTML); // This will be available as ${rotors}
         request.setAttribute("rotorsLocation", rotorsLocation); // This will be available as ${rotorsLocation}
         request.setAttribute("reflectors", reflectors); // This will be available as ${reflectors}
+        request.setAttribute("aliesdisplay", "none");
+        request.setAttribute("uboatdisplay", "inline-flex");
         request.getRequestDispatcher("setmachine.jsp").forward(request, response);
     }
 

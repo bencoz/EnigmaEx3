@@ -4,8 +4,12 @@
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
          version="3.1">
     <servlet>
-        <servlet-name>EnigmaServlet</servlet-name>
-        <servlet-class>server.servlets.EnigmaServlet</servlet-class>
+        <servlet-name>LoadGameSettingsServlet</servlet-name>
+        <servlet-class>server.servlets.LoadGameSettingsServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>GameListServlet</servlet-name>
+        <servlet-class>server.servlets.GameListServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>NewGameServlet</servlet-name>
@@ -20,8 +24,8 @@
         <servlet-class>server.servlets.UsersListServlet</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>EnigmaServlet</servlet-name>
-        <url-pattern>/enigma</url-pattern>
+        <servlet-name>LoadGameSettingsServlet</servlet-name>
+        <url-pattern>/games/load</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>NewGameServlet</servlet-name>
@@ -34,6 +38,10 @@
     <servlet-mapping>
         <servlet-name>UsersListServlet</servlet-name>
         <url-pattern>/userslist</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>GameListServlet</servlet-name>
+        <url-pattern>/gameslist</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

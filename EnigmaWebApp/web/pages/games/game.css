@@ -1,0 +1,59 @@
+html {
+    height: 100%;
+    width: 100%;
+}
+body {
+    float: left;
+    height: 100%;
+    width: 100%;
+}
+#source-msg-container{
+    margin:2px;
+}
+.settings > input {
+    margin: 2px;
+    width: 30px;
+    text-transform: uppercase;
+}
+.uboat-game{
+    width: 40%;
+    display: inline-flex;
+}
+.alies-game{
+    width: 40%;
+    display: inline-flex;
+}
+.msg-container{
+    width: 50%;
+    display: inline-flex;
+}
+.alies-info-container{
+    height: 40%;
+    display: inline-flex;
+}
+.game-container {
+    width: 100%;
+    height: 100%;
+}
+.logout-container{
+    width: 100%;
+}
+.logout-btn{
+    float: right;
+    margin: 10px;
+}
+.target-msg-container{
+    float: left;
+    padding-left: 10px;
+}
+.uboat-ready-btn{
+    float: left;
+}
+.alies-list{
+    position: fixed;
+    padding-top: 35px;
+}
+.msg-list{
+    position: fixed;
+    padding-top: 50px;
+}

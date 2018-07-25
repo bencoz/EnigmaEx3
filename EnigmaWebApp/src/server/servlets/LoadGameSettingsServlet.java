@@ -15,7 +15,7 @@ import java.util.List;
 
 public class LoadGameSettingsServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        response.sendRedirect("games/loadgamesetting.html");
+
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -27,6 +27,6 @@ public class LoadGameSettingsServlet extends HttpServlet {
         List<Character> chosenRotorsLoc = null;
         Integer chosenReflectorID = null;
 
-        gameManager.loadGameSettings(battleNameFromSession, chosenRotorsID, chosenRotorsLoc, chosenReflectorID);
+        gameManager.loadGameSettings(battleNameFromSession, enigmaManager, chosenRotorsID, chosenRotorsLoc, chosenReflectorID);
     }
 }
