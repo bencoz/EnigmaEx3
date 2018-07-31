@@ -107,3 +107,27 @@ $(function() {
     //on each call it triggers another execution of itself later (1 second later)
     //triggerAjaxMsgContent();
 });
+function disableMachineConfig() {
+    $('#fieldset').setAttribute('disabled', 'disabled');
+}
+function addOutputText(text) {
+    $('.target-msg-value').innerText = text;
+}
+$(function () {
+    $('#config').submit(function(){
+        $.ajax({
+            url: $('#config').attr('action'),
+            type: 'POST',
+            data : $('#config').serialize(),
+            success: function(data, textStatus, xhr) {
+                if (xhr.status == 200) {
+                    console.log(xhr.status);
+                    console.log('form submitted.');
+                    disableMachineConfig();
+                    addOutputText(xhr.responseText);
+                }
+            }
+        });
+        return false;
+    });
+});

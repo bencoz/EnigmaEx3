@@ -20,6 +20,7 @@
         <div class="uboat-settings-container">
             <h2>Machine Configuration</h2>
             <form class="uboat-settings" id="config" method="GET" action="./load">
+                <fieldset id="fieldset">
                     <table>
                         <tbody>
                         <tr>
@@ -58,6 +59,7 @@
                         </tr>
                         </tbody>
                     </table>
+                </fieldset>
             </form>
             <button class="uboat-ready-btn" type="submit" form="config">
                 Ready
