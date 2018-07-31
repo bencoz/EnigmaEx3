@@ -47,7 +47,10 @@ public class EnigmaManager
             return false;
         if (!isMachineReflectorsOK())
             return false;
-
+        if(machine.getBattlefield() == null) {
+            errorInMachineBuilding = "Machine Battlefield Uninitialized";
+            return false;
+        }
         return true;
     }
 
