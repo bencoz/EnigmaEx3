@@ -13,15 +13,15 @@ import javax.servlet.http.Part;
 import java.io.IOException;
 
 public class JoinGameServlet extends HttpServlet {
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.sendRedirect("games/joingame.html");
     }
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String usernameFromSession = SessionUtils.getUsername(request);
-        String battleNameFromSession = SessionUtils.getGameName(request);
+        String battleNameRequested = request.getParameter("battleName");
         GameManager gameManager = ServletUtils.getGameManager(getServletContext());
 
-        gameManager.addAliesToGame(usernameFromSession, battleNameFromSession);
+        gameManager.addAliesToGame(usernameFromSession, battleNameRequested);
     }
 }
