@@ -19,7 +19,7 @@ public class JoinGameServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String usernameFromSession = SessionUtils.getUsername(request);
-        String battleNameFromSession = SessionUtils.getBattleName(request);
+        String battleNameFromSession = SessionUtils.getGameName(request);
         GameManager gameManager = ServletUtils.getGameManager(getServletContext());
 
         gameManager.addAliesToGame(usernameFromSession, battleNameFromSession);

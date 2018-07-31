@@ -1,9 +1,8 @@
 package server.servlets;
 
-import Enigma.EnigmaManager;
+import Enigma.*;
 import GameManager.*;
-import Machine.*;
-import Users.UserManager;
+
 import server.constants.Constants;
 import server.utils.ServletUtils;
 import server.utils.SessionUtils;
@@ -30,26 +29,34 @@ public class NewGameServlet extends HttpServlet {
         String usernameFromSession = SessionUtils.getUsername(request);
         GameManager gameManager = ServletUtils.getGameManager(getServletContext());
         EnigmaManager enigmaManager = gameManager.createNewEnigmaManager();
-        Part part = request.getPart("xmlFile");
+        Part part = request.getPart("fake-key-1");
         boolean isEnigmaBuildOK = enigmaManager.createEnigmaMachineFromXMLInputStream(part.getInputStream());
-        boolean isGameNameExists = gameManager.isGameExist(enigmaManager.getBattleName());
         if(!isEnigmaBuildOK) {
             String error = enigmaManager.getErrorInMachineBuilding();
             response.sendError(403, error); //TODO :: CHOOSE ERROR CODE PROPERLY
+            return;
         }
+        String gameName = enigmaManager.getBattleName();
+        boolean isGameNameExists = gameManager.isGameExist(gameName);
         if(isGameNameExists){
             response.sendError(403, "name already exists"); //TODO :: CHOOSE ERROR CODE PROPERLY
+            return;
         }
         gameManager.createGame(usernameFromSession, enigmaManager);
         //response.sendRedirect();//TODO: response....(?)
         String rotorsHTML = generateRotorsHTML(enigmaManager.getMachine().getRotors().size());
         String rotorsLocation = generateRotorsLocationHTML(enigmaManager.getMachine().getRotors().size());
         String reflectors = generateReflectorsHTML(enigmaManager.getMachine().getReflectors().size());
-
+        request.setAttribute("battlefield", gameName);
+        request.setAttribute("uboatdisplay", "inline-flex");
+        request.setAttribute("aliesdisplay","none");
+        request.setAttribute("rotors", rotorsHTML);
         request.setAttribute("rotors", rotorsHTML); // This will be available as ${rotors}
         request.setAttribute("rotorsLocation", rotorsLocation); // This will be available as ${rotorsLocation}
         request.setAttribute("reflectors", reflectors); // This will be available as ${reflectors}
-        request.getRequestDispatcher("setmachine.jsp").forward(request, response);
+
+        request.getSession(true).setAttribute(Constants.GAMENAME, gameName);
+        request.getRequestDispatcher("gamepage.jsp").forward(request, response);
     }
 
     private String generateRotorsLocationHTML(Integer size) {

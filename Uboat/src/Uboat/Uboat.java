@@ -7,27 +7,29 @@ import java.util.*;
 
 public class Uboat {
     private String uboatName;
-    //private EnigmaManager enigmaManager;
-    private Map<String, String> managedGamesAnswers;//key is gameName, value is the OriginalCode
+    private String gameName;
+    private String code;
 
     public Uboat(String _uboatName){
         uboatName = _uboatName;
-        managedGamesAnswers = new HashMap<>();
     }
 
-    public void addGame(String _battlefieldName)
-    {
-        managedGamesAnswers.put(_battlefieldName,"Uninitialized");
+    public void setGame(String _battlefieldName) {
+        gameName = _battlefieldName;
     }
 
-    /*public void setGameCode(Integer gameID, EnigmaMachine machineCopy) {
-    }*/
+    public void setCode(String i_code){
+        code = i_code;
+    }
 
-    public boolean isRightAnswer(String _battlefieldName, String _answer) {
-        String answer = managedGamesAnswers.get(_battlefieldName);
-        if(answer.equals( _answer))
+    public boolean isRightAnswer(String _answer) {
+        if(code.equals( _answer))
             return true;
         else
             return false;
+    }
+
+    public String getGameName() {
+        return gameName;
     }
 }

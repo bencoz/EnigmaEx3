@@ -31,6 +31,7 @@ public class Game {
     //copy of the machine and code for the playing alies
     private EnigmaManager enigmaManager;
     private List<String> dictionary;
+
     private String encryptedCode;
 
     //private machineCopy; // for the playing alies to clone
@@ -101,7 +102,7 @@ public class Game {
     }
 
     public boolean isRightAnswer(String _answer){
-        return managingUboat.isRightAnswer(battlefieldName, _answer);
+        return managingUboat.isRightAnswer(_answer);
     }
 
     public void setAsInit(){
@@ -112,8 +113,8 @@ public class Game {
         return battlefieldName;
     }
 
-    public void loadSettings(List<Integer> chosenRotorsID, List<Integer> chosenRotorsID1, Integer chosenReflectorID) {
-
+    public void setEncryptedCode(String encryptedCode) {
+        this.encryptedCode = encryptedCode;
     }
 
     public void setEnigmaManager(EnigmaManager _enigmaManager) {

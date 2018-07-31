@@ -108,26 +108,41 @@ $(function() {
     //triggerAjaxMsgContent();
 });
 function disableMachineConfig() {
-    $('#fieldset').setAttribute('disabled', 'disabled');
+    $('#fieldset').attr('disabled', 'disabled');
 }
 function addOutputText(text) {
-    $('.target-msg-value').innerText = text;
+    $('.target-msg-value').text(text);
 }
-$(function () {
-    $('#config').submit(function(){
+function OutputRed(cond) {
+    if (cond) {
+        $('.target-msg-value').css('color', 'red');
+    } else {
+        $('.target-msg-value').css('color', 'black');
+    }
+}
+
+function postMachineConfig() {
+        console.log("enter ajax...");
         $.ajax({
-            url: $('#config').attr('action'),
-            type: 'POST',
+            method:'POST',
+            url: './load',
             data : $('#config').serialize(),
-            success: function(data, textStatus, xhr) {
-                if (xhr.status == 200) {
-                    console.log(xhr.status);
-                    console.log('form submitted.');
-                    disableMachineConfig();
-                    addOutputText(xhr.responseText);
+            error: function(xhr) {
+                console.log("error");
+                var html = $.parseHTML(xhr.responseText)
+                console.error("Failed to submit");
+                if (html){
+                    addOutputText(html[5].innerText.replace("Message", ''));
+                    OutputRed(true);
                 }
+            },
+            success: function(data) {
+                console.log("success")
+                console.log(data);
+                disableMachineConfig();
+                addOutputText(data);
+                OutputRed(false);
             }
         });
         return false;
-    });
-});
+}

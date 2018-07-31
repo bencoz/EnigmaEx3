@@ -26,7 +26,6 @@ body {
 .msg-container{
     width: 50%;
     display: inline-flex;
-    padding-top: 4%;
 }
 .alies-info-container{
     height: 40%;
@@ -39,6 +38,7 @@ body {
 .logout-container{
     width: 100%;
     position: absolute;
+    top: 0px;
 }
 .logout-btn{
     float: right;
@@ -60,7 +60,6 @@ body {
     padding-top: 50px;
 }
 .header-container{
-    position: absolute;
     width: 100%;
 }
 .header-container > h1 {
