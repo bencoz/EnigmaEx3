@@ -7,8 +7,8 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="module" module-name="Uboat" />
     <orderEntry type="module" module-name="Machine" />
     <orderEntry type="module" module-name="Alies" />
-    <orderEntry type="module" module-name="Uboat" />
   </component>
 </module>

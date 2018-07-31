@@ -9,7 +9,7 @@ import java.util.*;
 import Uboat.*;
 
 public class GameManager {
-    private Map<Integer, Game> games; //key will be battlefieldName
+    private Map<String, Game> games; //key will be battlefieldName
     private Map<String, Uboat> playingUboats;
     private Map<String, Alies> playingAlies;
     private String error;
@@ -20,20 +20,8 @@ public class GameManager {
         playingAlies = new HashMap<>();
     }
 
-    public Game createGame(String managingUboat_name, InputStream stream)
+    public void createGame(String managingUboat_name, EnigmaManager enigmaManager)
     {
-        EnigmaManager manager;
-        boolean userHaveGame = findUboatGame(managingUboat_name);
-        if (userHaveGame){
-            Game game = getGameByUboatName(managingUboat_name);
-            manager = game.getEnigmaManger();
-        } else {
-            manager = new EnigmaManager();
-        }
-        boolean buildMachineOk = manager.createEnigmaMachineFromXMLInputStream(stream);
-        if (!buildMachineOk){
-            Game game = new Game();
-        }
         String battlefieldName = enigmaManager.getBattlefield().getName();
         Integer neededNumOfAlies = enigmaManager.getBattlefield().getNumOfAllies();
         DifficultyLevel difficultyLevel = enigmaManager.getBattlefield().getLevel();
@@ -45,9 +33,7 @@ public class GameManager {
         newGame.setManagerAs(managingUboat);
         managingUboat.addGame(newGame.getBattlefieldName());
     }
-    public void initGame(){
 
-    }
     public void addAliesToGame(String _newAliesName, String _battlefieldName){
         Alies newAlies = findOrCreatePlayingAlies(_newAliesName);
         Game game = findGame(_battlefieldName);
@@ -117,7 +103,7 @@ public class GameManager {
     public void loadGameSettings(String _battleName, EnigmaManager enigmaManager, List<Integer> chosenRotorsID, List<Character> chosenRotorsLoc, Integer chosenReflectorID) {
         Game game = findGame(_battleName);
         enigmaManager.setMachineConfig(chosenRotorsID,chosenRotorsLoc,chosenReflectorID);
-        game.setMachineAs(enigmaManager.getMachine());
+        game.setEnigmaManager(enigmaManager);
     }
 
     public Collection<Game> getGames(){
@@ -126,5 +112,18 @@ public class GameManager {
 
     public Game getGame(String gameName) {
         return games.get(gameName);
+    }
+
+    public EnigmaManager createNewEnigmaManager() {
+        return new EnigmaManager();
+    }
+
+    public EnigmaManager getBattlefieldEnigmaManager(String battleName) {
+        EnigmaManager battleEnigmaManager = null;
+        Game game = findGame(battleName);
+        if(game!=null){
+            battleEnigmaManager = game.getEnigmaManager();
+        }
+        return  battleEnigmaManager;
     }
 }

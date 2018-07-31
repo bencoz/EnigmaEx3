@@ -19,39 +19,21 @@ import java.util.concurrent.BlockingQueue;
 
 public class Game {
     private Uboat managingUboat;
-    private List<Alies> playingAlies;
+    private List<Alies> playingAlies ;
     private String winningAliesName = null;
     private Integer neededNumOfAlies;
     private Integer numOfAliesSigned = 0;
-
-    public void setNeededNumOfAlies(Integer neededNumOfAlies) {
-        this.neededNumOfAlies = neededNumOfAlies;
-    }
-
-    public void setBattlefieldName(String battlefieldName) {
-        this.battlefieldName = battlefieldName;
-    }
-
-    public void setDifficultyLevel(Factory.DifficultyLevel difficultyLevel) {
-        this.difficultyLevel = difficultyLevel;
-    }
-
     private String battlefieldName;
     private BlockingQueue<AliesResponse> answersFromAlies_Queue;
     private GameStatus gameStatus;
     private Factory.DifficultyLevel difficultyLevel;
 
     //copy of the machine and code for the playing alies
-    private EnigmaManager enigma;
+    private EnigmaManager enigmaManager;
     private List<String> dictionary;
     private String encryptedCode;
 
     //private machineCopy; // for the playing alies to clone
-
-    public Game(){
-        playingAlies = new ArrayList<>();
-        gameStatus = GameStatus.UNINITIALIZED;
-    }
 
     public Game(String _battlefieldName, Integer _neededNumOfAlies, Factory.DifficultyLevel difficultyLevel){
         battlefieldName = _battlefieldName;
@@ -66,7 +48,7 @@ public class Game {
     public void addPlayingAlies(Alies _alies){
         playingAlies.add(_alies);
         numOfAliesSigned++;
-        _alies.setNewGameDetails(enigma.getMachine().deepCopy(),dictionary, answersFromAlies_Queue);
+        _alies.setNewGameDetails(enigmaManager.getMachine().deepCopy(),dictionary, answersFromAlies_Queue);
         if(numOfAliesSigned == neededNumOfAlies)
         {
             gameStatus = GameStatus.ACTIVE;
@@ -115,7 +97,7 @@ public class Game {
     }
 
     public EnigmaMachine getMachineCopy() {
-        return enigma.getMachine().deepCopy();
+        return enigmaManager.getMachine().deepCopy();
     }
 
     public boolean isRightAnswer(String _answer){
@@ -134,8 +116,8 @@ public class Game {
 
     }
 
-    public void setEnigmaManager(EnigmaManager i_enigma) {
-        enigma = i_enigma;
+    public void setEnigmaManager(EnigmaManager _enigmaManager) {
+        enigmaManager = _enigmaManager;
     }
 
     public Set<String> getAliesNames() {
@@ -146,7 +128,7 @@ public class Game {
         return res;
     }
 
-    public boolean createEnigmaMachineFromXMLInputStream(InputStream inputStream) {
-        return enigma.createEnigmaMachineFromXMLInputStream(inputStream);
+    public EnigmaManager getEnigmaManager() {
+        return enigmaManager;
     }
 }

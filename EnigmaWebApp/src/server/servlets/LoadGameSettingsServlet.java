@@ -22,8 +22,8 @@ public class LoadGameSettingsServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         //String usernameFromSession = SessionUtils.getUsername(request);
         String battleNameFromSession = SessionUtils.getBattleName(request);
-        EnigmaManager enigmaManager = ServletUtils.getEnigmaManager(getServletContext());
         GameManager gameManager = ServletUtils.getGameManager(getServletContext());
+        EnigmaManager enigmaManager = gameManager.getBattlefieldEnigmaManager(battleNameFromSession);
         List<Integer> chosenRotorsID = new LinkedList<>();
         List<Character> chosenRotorsLoc = new LinkedList<>();
         for (int i =0; i < enigmaManager.getMachine().getNumOfRotors(); i++){
