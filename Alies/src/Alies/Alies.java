@@ -39,6 +39,9 @@ public class Alies {
         aliesName = _name;
     }
 
+    public String getName() {
+        return aliesName;
+    }
     public void setNewGameDetails(EnigmaMachine em, List<String> _dictionary, BlockingQueue<AliesResponse> _answersFromAlies_Queue){
         machine = em;
         dictionary = _dictionary;

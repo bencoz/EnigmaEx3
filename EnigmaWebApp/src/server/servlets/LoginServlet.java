@@ -81,7 +81,11 @@ public class LoginServlet extends HttpServlet {
             }
         } else {
             //user is already logged in
-            response.sendRedirect(CHAT_ROOM_URL);
+            String userTypeFromParameter = request.getParameter(USERTYPE).trim();
+            if (userTypeFromParameter.equals("Uboat"))
+                response.sendRedirect(NEW_GAME_URL); //TODO: NEED TO REDIRECT TO GAME PAGE IF EXISTS
+            else
+                response.sendRedirect(GAMES_LIST_URL); //TODO: NEED TO REDIRECT TO GAME PAGE IF EXISTS
         }
     }
 

@@ -1,15 +1,15 @@
 package GameManager;
 
 import Alies.*;
-import Enigma.EnigmaManager;
+import Enigma.*;
 import Factory.DifficultyLevel;
-import Users.*;
 
+import java.io.InputStream;
 import java.util.*;
 import Uboat.*;
 
 public class GameManager {
-    private Map<String,Game> games; //key will be battlefieldName
+    private Map<Integer, Game> games; //key will be battlefieldName
     private Map<String, Uboat> playingUboats;
     private Map<String, Alies> playingAlies;
     private String error;
@@ -18,11 +18,22 @@ public class GameManager {
         games = new HashMap<>();
         playingUboats = new HashMap<>();
         playingAlies = new HashMap<>();
-
     }
 
-    public void createGame(String managingUboat_name, EnigmaManager enigmaManager)
+    public Game createGame(String managingUboat_name, InputStream stream)
     {
+        EnigmaManager manager;
+        boolean userHaveGame = findUboatGame(managingUboat_name);
+        if (userHaveGame){
+            Game game = getGameByUboatName(managingUboat_name);
+            manager = game.getEnigmaManger();
+        } else {
+            manager = new EnigmaManager();
+        }
+        boolean buildMachineOk = manager.createEnigmaMachineFromXMLInputStream(stream);
+        if (!buildMachineOk){
+            Game game = new Game();
+        }
         String battlefieldName = enigmaManager.getBattlefield().getName();
         Integer neededNumOfAlies = enigmaManager.getBattlefield().getNumOfAllies();
         DifficultyLevel difficultyLevel = enigmaManager.getBattlefield().getLevel();
@@ -34,7 +45,9 @@ public class GameManager {
         newGame.setManagerAs(managingUboat);
         managingUboat.addGame(newGame.getBattlefieldName());
     }
+    public void initGame(){
 
+    }
     public void addAliesToGame(String _newAliesName, String _battlefieldName){
         Alies newAlies = findOrCreatePlayingAlies(_newAliesName);
         Game game = findGame(_battlefieldName);
@@ -109,5 +122,9 @@ public class GameManager {
 
     public Collection<Game> getGames(){
         return games.values();
+    }
+
+    public Game getGame(String gameName) {
+        return games.get(gameName);
     }
 }

@@ -34,7 +34,7 @@ public class EnigmaManager
             errorInMachineBuilding = "Could not find XML file.";
         }
         if (machine == null) {
-            errorInMachineBuilding = "Could not load Machine";
+            errorInMachineBuilding = "Could not load Machine - File is no good";
             return false;
         }
         if (!isMachineABCEven()) {

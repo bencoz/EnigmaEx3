@@ -20,12 +20,12 @@
         <servlet-class>server.servlets.LoginServlet</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>UsersListServlet</servlet-name>
-        <servlet-class>server.servlets.UsersListServlet</servlet-class>
+        <servlet-name>AliesListServlet</servlet-name>
+        <servlet-class>server.servlets.AliesListServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>LoadGameSettingsServlet</servlet-name>
-        <url-pattern>/games/load</url-pattern>
+        <url-pattern>/pages/games/load</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>NewGameServlet</servlet-name>
@@ -36,8 +36,8 @@
         <url-pattern>/pages/signup/login</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>UsersListServlet</servlet-name>
-        <url-pattern>/userslist</url-pattern>
+        <servlet-name>AliesListServlet</servlet-name>
+        <url-pattern>/pages/alieslist</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>GameListServlet</servlet-name>

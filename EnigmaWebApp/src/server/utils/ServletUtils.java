@@ -55,5 +55,54 @@ public class ServletUtils {
 		if (servletContext.getAttribute(ENIGMA_MANAGER_ATTRIBUTE_NAME) == null) {
 			servletContext.setAttribute(ENIGMA_MANAGER_ATTRIBUTE_NAME, new EnigmaManager());
 		}
-		return (EnigmaManager) servletContext.getAttribute(ENIGMA_MANAGER_ATTRIBUTE_NAME);    }
+		return (EnigmaManager) servletContext.getAttribute(ENIGMA_MANAGER_ATTRIBUTE_NAME);
+	}
+
+	public static String numToString(int num) {
+		String id;
+		switch (num) {
+			case 1:
+				id = "I";
+				break;
+			case 2:
+				id = "II";
+				break;
+			case 3:
+				id = "III";
+				break;
+			case 4:
+				id = "IV";
+				break;
+			case 5:
+				id = "V";
+				break;
+			default:
+				id = "";
+		}
+		return id;
+	}
+
+	public static Integer StringToNum(String reflectorID) {
+		Integer numID;
+		switch (reflectorID) {
+			case "I":
+				numID = 1;
+				break;
+			case "II":
+				numID = 2;
+				break;
+			case "III":
+				numID = 3;
+				break;
+			case "IV":
+				numID = 4;
+				break;
+			case "V":
+				numID = 5;
+				break;
+			default:
+				numID = 0;
+		}
+		return numID;
+	}
 }

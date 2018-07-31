@@ -10,6 +10,7 @@
 <html>
     <%@page import="chat.utils.*" %>
     <%@ page import="chat.constants.Constants" %>
+    <%@ page import="server.utils.SessionUtils" %>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Online Chat</title>

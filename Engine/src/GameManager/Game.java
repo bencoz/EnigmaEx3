@@ -3,33 +3,55 @@ package GameManager;
 import Alies.Alies;
 import Alies.AliesResponse;
 import Alies.DifficultyLevel;
+import Enigma.EnigmaManager;
 import Machine.EnigmaMachine;
 import Uboat.Uboat;
 import Users.User;
 
+import java.io.InputStream;
 import java.net.ServerSocket;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
 public class Game {
     private Uboat managingUboat;
-    private List<Alies> playingAlies ;
+    private List<Alies> playingAlies;
     private String winningAliesName = null;
     private Integer neededNumOfAlies;
     private Integer numOfAliesSigned = 0;
+
+    public void setNeededNumOfAlies(Integer neededNumOfAlies) {
+        this.neededNumOfAlies = neededNumOfAlies;
+    }
+
+    public void setBattlefieldName(String battlefieldName) {
+        this.battlefieldName = battlefieldName;
+    }
+
+    public void setDifficultyLevel(Factory.DifficultyLevel difficultyLevel) {
+        this.difficultyLevel = difficultyLevel;
+    }
+
     private String battlefieldName;
     private BlockingQueue<AliesResponse> answersFromAlies_Queue;
     private GameStatus gameStatus;
     private Factory.DifficultyLevel difficultyLevel;
 
     //copy of the machine and code for the playing alies
-    private EnigmaMachine machine;
+    private EnigmaManager enigma;
     private List<String> dictionary;
     private String encryptedCode;
 
     //private machineCopy; // for the playing alies to clone
+
+    public Game(){
+        playingAlies = new ArrayList<>();
+        gameStatus = GameStatus.UNINITIALIZED;
+    }
 
     public Game(String _battlefieldName, Integer _neededNumOfAlies, Factory.DifficultyLevel difficultyLevel){
         battlefieldName = _battlefieldName;
@@ -44,7 +66,7 @@ public class Game {
     public void addPlayingAlies(Alies _alies){
         playingAlies.add(_alies);
         numOfAliesSigned++;
-        _alies.setNewGameDetails(machine.deepCopy(),dictionary, answersFromAlies_Queue);
+        _alies.setNewGameDetails(enigma.getMachine().deepCopy(),dictionary, answersFromAlies_Queue);
         if(numOfAliesSigned == neededNumOfAlies)
         {
             gameStatus = GameStatus.ACTIVE;
@@ -93,7 +115,7 @@ public class Game {
     }
 
     public EnigmaMachine getMachineCopy() {
-        return machine.deepCopy();
+        return enigma.getMachine().deepCopy();
     }
 
     public boolean isRightAnswer(String _answer){
@@ -112,7 +134,19 @@ public class Game {
 
     }
 
-    public void setMachineAs(EnigmaMachine _machine) {
-        machine = _machine;
+    public void setEnigmaManager(EnigmaManager i_enigma) {
+        enigma = i_enigma;
+    }
+
+    public Set<String> getAliesNames() {
+        Set<String> res = new HashSet<>();
+        for (Alies alies : playingAlies){
+            res.add(alies.getName());
+        }
+        return res;
+    }
+
+    public boolean createEnigmaMachineFromXMLInputStream(InputStream inputStream) {
+        return enigma.createEnigmaMachineFromXMLInputStream(inputStream);
     }
 }
