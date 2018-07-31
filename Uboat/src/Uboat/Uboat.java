@@ -4,8 +4,9 @@ package Uboat;
 
 import java.io.*;
 import java.util.*;
+import java.io.Serializable;
 
-public class Uboat {
+public class Uboat implements Serializable {
     private String uboatName;
     private String gameName;
     private String code;
