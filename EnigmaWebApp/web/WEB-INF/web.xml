@@ -8,6 +8,10 @@
         <servlet-class>server.servlets.LoadGameSettingsServlet</servlet-class>
     </servlet>
     <servlet>
+        <servlet-name>JoinGameServlet</servlet-name>
+        <servlet-class>server.servlets.JoinGameServlet</servlet-class>
+    </servlet>
+    <servlet>
         <servlet-name>GameListServlet</servlet-name>
         <servlet-class>server.servlets.GameListServlet</servlet-class>
     </servlet>
@@ -28,6 +32,10 @@
         <url-pattern>/pages/games/load</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
+        <servlet-name>JoinGameServlet</servlet-name>
+        <url-pattern>/pages/joingame</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
         <servlet-name>NewGameServlet</servlet-name>
         <url-pattern>/pages/games/newgame</url-pattern>
     </servlet-mapping>
@@ -41,7 +49,7 @@
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>GameListServlet</servlet-name>
-        <url-pattern>/gameslist</url-pattern>
+        <url-pattern>/pages/games/gamelist</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
