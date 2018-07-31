@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Game List</title>
+    <script type="text/javascript" src="../../common/jquery-2.0.3.min.js"></script>
+    <script src="../../common/context-path-helper.js"></script>
     <script src="gamelist.js"></script>
 </head>
 <body>
@@ -10,9 +12,11 @@
     <h1>Welcome to the Enigma Game</h1>
     <h2>Please choose one of the Games below:</h2>
     <ul id="game-list">
-        <div id="game1" class="game-object">
-            <h3>game1Details</h3>
-        </div>
+        <button type = "button" onclick = "clickOnGame()">
+            <div id="game1" class="game-object">
+                <h3>game1Details</h3>
+            </div>
+        </button>
         <div id = "game2"class="game-object">
             <h3>game2Details</h3>
         </div>
