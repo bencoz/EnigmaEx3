@@ -19,7 +19,8 @@
     <div class="uboat-game" style="display: ${uboatdisplay};">
         <div class="uboat-settings-container">
             <h2>Machine Configuration</h2>
-            <form class="uboat-settings" id="config" method="GET" action="./load">
+            <iframe width="0" height="0" border="0" name="dummyframe" id="dummyframe"></iframe>
+            <form class="uboat-settings" id="config" method="post" onsubmit="postMachineConfig()" target="dummyframe">
                 <fieldset id="fieldset">
                     <table>
                         <tbody>

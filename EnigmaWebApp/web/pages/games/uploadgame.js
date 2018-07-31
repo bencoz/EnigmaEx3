@@ -14,15 +14,19 @@ $(function() { // onload...do
             error: function(xhr) {
                 var html = $.parseHTML(xhr.responseText)
                 console.error("Failed to submit");
-                if (html)
-                    $("#result").text(html[5].innerText);
+                if (html) {
+                    var text = html[5].innerText;
+                    text = text.replace("Message ", '');
+                    $("#result").text(text);
+                }
             },
             success: function(data) {
                 console.log("data was successfully uploaded");
                 $("#result").empty();
-                var newDoc = document.open("text/html", "replace");
-                newDoc.write(data);
-                //$("html").html(data);
+                document.write(data);
+                // ("text/html", "replace");
+                // newDoc.write(data)
+                // //$("html").html(data);
             }
         });
         // return value of the submit operation

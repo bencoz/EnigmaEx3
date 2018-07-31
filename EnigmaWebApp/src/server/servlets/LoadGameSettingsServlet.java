@@ -15,26 +15,66 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class LoadGameSettingsServlet extends HttpServlet {
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-    }
-
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        //String usernameFromSession = SessionUtils.getUsername(request);
-        String battleNameFromSession = SessionUtils.getBattleName(request);
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        String usernameFromSession = SessionUtils.getUsername(request);
+        String battleNameFromSession = SessionUtils.getGameName(request);
         GameManager gameManager = ServletUtils.getGameManager(getServletContext());
         EnigmaManager enigmaManager = gameManager.getBattlefieldEnigmaManager(battleNameFromSession);
         List<Integer> chosenRotorsID = new LinkedList<>();
         List<Character> chosenRotorsLoc = new LinkedList<>();
+        boolean buildIsOk = true;
         for (int i =0; i < enigmaManager.getMachine().getNumOfRotors(); i++){
-            chosenRotorsID.add(Integer.parseInt(request.getParameter("rotor"+(i+1))));
+            Integer id = Integer.parseInt(request.getParameter("rotor"+(i+1)));
+            if (chosenRotorsID.contains(id)){
+                buildIsOk = false;
+                break;
+            } else {
+                chosenRotorsID.add(id);
+            }
+        }
+        if (!buildIsOk){
+            response.sendError(403, "use a rotor only one time"); //TODO :: CHOOSE ERROR CODE PROPERLY
+            return;
         }
         for (int i =0; i < enigmaManager.getMachine().getNumOfRotors(); i++){
             chosenRotorsLoc.add(request.getParameter("rotor"+(i+1)+"_loc").charAt(0));
         }
         Integer chosenReflectorID = Integer.parseInt(request.getParameter("reflector"));
         String message = request.getParameter("message");
-
-        gameManager.loadGameSettings(battleNameFromSession, enigmaManager, chosenRotorsID, chosenRotorsLoc, chosenReflectorID);
+        gameManager.loadGameSettings(battleNameFromSession, chosenRotorsID, chosenRotorsLoc, chosenReflectorID);
+        String encryptedCode = gameManager.setGameCode(usernameFromSession, message);
+        response.setStatus(200);
+        response.getWriter().write(encryptedCode);
     }
+
+// <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+    /**
+     * Handles the HTTP <code>GET</code> method.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        processRequest(request, response);
+    }
+
+    /**
+     * Handles the HTTP <code>POST</code> method.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        processRequest(request, response);
+    }
+
 }

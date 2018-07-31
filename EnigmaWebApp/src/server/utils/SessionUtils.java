@@ -17,10 +17,6 @@ public class SessionUtils {
         request.getSession().invalidate();
     }
 
-    public static String getBattleName(HttpServletRequest request) { //TODO:IMPLEMENT
-        return "";
-    }
-
     public static String getGameName(HttpServletRequest request) {
         HttpSession session = request.getSession(false);
         Object sessionAttribute = session != null ? session.getAttribute(Constants.GAMENAME) : null;

@@ -4,7 +4,6 @@ import Alies.*;
 import Enigma.*;
 import Factory.DifficultyLevel;
 
-import java.io.InputStream;
 import java.util.*;
 import Uboat.*;
 
@@ -31,7 +30,9 @@ public class GameManager {
         //search if managingUboat exist in the system and if not create him
         Uboat managingUboat = findOrCreatePlayingUboat(managingUboat_name);
         newGame.setManagerAs(managingUboat);
-        managingUboat.addGame(newGame.getBattlefieldName());
+        newGame.setEnigmaManager(enigmaManager);
+        managingUboat.setGame(newGame.getBattlefieldName());
+        games.put(battlefieldName, newGame);
     }
 
     public void addAliesToGame(String _newAliesName, String _battlefieldName){
@@ -53,12 +54,14 @@ public class GameManager {
     }
 
 
-
-    /*public void setGameCode(String _managingUboat_name, Integer _gameID){
+    public String setGameCode(String _managingUboat_name, String code){
         Uboat managingUboat = findPlayingUboat(_managingUboat_name);
-        Game currGame = findGame(_gameID);
-        managingUboat.setGameCode(_gameID, currGame.getMachineCopy());//TODO: get config and code
-    }*/
+        managingUboat.setCode(code);
+        Game currGame = findGame(managingUboat.getGameName());
+        String encodedCode = currGame.getEnigmaManager().process(code);
+        currGame.setEncryptedCode(encodedCode);
+        return encodedCode;
+    }
 
     private Game findGame(String _battlefieldName) {
         Game resGame = null;
@@ -100,10 +103,10 @@ public class GameManager {
         return res;
     }
 
-    public void loadGameSettings(String _battleName, EnigmaManager enigmaManager, List<Integer> chosenRotorsID, List<Character> chosenRotorsLoc, Integer chosenReflectorID) {
+    public void loadGameSettings(String _battleName, List<Integer> chosenRotorsID, List<Character> chosenRotorsLoc, Integer chosenReflectorID) {
         Game game = findGame(_battleName);
-        enigmaManager.setMachineConfig(chosenRotorsID,chosenRotorsLoc,chosenReflectorID);
-        game.setEnigmaManager(enigmaManager);
+        EnigmaManager em = game.getEnigmaManager();
+        em.setMachineConfig(chosenRotorsID, chosenRotorsLoc, chosenReflectorID);
     }
 
     public Collection<Game> getGames(){
@@ -121,7 +124,7 @@ public class GameManager {
     public EnigmaManager getBattlefieldEnigmaManager(String battleName) {
         EnigmaManager battleEnigmaManager = null;
         Game game = findGame(battleName);
-        if(game!=null){
+        if (game != null){
             battleEnigmaManager = game.getEnigmaManager();
         }
         return  battleEnigmaManager;
