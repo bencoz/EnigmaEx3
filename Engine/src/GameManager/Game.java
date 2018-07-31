@@ -9,6 +9,7 @@ import Uboat.Uboat;
 import Users.User;
 
 import java.io.InputStream;
+import java.io.Serializable;
 import java.net.ServerSocket;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -17,20 +18,20 @@ import java.util.Set;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
-public class Game {
+public class Game implements Serializable{
     private Uboat managingUboat;
-    private List<Alies> playingAlies ;
+    private transient List<Alies> playingAlies ;
     private String winningAliesName = null;
     private Integer neededNumOfAlies;
     private Integer numOfAliesSigned = 0;
     private String battlefieldName;
-    private BlockingQueue<AliesResponse> answersFromAlies_Queue;
-    private GameStatus gameStatus;
-    private Factory.DifficultyLevel difficultyLevel;
+    private transient BlockingQueue<AliesResponse> answersFromAlies_Queue;
+    private transient GameStatus gameStatus;
+    private transient Factory.DifficultyLevel difficultyLevel;
 
     //copy of the machine and code for the playing alies
-    private EnigmaManager enigmaManager;
-    private List<String> dictionary;
+    private transient EnigmaManager enigmaManager;
+    private transient List<String> dictionary;
 
     private String encryptedCode;
 
