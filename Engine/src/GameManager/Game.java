@@ -133,4 +133,15 @@ public class Game implements Serializable{
     public EnigmaManager getEnigmaManager() {
         return enigmaManager;
     }
+
+    public Alies getAlies(String aliesName) {
+        Alies res = null;
+        for (Alies alies : playingAlies){
+            if (alies.getName() == aliesName){
+                res = alies;
+                break;
+            }
+        }
+        return res;
+    }
 }

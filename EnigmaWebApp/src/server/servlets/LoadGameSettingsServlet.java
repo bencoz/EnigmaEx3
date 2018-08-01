@@ -23,25 +23,43 @@ public class LoadGameSettingsServlet extends HttpServlet {
         EnigmaManager enigmaManager = gameManager.getBattlefieldEnigmaManager(battleNameFromSession);
         List<Integer> chosenRotorsID = new LinkedList<>();
         List<Character> chosenRotorsLoc = new LinkedList<>();
+        Integer chosenReflectorID = Integer.parseInt(request.getParameter("reflector"));
+        String message = request.getParameter("message");
         boolean buildIsOk = true;
+        String error = "";
         for (int i =0; i < enigmaManager.getMachine().getNumOfRotors(); i++){
             Integer id = Integer.parseInt(request.getParameter("rotor"+(i+1)));
             if (chosenRotorsID.contains(id)){
                 buildIsOk = false;
+                error = "Use a rotor only one time";
                 break;
             } else {
                 chosenRotorsID.add(id);
             }
         }
+        if (buildIsOk) {
+            String ABC = enigmaManager.getMachine().getABC();
+            for (int i = 0; i < enigmaManager.getMachine().getNumOfRotors(); i++) {
+                Character loc = request.getParameter("rotor" + (i + 1) + "_loc").charAt(0);
+                if (ABC.indexOf(loc) != -1)
+                    chosenRotorsLoc.add(loc);
+                else {
+                    buildIsOk = false;
+                    error = "Character \'" + loc + "\' is not in machine's abc";
+                    break;
+                }
+            }
+        }
+        if (buildIsOk){
+            if (!enigmaManager.isInDictionary(message)){
+                buildIsOk = false;
+                error = "messgae contains words not in machine's dictionary";
+            }
+        }
         if (!buildIsOk){
-            response.sendError(403, "use a rotor only one time"); //TODO :: CHOOSE ERROR CODE PROPERLY
+            response.sendError(403, error);
             return;
         }
-        for (int i =0; i < enigmaManager.getMachine().getNumOfRotors(); i++){
-            chosenRotorsLoc.add(request.getParameter("rotor"+(i+1)+"_loc").charAt(0));
-        }
-        Integer chosenReflectorID = Integer.parseInt(request.getParameter("reflector"));
-        String message = request.getParameter("message");
         gameManager.loadGameSettings(battleNameFromSession, chosenRotorsID, chosenRotorsLoc, chosenReflectorID);
         String encryptedCode = gameManager.setGameCode(usernameFromSession, message);
         response.setStatus(200);

@@ -212,6 +212,10 @@ public class Alies {
         }
     }
 
+    public List<CandidateForDecoding> getCandidacies() {
+        return candidacies;
+    }
+
     public void setAnswersQueue(BlockingQueue<AliesResponse> _answersToUboat_queue) {
         answerToUboat_Queue = _answersToUboat_queue;
     }

@@ -23,5 +23,10 @@ public class JoinGameServlet extends HttpServlet {
         GameManager gameManager = ServletUtils.getGameManager(getServletContext());
 
         gameManager.addAliesToGame(usernameFromSession, battleNameRequested);
+
+        request.setAttribute("battlefield", battleNameRequested);
+        request.setAttribute("uboatdisplay", "none");
+        request.setAttribute("aliesdisplay","inline-flex");
+        request.getRequestDispatcher("gamepage.jsp").forward(request, response);
     }
 }
