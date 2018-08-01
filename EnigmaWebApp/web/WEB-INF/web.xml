@@ -33,7 +33,7 @@
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>JoinGameServlet</servlet-name>
-        <url-pattern>/pages/joingame</url-pattern>
+        <url-pattern>/games/joingame</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>NewGameServlet</servlet-name>
