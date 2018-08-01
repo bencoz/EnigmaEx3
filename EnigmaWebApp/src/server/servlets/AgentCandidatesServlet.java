@@ -25,7 +25,7 @@ public class AgentCandidatesServlet extends HttpServlet{
             GameManager gameManager = ServletUtils.getGameManager(getServletContext());
             String usernameFromSession = SessionUtils.getUsername(request);
             Game game = gameManager.getGame(SessionUtils.getGameName(request));
-            Alies alies = game.getAliesByName(usernameFromSession);
+            Alies alies = game.getAlies(usernameFromSession);
             List<CandidateForDecoding>agentList = alies.getCandidacies();
             String json = gson.toJson(agentList);
             out.println(json);

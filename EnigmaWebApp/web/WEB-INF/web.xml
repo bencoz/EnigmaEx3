@@ -8,6 +8,10 @@
         <servlet-class>server.servlets.LoadGameSettingsServlet</servlet-class>
     </servlet>
     <servlet>
+        <servlet-name>AliesReadyServlet</servlet-name>
+        <servlet-class>server.servlets.AliesReadyServlet</servlet-class>
+    </servlet>
+    <servlet>
         <servlet-name>JoinGameServlet</servlet-name>
         <servlet-class>server.servlets.JoinGameServlet</servlet-class>
     </servlet>
@@ -27,6 +31,10 @@
         <servlet-name>AliesListServlet</servlet-name>
         <servlet-class>server.servlets.AliesListServlet</servlet-class>
     </servlet>
+    <servlet-mapping>
+        <servlet-name>AliesReadyServlet</servlet-name>
+        <url-pattern>/pages/games/ready</url-pattern>
+    </servlet-mapping>
     <servlet-mapping>
         <servlet-name>LoadGameSettingsServlet</servlet-name>
         <url-pattern>/pages/games/load</url-pattern>

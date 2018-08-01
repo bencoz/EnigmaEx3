@@ -10,7 +10,6 @@ public class Uboat implements Serializable {
     private String uboatName;
     private String gameName;
     private String code;
-    private boolean ready = false;
 
     public Uboat(String _uboatName){
         uboatName = _uboatName;
@@ -33,17 +32,5 @@ public class Uboat implements Serializable {
 
     public String getGameName() {
         return gameName;
-    }
-
-    public boolean isReady() {
-        return ready;
-    }
-
-    public String getName() {
-        return uboatName;
-    }
-
-    public void setAsReady() {
-        ready = true;
     }
 }

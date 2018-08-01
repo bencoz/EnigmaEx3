@@ -1,6 +1,5 @@
 package server.servlets;
 
-import GameManager.GameManager;
 import Users.UserManager;
 import server.constants.Constants;
 import server.utils.ServletUtils;
@@ -41,7 +40,6 @@ public class LoginServlet extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         String usernameFromSession = SessionUtils.getUsername(request);
         UserManager userManager = ServletUtils.getUserManager(getServletContext());
-        GameManager gameManager = ServletUtils.getGameManager(getServletContext());
         if (usernameFromSession == null) {
             //user is not logged in yet
             String usernameFromParameter = request.getParameter(USERNAME);
@@ -67,7 +65,7 @@ public class LoginServlet extends HttpServlet {
                     getServletContext().getRequestDispatcher(LOGIN_ERROR_URL).forward(request, response);
                 } else {
                     //add the new user to the users list
-                    userManager.addUser(usernameFromParameter);
+                    userManager.addUser(usernameFromParameter, userTypeFromParameter);
                     //set the username in a session so it will be available on each request
                     //the true parameter means that if a session object does not exists yet
                     //create a new one
@@ -75,14 +73,10 @@ public class LoginServlet extends HttpServlet {
 
                     //redirect the request to the chat room - in order to actually change the URL
                     System.out.println("On login, request URI is: " + request.getRequestURI());
-                    if (userTypeFromParameter.equals("Uboat")) {
+                    if (userTypeFromParameter.equals("Uboat"))
                         response.sendRedirect(NEW_GAME_URL);
-                        gameManager.addUboat(usernameFromParameter);
-                    }
-                    else {
+                    else
                         response.sendRedirect(GAMES_LIST_URL);
-                        gameManager.addAlies(usernameFromParameter);
-                    }
                 }
             }
         } else {

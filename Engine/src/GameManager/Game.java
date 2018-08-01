@@ -19,77 +19,45 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
 public class Game implements Serializable{
-    private String battlefieldName;
     private Uboat managingUboat;
     private transient List<Alies> playingAlies ;
     private transient String winningAliesName = null;
     private Integer neededNumOfAlies;
     private Integer numOfAliesSigned = 0;
-    private Integer numOfAliesReady = 0;
+    private String battlefieldName;
+    private transient BlockingQueue<AliesResponse> answersFromAlies_Queue;
     private GameStatus gameStatus;
     private Factory.DifficultyLevel difficultyLevel;
 
+    //copy of the machine and code for the playing alies
     private transient EnigmaManager enigmaManager;
+    private transient List<String> dictionary;
+
     private String encryptedCode;
-    private transient BlockingQueue<AliesResponse> answersFromAlies_Queue;
 
     //private machineCopy; // for the playing alies to clone
-    //private transient List<String> dictionary;
 
     public Game(String _battlefieldName, Integer _neededNumOfAlies, Factory.DifficultyLevel _difficultyLevel){
         battlefieldName = _battlefieldName;
         neededNumOfAlies = _neededNumOfAlies;
-        difficultyLevel = _difficultyLevel;
         answersFromAlies_Queue = new ArrayBlockingQueue<>(neededNumOfAlies);
         playingAlies = new ArrayList<>();
         gameStatus = GameStatus.UNINITIALIZED;
+        difficultyLevel = _difficultyLevel;
     }
 
 
 
     public void addPlayingAlies(Alies _alies){
-        if(numOfAliesSigned != neededNumOfAlies)
+        playingAlies.add(_alies);
+        numOfAliesSigned++;
+        _alies.setNewGameDetails(getMachineCopy(), answersFromAlies_Queue);
+        if(numOfAliesSigned == neededNumOfAlies)
         {
-            playingAlies.add(_alies);
-            numOfAliesSigned++;
-            _alies.setNewGameDetails(getMachineCopy() , answersFromAlies_Queue);
-        }
-    }
-
-    public void setAliesAsReady(String userName){
-        Alies alies = getAliesByName(userName);
-        alies.setAsReady();
-        numOfAliesReady++;
-        boolean needToStart = areAllPlayersReady();
-        if(needToStart){
             gameStatus = GameStatus.ACTIVE;
             runGame();
         }
     }
-
-    private boolean areAllPlayersReady() {
-        if(managingUboat.isReady() == false)
-            return false;
-        for (Alies alies : playingAlies ) {
-            if(alies.isReady() != false){
-                return false;
-            }
-        }
-        return true;
-    }
-
-    public void setUboatAsReady(String userName){
-        if(managingUboat.getName() == userName) {
-            managingUboat.setAsReady();
-            gameStatus = GameStatus.WAITING;
-            boolean needToStart = areAllPlayersReady();
-            if (needToStart) {
-                gameStatus = GameStatus.ACTIVE;
-                runGame();
-            }
-        }
-    }
-
 
     private void runGame()
     {
@@ -113,7 +81,7 @@ public class Game implements Serializable{
         stopGame();
     }
 
-    private void activateAlies() {//TODO:add init
+    private void activateAlies() {
         for (Alies alies: playingAlies ) {
             alies.start();
         }
@@ -171,7 +139,7 @@ public class Game implements Serializable{
         return enigmaManager;
     }
 
-    public Alies getAliesByName(String aliesName) {
+    public Alies getAlies(String aliesName) {
         Alies res = null;
         for (Alies alies : playingAlies){
             if (alies.getName() == aliesName){

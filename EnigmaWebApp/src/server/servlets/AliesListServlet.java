@@ -26,6 +26,10 @@ public class AliesListServlet extends HttpServlet {
             Gson gson = new Gson();
             GameManager gameManager = ServletUtils.getGameManager(getServletContext());
             Game game = gameManager.getGame(SessionUtils.getGameName(request));
+            if (game == null){
+                response.sendError(403,"game has not been created yet...");
+                return;
+            }
             List<Alies> aliesList = game.getAlies();
             String json = gson.toJson(aliesList);
             out.println(json);

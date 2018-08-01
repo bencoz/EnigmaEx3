@@ -9,8 +9,8 @@ public class UserManager {
         users = new HashMap<>();
     }
 
-    public void addUser(String userName) {
-        User newUser = new User(userName);
+    public void addUser(String userName, String userType) {
+        User newUser = new User(userName, userType);
         users.put(userName,newUser);
     }
 

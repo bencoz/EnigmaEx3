@@ -15,27 +15,39 @@ import java.util.concurrent.BlockingQueue;
 
 public class Alies implements Serializable {
     private String aliesName;
-    private boolean ready = false;
-    private Integer taskSize;
-    private Integer blockSize; //block of tasks
-    private Integer numOfAgents;
-    private transient DecipheringStatus status;
-    private transient boolean gameFinished = false;
     private transient String codeToDecipher;
+    private transient List<String> dictionary;
+    private transient String excludeWords;
+    private Integer numOfAgents;
+    private Integer taskSize;
+    private Integer maxNumOfAgents;
     private transient EnigmaMachine machine; //copy of the machine
     private transient DecipherMission mission;
+    private Integer blockSize; //block of tasks
     private transient List<CandidateForDecoding> candidacies;
+    private transient DecipheringStatus status;
     private long decipheringStartTime;
     private Integer handledTasksAmount = 0;
+    private transient boolean gameFinished = false;
     private transient BlockingQueue<AgentResponse> answersToDM_Queue;
     private transient ServerSocket agentServer;
     private transient SocketHandler socketHandler;
     private Integer portNumber;
-    private transient BlockingQueue<AliesResponse> answersFromAlies_Queue;
+    private transient BlockingQueue<AliesResponse> answerToUboat_Queue;
 
     //TODO: change? need to get en and dic according to the chosen game
     public Alies(String _name) {
         aliesName = _name;
+    }
+
+    public String getName() {
+        return aliesName;
+    }
+    public void setNewGameDetails(EnigmaMachine em, BlockingQueue<AliesResponse> _answersFromAlies_Queue){
+        machine = em;
+        dictionary = em.getDecipher().getDictionary();
+        excludeWords = em.getDecipher().getExcludeChars();
+        maxNumOfAgents = em.getDecipher().getMaxNumOfAgents();
         candidacies = new ArrayList<>();
         status = new DecipheringStatus();
         socketHandler = new SocketHandler();
@@ -44,47 +56,29 @@ public class Alies implements Serializable {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        portNumber = agentServer.getLocalPort(); //the only port
-    }
-
-    public String getName() {
-        return aliesName;
-    }
-    public void setNewGameDetails(EnigmaMachine em, BlockingQueue<AliesResponse> _answersFromAlies_Queue){
-        machine = em;
-        //excludeWords = em.getDecipher().getExcludeChars();
-        answersFromAlies_Queue = _answersFromAlies_Queue;
-        candidacies = new ArrayList<>();
-        status = new DecipheringStatus();
+        portNumber = agentServer.getLocalPort();
+        answerToUboat_Queue = _answersFromAlies_Queue;
     }
 
 
     public void start(){
         this.decipheringStartTime = System.currentTimeMillis();
         activateAgents();
-        /*while( !gameFinished){
-            try {
-                AgentResponse response = answersToDM_Queue.take();
-                checkresponse(response);
-
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-        sleep(gameFinishe);
-        killreamaingthreads();*/
     }
 
-    public void init(String _code, DifficultyLevel _difficulty){ //task size already Initialized
-        mission = new DecipherMission(machine,_difficulty);
-        mission.init(machine, taskSize);
+    public boolean init(String _code, DifficultyLevel _difficulty, Integer _numOfAgents){
+        mission = new DecipherMission(machine, _difficulty);
+        mission.init(machine, taskSize, _numOfAgents);
+        numOfAgents = _numOfAgents;
+        if (mission.getSize() < taskSize*numOfAgents)
+            return false;
         this.codeToDecipher = _code;
         answersToDM_Queue = new ArrayBlockingQueue<>(numOfAgents);
 
         //calculate block size
-        //TODO:what block size means?!
         Double tempSize = Math.log(mission.getSize());
         blockSize = tempSize.intValue();
+        return true;
     }
 
     private void activateAgents() {
@@ -130,7 +124,8 @@ public class Alies implements Serializable {
     }
 
 
-    private void closeConnection(String agentName) { //TODO :: IMPLENMENT !!!
+    private void closeConnection(String agentName) {
+        //TODO :: IMPLENMENT !!!
     }
 
     private void giveAgentBlockOfTasks(String agentName) {
@@ -159,7 +154,7 @@ public class Alies implements Serializable {
                         agentAliesSocket.getOOS().writeObject(machine);
                         agentAliesSocket.getOOS().writeObject(codeToDecipher);
                         agentAliesSocket.getOOS().writeObject(blockSize);
-                        agentAliesSocket.getOOS().writeObject(machine.getDecipher().getDictionary());
+                        agentAliesSocket.getOOS().writeObject(dictionary);
                         break;
                     case "initialized":
                         finished = true;
@@ -180,16 +175,9 @@ public class Alies implements Serializable {
         //TODO: who need to do this? each tread or the main tread
         if (response.isEmpty())
             return;
-        AliesResponse aliesResponse;
         for (CandidateForDecoding candidate: response.getCandidacies())
         {
             candidacies.add(candidate);
-            aliesResponse = new AliesResponse(candidate.getDecoding(),aliesName);
-            try {
-                answersFromAlies_Queue.put(aliesResponse);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
         }
     }
 
@@ -218,9 +206,9 @@ public class Alies implements Serializable {
         return candidacies;
     }
 
-    /*public void setAnswersQueue(BlockingQueue<AliesResponse> _answersToUboat_queue) {
+    public void setAnswersQueue(BlockingQueue<AliesResponse> _answersToUboat_queue) {
         answerToUboat_Queue = _answersToUboat_queue;
-    }*/
+    }
 
     public void stopDeciphering() {
         status.stopDeciphering();
@@ -234,15 +222,7 @@ public class Alies implements Serializable {
         return portNumber;
     }
 
-    public void setTaskSize(Integer taskSize) {
-        this.taskSize = taskSize;
-    }
-
-    public void setAsReady() {
-        ready = true;
-    }
-
-    public boolean isReady() {
-        return ready;
+    public void setTaskAmount(Integer taskAmount) {
+        this.taskSize = taskAmount;
     }
 }
