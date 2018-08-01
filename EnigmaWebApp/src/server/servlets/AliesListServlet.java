@@ -1,5 +1,6 @@
 package server.servlets;
 
+import Alies.Alies;
 import GameManager.*;
 import Users.UserManager;
 import com.google.gson.Gson;
@@ -12,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
 import java.util.Set;
 
 public class AliesListServlet extends HttpServlet {
@@ -24,7 +26,7 @@ public class AliesListServlet extends HttpServlet {
             Gson gson = new Gson();
             GameManager gameManager = ServletUtils.getGameManager(getServletContext());
             Game game = gameManager.getGame(SessionUtils.getGameName(request));
-            Set<String> aliesList = game.getAliesNames();
+            List<Alies> aliesList = game.getAlies();
             String json = gson.toJson(aliesList);
             out.println(json);
             out.flush();
