@@ -17,6 +17,17 @@ public class GameManager {
         games = new HashMap<>();
         playingUboats = new HashMap<>();
         playingAlies = new HashMap<>();
+
+        Game g1 = new Game("game1",2,DifficultyLevel.Easy);
+        Uboat uboat1 = new Uboat("Eden");
+        g1.setManagerAs(uboat1);
+
+        Game g2 = new Game("game2",5,DifficultyLevel.Hard);
+        Uboat uboat2 = new Uboat("Ben");
+        g2.setManagerAs(uboat2);
+
+        games.put("game1",g1);
+        games.put("game2",g2);
     }
 
     public void createGame(String managingUboat_name, EnigmaManager enigmaManager)

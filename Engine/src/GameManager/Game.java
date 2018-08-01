@@ -131,6 +131,10 @@ public class Game implements Serializable{
         return res;
     }
 
+    public List<Alies> getAlies() {
+        return  playingAlies;
+    }
+
     public EnigmaManager getEnigmaManager() {
         return enigmaManager;
     }
