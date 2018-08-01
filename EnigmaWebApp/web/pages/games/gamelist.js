@@ -53,24 +53,19 @@ function clickOnGame(e)
 {
     var data = e.data.name;
     $.ajax({
-    method:'POST',
-    url: "/games/joingame",
-
-    data: {battleName:data},
-    timeout: 4000,
-    error: function(xhr) {
-        var html = $.parseHTML(xhr.responseText)
-        console.error("Failed to submit");
-        if (html)
-            alert(html[5].innerText);
-    },
-    success: function(data) {
-        console.log("joined game");
-        $("#result").empty();
-        var newDoc = document.open("text/html", "replace");
-        newDoc.write(data);
-        //$("html").html(data);
-    }
+        method:'POST',
+        url: "./joingame",
+        data: {battleName:data},
+        error: function(xmlhttprequest, textstatus, message) {
+            console.log(xmlhttprequest);
+            console.log(message);
+            console.error("Failed to submit");
+        },
+        success: function(data) {
+            console.log("success");
+            document.write(data);
+            document.close();
+        }
 });
     // return value of the submit operation
     // by default - we'll always return false so it doesn't redirect the user.

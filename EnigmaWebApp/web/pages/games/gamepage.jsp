@@ -1,4 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<!DOCTYPE HTML>
 <html>
 <head>
     <title>Enigma Competition</title>
@@ -78,10 +79,11 @@
     <div class="alies-game" style="display: ${aliesdisplay};">
         <div class="alis-setting-container">
             <h2>Alies Configuration</h2>
-            <form class="alies-setting">
+            <h3>Port Number : ${portNum}</h3>
+            <form id='aliesConfig' method="post" class="alies-setting" onsubmit="postAliesSettings()" target="dummyframe">
                 Task Size:
                 <input name="tasksize" type="text" value="10" />
-                <button class="alies-ready-btn">
+                <button class="alies-ready-btn" type="submit" form="aliesConfig">
                     Ready
                 </button>
             </form>

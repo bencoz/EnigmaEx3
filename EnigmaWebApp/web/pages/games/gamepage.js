@@ -93,20 +93,6 @@ function triggerAjaxMsgContent() {
     setTimeout(ajaxMsgContent, refreshRate);
 }
 
-
-//activate the timer calls after the page is loaded
-$(function() {
-
-    //prevent IE from caching ajax calls
-    $.ajaxSetup({cache: false});
-
-    //The users list is refreshed automatically every second
-    setInterval(ajaxAliesList, refreshRate);
-
-    //The chat content is refreshed only once (using a timeout) but
-    //on each call it triggers another execution of itself later (1 second later)
-    //triggerAjaxMsgContent();
-});
 function disableMachineConfig() {
     $('#fieldset').attr('disabled', 'disabled');
 }
@@ -122,7 +108,7 @@ function OutputRed(cond) {
 }
 
 function postMachineConfig() {
-        console.log("enter ajax...");
+        console.log("posting uboat machine config");
         $.ajax({
             method:'POST',
             url: './load',
@@ -146,3 +132,43 @@ function postMachineConfig() {
         });
         return false;
 }
+
+function postAliesSettings() {
+    console.log("posting alies settings");
+    $.ajax({
+        method:'POST',
+        url: './load',
+        data : $('#aliesConfig').serialize(),
+        error: function(xhr) {
+            console.log("error");
+            var html = $.parseHTML(xhr.responseText)
+            console.error("Failed to submit");
+            if (html){
+                addOutputText(html[5].innerText.replace("Message", ''));
+                OutputRed(true);
+            }
+        },
+        success: function(data) {
+            console.log("success")
+            console.log(data);
+            disableMachineConfig();
+            addOutputText(data);
+            OutputRed(false);
+        }
+    });
+    return false;
+}
+
+//activate the timer calls after the page is loaded
+$(function() {
+
+    //prevent IE from caching ajax calls
+    $.ajaxSetup({cache: false});
+
+    //The users list is refreshed automatically every second
+    setInterval(ajaxAliesList, refreshRate);
+
+    //The chat content is refreshed only once (using a timeout) but
+    //on each call it triggers another execution of itself later (1 second later)
+    //triggerAjaxMsgContent();
+});

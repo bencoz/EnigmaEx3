@@ -24,6 +24,7 @@ $(function() { // onload...do
                 console.log("data was successfully uploaded");
                 $("#result").empty();
                 document.write(data);
+                document.close();
                 // ("text/html", "replace");
                 // newDoc.write(data)
                 // //$("html").html(data);
