@@ -43,9 +43,9 @@ public class Alies implements Serializable {
     public String getName() {
         return aliesName;
     }
-    public void setNewGameDetails(EnigmaMachine em, List<String> _dictionary, BlockingQueue<AliesResponse> _answersFromAlies_Queue){
+    public void setNewGameDetails(EnigmaMachine em, BlockingQueue<AliesResponse> _answersFromAlies_Queue){
         machine = em;
-        dictionary = _dictionary;
+        dictionary = em.getDecipher().getDictionary();
         excludeWords = em.getDecipher().getExcludeChars();
         maxNumOfAgents = em.getDecipher().getMaxNumOfAgents();
         candidacies = new ArrayList<>();
@@ -64,25 +64,13 @@ public class Alies implements Serializable {
     public void start(){
         this.decipheringStartTime = System.currentTimeMillis();
         activateAgents();
-        /*while( !gameFinished){
-            try {
-                AgentResponse response = answersToDM_Queue.take();
-                checkresponse(response);
-
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-        sleep(gameFinishe);
-        killreamaingthreads();*/
     }
 
-    public boolean init(String _code, DifficultyLevel _difficulty, Integer _taskSize, Integer _numOfAgents){
-        mission = new DecipherMission(machine,_difficulty);
-        mission.init(machine, _taskSize, _numOfAgents);
+    public boolean init(String _code, DifficultyLevel _difficulty, Integer _numOfAgents){
+        mission = new DecipherMission(machine, _difficulty);
+        mission.init(machine, taskSize, _numOfAgents);
         numOfAgents = _numOfAgents;
-        taskSize = _taskSize;
-        if (mission.getSize() < _taskSize*numOfAgents)
+        if (mission.getSize() < taskSize*numOfAgents)
             return false;
         this.codeToDecipher = _code;
         answersToDM_Queue = new ArrayBlockingQueue<>(numOfAgents);
@@ -136,7 +124,8 @@ public class Alies implements Serializable {
     }
 
 
-    private void closeConnection(String agentName) { //TODO :: IMPLENMENT !!!
+    private void closeConnection(String agentName) {
+        //TODO :: IMPLENMENT !!!
     }
 
     private void giveAgentBlockOfTasks(String agentName) {
@@ -231,5 +220,9 @@ public class Alies implements Serializable {
 
     public int getPortNumber() {
         return portNumber;
+    }
+
+    public void setTaskAmount(Integer taskAmount) {
+        this.taskSize = taskAmount;
     }
 }

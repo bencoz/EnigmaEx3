@@ -65,3 +65,6 @@ body {
 .header-container > h1 {
     padding-left: 40%;
 }
+#dummyframe{
+    display: none;
+}

@@ -51,7 +51,7 @@ public class Game implements Serializable{
     public void addPlayingAlies(Alies _alies){
         playingAlies.add(_alies);
         numOfAliesSigned++;
-        _alies.setNewGameDetails(getMachineCopy(),dictionary, answersFromAlies_Queue);
+        _alies.setNewGameDetails(getMachineCopy(), answersFromAlies_Queue);
         if(numOfAliesSigned == neededNumOfAlies)
         {
             gameStatus = GameStatus.ACTIVE;

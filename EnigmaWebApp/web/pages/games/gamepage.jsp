@@ -22,7 +22,7 @@
             <h2>Machine Configuration</h2>
             <iframe width="0" height="0" border="0" name="dummyframe" id="dummyframe"></iframe>
             <form class="uboat-settings" id="config" method="post" onsubmit="postMachineConfig()" target="dummyframe">
-                <fieldset id="fieldset">
+                <fieldset id="uboatfieldset">
                     <table>
                         <tbody>
                         <tr>
@@ -81,11 +81,13 @@
             <h2>Alies Configuration</h2>
             <h3>Port Number : ${portNum}</h3>
             <form id='aliesConfig' method="post" class="alies-setting" onsubmit="postAliesSettings()" target="dummyframe">
-                Task Size:
-                <input name="tasksize" type="text" value="10" />
-                <button class="alies-ready-btn" type="submit" form="aliesConfig">
-                    Ready
-                </button>
+                <fieldset id="aliesfieldset">
+                    <label title="text">Task Size:</label>
+                    <input name="tasksize" type="text" value="10" />
+                    <button class="alies-ready-btn" type="submit" form="aliesConfig">
+                        Ready
+                    </button>
+                </fieldset>
             </form>
             <div class="target-msg-container">
 
@@ -97,11 +99,6 @@
     <div class="msg-container">
         <h1>Candidates:</h1>
         <ol class="msg-list">
-        <li>"MessageMessageMessageMessage" By:"Alies1"</li>
-        <li>"MessageMessageMessageMessage" By:"Alies1"</li>
-        <li>"MessageMessageMessageMessage" By:"Alies2"</li>
-        <li>"MessageMessageMessageMessage" By:"Alies3"</li>
-        <li>"MessageMessageMessageMessage" By:"Alies3"</li>
         </ol>
     </div>
     <div class="alies-info-container">

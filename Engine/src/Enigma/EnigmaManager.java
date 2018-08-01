@@ -51,6 +51,7 @@ public class EnigmaManager
             errorInMachineBuilding = "Machine Battlefield Uninitialized";
             return false;
         }
+        dictionary = machine.getDecipher().getDictionary();
         return true;
     }
 
@@ -182,8 +183,6 @@ public class EnigmaManager
         else
             return true;
     }
-
-
 
     private boolean isMachineABCEven() {
         return (machine.getABC().length() % 2 == 0);

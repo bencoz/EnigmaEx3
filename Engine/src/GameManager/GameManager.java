@@ -18,7 +18,7 @@ public class GameManager {
         playingUboats = new HashMap<>();
         playingAlies = new HashMap<>();
 
-        Game g1 = new Game("game1",2,DifficultyLevel.Easy);
+        /*Game g1 = new Game("game1",2,DifficultyLevel.Easy);
         Uboat uboat1 = new Uboat("Eden");
         g1.setManagerAs(uboat1);
 
@@ -27,7 +27,7 @@ public class GameManager {
         g2.setManagerAs(uboat2);
 
         games.put("game1",g1);
-        games.put("game2",g2);
+        games.put("game2",g2);*/
     }
 
     public void createGame(String managingUboat_name, EnigmaManager enigmaManager)
@@ -144,5 +144,10 @@ public class GameManager {
     public int getAliesPort(String usernameFromSession) {
         Alies alies = playingAlies.get(usernameFromSession);
         return alies.getPortNumber();
+    }
+
+    public void setAliesTaskAmount(String usernameFromSession, Integer taskAmount) {
+        Alies alies = playingAlies.get(usernameFromSession);
+        alies.setTaskAmount(taskAmount);
     }
 }
