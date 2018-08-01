@@ -32,7 +32,7 @@ public class Alies implements Serializable {
     private transient BlockingQueue<AgentResponse> answersToDM_Queue;
     private transient ServerSocket agentServer;
     private transient SocketHandler socketHandler;
-
+    private Integer portNumber;
     private transient BlockingQueue<AliesResponse> answerToUboat_Queue;
 
     //TODO: change? need to get en and dic according to the chosen game
@@ -56,8 +56,8 @@ public class Alies implements Serializable {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        portNumber = agentServer.getLocalPort();
         answerToUboat_Queue = _answersFromAlies_Queue;
-        System.out.println("listening on port: " + agentServer.getLocalPort());
     }
 
 
@@ -227,5 +227,9 @@ public class Alies implements Serializable {
 
     public void setMachineCopy(EnigmaMachine _machineCopy) {
         machine = _machineCopy;
+    }
+
+    public int getPortNumber() {
+        return portNumber;
     }
 }
