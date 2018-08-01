@@ -3,30 +3,6 @@ var refreshRate = 2000; //mili seconds
 var MSG_LIST_URL = buildUrlWithContextPath("msglist");
 var ALIES_LIST_URL = buildUrlWithContextPath("alieslist");
 
-function ajaxAliesList() {
-    $.ajax({
-        url: ALIES_LIST_URL,
-        data: "",
-        dataType: 'json',
-        success: function(data) {
-            console.log("got alies data" + data);
-            loadAlies(data);
-            //TODO:: if all alies connected then stop.
-        },
-        error: function(error) {
-            console.log("Error fetching Alies List");
-            setTimeout(ajaxAliesList, 2000);
-        }
-    });
-}
-
-function loadAlies(users) {
-    $.each(users || [], function(index, alies) {
-        console.log("Adding alies #" + index + ": " + username);
-        $('<li>' + alies.name + '<br>' + alies.numOfAgents + '</li>').appendTo($(".alies-list"));
-    });
-}
-
 function appendToMsgList(entries) {
 //    $("#chatarea").children(".success").removeClass("success");
 
@@ -159,6 +135,37 @@ function postAliesSettings() {
     return false;
 }
 
+function refreshParticipatingAlies(alies_list) {
+    //clear all current users
+    $("#alies-info-container").empty();
+
+    // rebuild the list of alies: scan all alies and add them to the list
+    $.each(alies_list || [], function(index, alies) {
+
+        var id = alies.name;
+        var nameDiv = $('<div>').text("Alies Name: "+ alies.aliesName);
+        var numOfAgentDiv = $('<div>').text("Number Of Agent: "+ alies.numOfAgents);
+
+        var aliesDiv = $('<div>', {
+            class: "AliesObj",
+            id: id
+        });
+        aliesDiv.append(nameDiv);
+        aliesDiv.append(numOfAgentDiv);
+
+        aliesDiv.appendTo($("#alies-info-container"));
+    });
+}
+
+function ajaxAliesList() {
+    //TODO :: STOP when alies number.
+    $.ajax({
+        url: "./alieslist",
+        success: function (alies_list) {
+            refreshParticipatingAlies(alies_list);
+        }
+    });
+}
 //activate the timer calls after the page is loaded
 $(function() {
 
