@@ -140,4 +140,8 @@ public class GameManager {
         Uboat uboat = new Uboat(userName);
         playingUboats.put(userName , uboat);
     }
+
+    public void setAliesTaskSize(String usernameFromSession, Integer taskSize) {
+        playingAlies.get(usernameFromSession).setTaskSize(taskSize);
+    }
 }
