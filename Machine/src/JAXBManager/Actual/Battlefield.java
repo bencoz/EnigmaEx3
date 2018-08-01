@@ -2,7 +2,9 @@ package JAXBManager.Actual;
 
 import Factory.DifficultyLevel;
 
-public class Battlefield {
+import java.io.Serializable;
+
+public class Battlefield implements Serializable {
     private DifficultyLevel level;
     private String name;
     private int numOfAllies;
