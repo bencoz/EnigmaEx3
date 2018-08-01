@@ -21,13 +21,13 @@ import java.util.concurrent.BlockingQueue;
 public class Game implements Serializable{
     private Uboat managingUboat;
     private transient List<Alies> playingAlies ;
-    private String winningAliesName = null;
+    private transient String winningAliesName = null;
     private Integer neededNumOfAlies;
     private Integer numOfAliesSigned = 0;
     private String battlefieldName;
     private transient BlockingQueue<AliesResponse> answersFromAlies_Queue;
-    private transient GameStatus gameStatus;
-    private transient Factory.DifficultyLevel difficultyLevel;
+    private GameStatus gameStatus;
+    private Factory.DifficultyLevel difficultyLevel;
 
     //copy of the machine and code for the playing alies
     private transient EnigmaManager enigmaManager;
@@ -37,12 +37,13 @@ public class Game implements Serializable{
 
     //private machineCopy; // for the playing alies to clone
 
-    public Game(String _battlefieldName, Integer _neededNumOfAlies, Factory.DifficultyLevel difficultyLevel){
+    public Game(String _battlefieldName, Integer _neededNumOfAlies, Factory.DifficultyLevel _difficultyLevel){
         battlefieldName = _battlefieldName;
         neededNumOfAlies = _neededNumOfAlies;
         answersFromAlies_Queue = new ArrayBlockingQueue<>(neededNumOfAlies);
         playingAlies = new ArrayList<>();
         gameStatus = GameStatus.UNINITIALIZED;
+        difficultyLevel = _difficultyLevel;
     }
 
 
@@ -50,7 +51,7 @@ public class Game implements Serializable{
     public void addPlayingAlies(Alies _alies){
         playingAlies.add(_alies);
         numOfAliesSigned++;
-        _alies.setNewGameDetails(enigmaManager.getMachine().deepCopy(),dictionary, answersFromAlies_Queue);
+        _alies.setNewGameDetails(getMachineCopy(),dictionary, answersFromAlies_Queue);
         if(numOfAliesSigned == neededNumOfAlies)
         {
             gameStatus = GameStatus.ACTIVE;
