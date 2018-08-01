@@ -6,7 +6,7 @@ var refreshRate = 2000; //mili seconds
 
 function refreshGamesList(games) {
     //clear all current users
-    $("#gameslist").empty();
+    $("#game-list").empty();
 
     // rebuild the list of games: scan all users and add them to the list
     $.each(games || [], function(index, game) {
@@ -15,15 +15,26 @@ function refreshGamesList(games) {
         //game will be described by jason:
         //{battlefieldName : name, managerName: managerName, isActive:is/isn't(true/false), difficulty:difficulty,
         //actualNumOfUsers:actualNumOfUsers , neededNumOfUsers:neededNumOfUsers}
-        $('<button>',{ type : "button", onclick : "clickOnGame()"})
-            .append('<div>',{class: "gameObj",id: game.battlefieldName}
-                .append($('<ul>')
-                    .append('<li>' + "Battlefield Name: "+ game.battlefieldName+'</li>')
-                    .append('<li>' + "Manager Name: "+ game.managerName+'</li>')
-                    .append('<li>' + "Game" + game.isActive + "active" +'</li>')
-                    .append('<li>' + "Difficulty Level" + game.difficulty  +'</li>')
-                    .append('<li>' + game.actualNumOfUser + "/" + NeededNumOfUser +'</li>'))
-                .appendTo($("#gameslist")));
+        var id = game.battlefieldName;
+        var nameDiv = $('<div>').text("Battlefield Name: "+ game.battlefieldName);
+        var managerDiv = $('<div>').text("Manager Name: "+ game.managingUboat.uboatName);
+        var difficultyDiv = $('<div>').text("Difficulty Level: " + game.difficultyLevel);
+        var signedDiv = $('<div>').text("In game alies:" + game.numOfAliesSigned + "/" + game.neededNumOfAlies);
+        var statusDiv = $('<div>').text("Status: " + game.gameStatus);
+
+        var btn = $('<button>', {
+            type: "button",
+            class: "gameObj",
+            id: id
+            });
+        btn.on("click", {name: game.battlefieldName},clickOnGame);
+        btn.append(nameDiv);
+        btn.append(managerDiv);
+        btn.append(difficultyDiv);
+        btn.append(signedDiv);
+        btn.append(statusDiv);
+
+        btn.appendTo($("#game-list"));
     });
 }
 
@@ -38,20 +49,20 @@ function ajaxGamesList() {
 
 }
 
-function clickOnGame()
+function clickOnGame(e)
 {
-    var t = this;
+    var data = e.data.name;
     $.ajax({
     method:'POST',
-    url: "/pages/joingame",
+    url: "/games/joingame",
 
-    data: {battleName:name},
+    data: {battleName:data},
     timeout: 4000,
     error: function(xhr) {
         var html = $.parseHTML(xhr.responseText)
         console.error("Failed to submit");
         if (html)
-            $("#result").text(html[5].innerText);
+            alert(html[5].innerText);
     },
     success: function(data) {
         console.log("joined game");
@@ -64,7 +75,6 @@ function clickOnGame()
     // return value of the submit operation
     // by default - we'll always return false so it doesn't redirect the user.
     return false;
-
 }
 
 $(function() {
