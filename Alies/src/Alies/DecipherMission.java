@@ -11,7 +11,6 @@ import java.util.stream.Collectors;
 public class DecipherMission {
     private double size;
     private Integer taskSize;
-    private Integer numOfAgents;
     private boolean done;
     private DifficultyLevel difficulty;
     private List<AgentTask> tasks;
@@ -87,9 +86,8 @@ public class DecipherMission {
         return res;
     }
 
-    public void init(EnigmaMachine machine, Integer _taskSize, Integer _numOfAgents){
+    public void init(EnigmaMachine machine, Integer _taskSize){
         taskSize = _taskSize;
-        numOfAgents = _numOfAgents;
         setTasks(machine);
         taskIterator = tasks.iterator();
     }
@@ -107,9 +105,6 @@ public class DecipherMission {
         }
     }
 
-    public Integer getNumOfAgent(){
-        return numOfAgents;
-    }
 
     public Double getSize() {
         return size;

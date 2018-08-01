@@ -25,7 +25,6 @@ public class LoadGameSettingsServlet extends HttpServlet {
         List<Character> chosenRotorsLoc = new LinkedList<>();
         Integer chosenReflectorID = Integer.parseInt(request.getParameter("reflector"));
         String message = request.getParameter("message");
-        message = message.toUpperCase();
         boolean buildIsOk = true;
         String error = "";
         for (int i =0; i < enigmaManager.getMachine().getNumOfRotors(); i++){

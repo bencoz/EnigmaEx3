@@ -1,5 +1,7 @@
 package Alies;
 
+import Commons.CandidateForDecoding;
+
 public class AliesResponse {
     String candidateForDecoding;
     String aliesTeamName;
@@ -9,6 +11,7 @@ public class AliesResponse {
         candidateForDecoding = _candidateForDecoding;
         aliesTeamName = _aliesTeamName;
     }
+
 
     public String getAnswer() {
         return candidateForDecoding;

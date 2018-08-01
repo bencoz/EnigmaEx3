@@ -2,7 +2,6 @@ package server.servlets;
 
 import Enigma.EnigmaManager;
 import GameManager.GameManager;
-import server.constants.Constants;
 import server.utils.ServletUtils;
 import server.utils.SessionUtils;
 
@@ -23,10 +22,8 @@ public class JoinGameServlet extends HttpServlet {
         String battleNameRequested = request.getParameter("battleName");
         GameManager gameManager = ServletUtils.getGameManager(getServletContext());
 
-        request.getSession(true).setAttribute(Constants.GAMENAME, battleNameRequested);
         gameManager.addAliesToGame(usernameFromSession, battleNameRequested);
         int port = gameManager.getAliesPort(usernameFromSession);
-
         request.setAttribute("portNum", port);
         request.setAttribute("battlefield", battleNameRequested);
         request.setAttribute("uboatdisplay", "none");

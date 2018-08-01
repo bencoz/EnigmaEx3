@@ -2,7 +2,6 @@ var msgVersion = 0;
 var refreshRate = 2000; //mili seconds
 var MSG_LIST_URL = buildUrlWithContextPath("msglist");
 var ALIES_LIST_URL = buildUrlWithContextPath("alieslist");
-var aliesIntervalId;
 
 function appendToMsgList(entries) {
 //    $("#chatarea").children(".success").removeClass("success");
@@ -22,54 +21,14 @@ function appendMsgEntry(index, entry){
 
 function createMsgEntry (entry){
     var date = new Date(entry.time*1000);
-    return $("<span class=\"success\">").append(entry.username + "> " + entry.candidate);
+    var hours = date.getHours();
+    var minutes = "0" + date.getMinutes();
+    var seconds = "0" + date.getSeconds();
+    var formattedTime = hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
+    return $("<span class=\"success\">").append(entry.username + "> " + entry.candidate +"("+formattedTime+")");
 }
 
 function ajaxMsgContent() {
-    var uboatDisplay = $('#uboat-game').css('display');
-    if (uboatDisplay == 'none'){
-        ajaxAliesCandidates();
-    } else {
-        ajaxUboatList()
-    }
-}
-
-function ajaxAliesCandidates() {
-    $.ajax({
-        url: MSG_LIST_URL, //TODO:: change to agentcandidatesservlet
-        data: "msgVersion=" + msgVersion,
-        dataType: 'json',
-        success: function(data) {
-            /*
-             data is of the next form:
-             {
-                "entries": [
-                    {
-                        "candidate":"Hi",
-                        "username":"bbb",
-                    },
-                    {
-                        "candidate":"Hello",
-                        "username":"bbb",
-                    }
-                ],
-                "version":1
-             }
-             */
-            console.log("Server msg version: " + data.version + ", Current msg version: " + msgVersion);
-            if (data.version !== msgVersion) {
-                msgVersion = data.version;
-                appendToMsgList(data.entries);
-            }
-            triggerAjaxMsgContent();
-        },
-        error: function(error) {
-            triggerAjaxMsgContent();
-        }
-    });
-}
-
-function ajaxUboatList() {
     $.ajax({
         url: MSG_LIST_URL,
         data: "msgVersion=" + msgVersion,
@@ -82,10 +41,12 @@ function ajaxUboatList() {
                     {
                         "candidate":"Hi",
                         "username":"bbb",
+                        "time":1485548397514
                     },
                     {
                         "candidate":"Hello",
                         "username":"bbb",
+                        "time":1485548397514
                     }
                 ],
                 "version":1
@@ -109,10 +70,7 @@ function triggerAjaxMsgContent() {
 }
 
 function disableMachineConfig() {
-    $('#uboatfieldset').attr('disabled', 'disabled');
-}
-function disableAliesConfig() {
-    $('#aliesfieldset').attr('disabled', 'disabled');
+    $('#fieldset').attr('disabled', 'disabled');
 }
 function addOutputText(text) {
     $('.target-msg-value').text(text);
@@ -142,6 +100,7 @@ function postMachineConfig() {
             },
             success: function(data) {
                 console.log("success")
+                console.log(data);
                 disableMachineConfig();
                 addOutputText(data);
                 OutputRed(false);
@@ -154,14 +113,23 @@ function postAliesSettings() {
     console.log("posting alies settings");
     $.ajax({
         method:'POST',
-        url: './ready',
+        url: './load',
         data : $('#aliesConfig').serialize(),
         error: function(xhr) {
+            console.log("error");
+            var html = $.parseHTML(xhr.responseText)
             console.error("Failed to submit");
+            if (html){
+                addOutputText(html[5].innerText.replace("Message", ''));
+                OutputRed(true);
+            }
         },
         success: function(data) {
             console.log("success")
-            disableAliesConfig();
+            console.log(data);
+            disableMachineConfig();
+            addOutputText(data);
+            OutputRed(false);
         }
     });
     return false;
@@ -195,10 +163,6 @@ function ajaxAliesList() {
         url: "./alieslist",
         success: function (alies_list) {
             refreshParticipatingAlies(alies_list);
-        },
-        error: function (xhr) {
-            var html = $.parseHTML(xhr.responseText)
-            console.error(html[5].innerText.replace("Message",""));
         }
     });
 }
@@ -209,7 +173,7 @@ $(function() {
     $.ajaxSetup({cache: false});
 
     //The users list is refreshed automatically every second
-    aliesIntervalId = setInterval(ajaxAliesList, refreshRate);
+    setInterval(ajaxAliesList, refreshRate);
 
     //The chat content is refreshed only once (using a timeout) but
     //on each call it triggers another execution of itself later (1 second later)
