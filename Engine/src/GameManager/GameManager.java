@@ -39,7 +39,7 @@ public class GameManager {
         Game newGame = new Game(battlefieldName, neededNumOfAlies, difficultyLevel);
 
         //search if managingUboat exist in the system and if not create him
-        Uboat managingUboat = findOrCreatePlayingUboat(managingUboat_name);
+        Uboat managingUboat = findPlayingUboat(managingUboat_name);
         newGame.setManagerAs(managingUboat);
         newGame.setEnigmaManager(enigmaManager);
         managingUboat.setGame(newGame.getBattlefieldName());
@@ -47,19 +47,15 @@ public class GameManager {
     }
 
     public void addAliesToGame(String _newAliesName, String _battlefieldName){
-        Alies newAlies = findOrCreatePlayingAlies(_newAliesName);
+        Alies newAlies = findPlayingAlies(_newAliesName);
         Game game = findGame(_battlefieldName);
         game.addPlayingAlies(newAlies);
     }
 
-    private Alies findOrCreatePlayingAlies(String _aliesName) {
-        Alies resAlies;
+    private Alies findPlayingAlies(String _aliesName) {
+        Alies resAlies = null;
         if(playingAlies.containsKey(_aliesName)) {
             resAlies = playingAlies.get(_aliesName);
-        }
-        else{
-            resAlies = new Alies(_aliesName);
-            playingAlies.put(_aliesName, resAlies);
         }
         return resAlies;
     }
@@ -82,18 +78,7 @@ public class GameManager {
         return resGame;
     }
 
-    public Uboat findOrCreatePlayingUboat(String _uboatName)
-    {
-        Uboat resUboat;
-        if(playingUboats.containsKey(_uboatName)) {
-            resUboat = playingUboats.get(_uboatName);
-        }
-        else{
-            resUboat = new Uboat(_uboatName);
-            playingUboats.put(_uboatName, resUboat);
-        }
-        return resUboat;
-    }
+
 
     public Uboat findPlayingUboat(String _uboatName)
     {
@@ -146,8 +131,13 @@ public class GameManager {
         return alies.getPortNumber();
     }
 
-    public void setAliesTaskAmount(String usernameFromSession, Integer taskAmount) {
-        Alies alies = playingAlies.get(usernameFromSession);
-        alies.setTaskAmount(taskAmount);
+    public void addAlies(String userName){
+        Alies alies = new Alies(userName);
+        playingAlies.put(userName,alies);
+    }
+
+    public  void addUboat(String userName){
+        Uboat uboat = new Uboat(userName);
+        playingUboats.put(userName , uboat);
     }
 }
