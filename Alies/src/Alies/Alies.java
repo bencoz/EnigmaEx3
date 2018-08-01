@@ -6,33 +6,34 @@ import Machine.*;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.*;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
-public class Alies {
+public class Alies implements Serializable {
     private String aliesName;
-    private String codeToDecipher;
-    private List<String> dictionary;
-    private String excludeWords;
+    private transient String codeToDecipher;
+    private transient List<String> dictionary;
+    private transient String excludeWords;
     private Integer numOfAgents;
     private Integer taskSize;
     private Integer maxNumOfAgents;
-    private EnigmaMachine machine; //copy of the machine
-    private DecipherMission mission;
+    private transient EnigmaMachine machine; //copy of the machine
+    private transient DecipherMission mission;
     private Integer blockSize; //block of tasks
-    private List<CandidateForDecoding> candidacies;
-    private DecipheringStatus status;
+    private transient List<CandidateForDecoding> candidacies;
+    private transient DecipheringStatus status;
     private long decipheringStartTime;
     private Integer handledTasksAmount = 0;
-    private boolean gameFinished = false;
-    private BlockingQueue<AgentResponse> answersToDM_Queue;
-    private ServerSocket agentServer;
-    private SocketHandler socketHandler;
+    private transient boolean gameFinished = false;
+    private transient BlockingQueue<AgentResponse> answersToDM_Queue;
+    private transient ServerSocket agentServer;
+    private transient SocketHandler socketHandler;
 
-    private BlockingQueue<AliesResponse> answerToUboat_Queue;
+    private transient BlockingQueue<AliesResponse> answerToUboat_Queue;
 
     //TODO: change? need to get en and dic according to the chosen game
     public Alies(String _name) {
