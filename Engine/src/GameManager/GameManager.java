@@ -140,4 +140,9 @@ public class GameManager {
         }
         return  battleEnigmaManager;
     }
+
+    public int getAliesPort(String usernameFromSession) {
+        Alies alies = playingAlies.get(usernameFromSession);
+        return alies.getPortNumber();
+    }
 }
