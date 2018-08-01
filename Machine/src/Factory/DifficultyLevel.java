@@ -6,7 +6,7 @@ public enum DifficultyLevel {
     Hard,
     Impossible;
 
-    public static DifficultyLevel getDufficultyByStr(String level) {
+    public static DifficultyLevel getDifficultyByStr(String level) {
         level = level.toUpperCase();
         DifficultyLevel res = Easy;
         switch (level)
