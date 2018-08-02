@@ -15,6 +15,8 @@ import java.io.IOException;
 
 public class JoinGameServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        //TODO:: If user in game to inGameServlet - check user type and move to jsp with data
+        //TODO:: Move important function to static Servlet Utils
         response.sendRedirect("games/joingame.html");
     }
 

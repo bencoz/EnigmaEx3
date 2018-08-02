@@ -21,6 +21,8 @@ public class NewGameServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        //TODO:: If user in game to inGameServlet - check user type and move to jsp with data
+        //TODO:: Move important function to static Servlet Utils
         response.sendRedirect("games/uploadgame.html");
     }
 
@@ -42,8 +44,9 @@ public class NewGameServlet extends HttpServlet {
             response.sendError(403, "name already exists"); //TODO :: CHOOSE ERROR CODE PROPERLY
             return;
         }
+
         gameManager.createGame(usernameFromSession, enigmaManager);
-        //response.sendRedirect();//TODO: response....(?)
+
         String rotorsHTML = generateRotorsHTML(enigmaManager.getMachine().getRotors().size());
         String rotorsLocation = generateRotorsLocationHTML(enigmaManager.getMachine().getRotors().size());
         String reflectors = generateReflectorsHTML(enigmaManager.getMachine().getReflectors().size());

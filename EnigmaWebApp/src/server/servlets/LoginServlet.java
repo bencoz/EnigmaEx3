@@ -76,12 +76,12 @@ public class LoginServlet extends HttpServlet {
                     //redirect the request to the chat room - in order to actually change the URL
                     System.out.println("On login, request URI is: " + request.getRequestURI());
                     if (userTypeFromParameter.equals("Uboat")) {
-                        response.sendRedirect(NEW_GAME_URL);
                         gameManager.addUboat(usernameFromParameter);
+                        response.sendRedirect(NEW_GAME_URL);
                     }
                     else {
-                        response.sendRedirect(GAMES_LIST_URL);
                         gameManager.addAlies(usernameFromParameter);
+                        response.sendRedirect(GAMES_LIST_URL);
                     }
                 }
             }
