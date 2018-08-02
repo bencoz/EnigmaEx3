@@ -4,8 +4,10 @@
 <head>
     <title>Enigma Competition</title>
     <link rel="stylesheet" href="game.css">
+    <link rel="stylesheet" href="winningmodal.css">
     <script src="../../common/jquery-2.0.3.min.js"></script>
     <script src="gamepage.js"></script>
+    <script src="wining.js"></script>
 </head>
 <body>
 <div class="game-container">
@@ -105,6 +107,25 @@
         <h2>Participating Alies</h2>
         <ul class='alies-list'>
         </ul>
+    </div>
+</div>
+<div class="modal-container">
+    <!-- The Modal -->
+    <div id="myModal" class="modal">
+        <!-- Modal content -->
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="close">&times;</span>
+                <h3>Wining Alies: </h3>
+            </div>
+            <div class="modal-body">
+                <p>Agent Name: </p>
+            </div>
+            <div class="modal-footer">
+                <button id="btncontinue">Continue</button>
+                <button id="btnlogout">Logout</button>
+            </div>
+
     </div>
 </div>
 </body>

@@ -2,21 +2,20 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Enigma Server</title>
-    <style>
-        #result {color: red}
-    </style>
+    <title>Enigma Upload</title>
+    <link rel="stylesheet" href="../../common/bootstrap.min.css">
+    <link rel="stylesheet" href="uploadgame.css">
     <script type="text/javascript" src="../../common/jquery-2.0.3.min.js"></script>
     <script src="../../common/context-path-helper.js"></script>
-    <script type="text/javascript" src="./uploadgame.js">
-    </script>
+    <script type="text/javascript" src="uploadgame.js"></script>
 </head>
 <body>
+    <h1>The force is strong with this one</h1>
     <h3>Select Your Enigma Game XML File:</h3>
     <form id="uploadForm" action="/pages/games/newgame" enctype="multipart/form-data" method="POST">
-        <input type="file"><br><br>
-        <input type="Submit" value="Upload File"><br>
+        <input type="file"></br></br>
     </form>
+    <button class="btn btn-info btn-lg active" type="Submit" form="uploadForm" value="Upload File">Upload File</button>
     <div id="result"></div>
 </body>
 </html>

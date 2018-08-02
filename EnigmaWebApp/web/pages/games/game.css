@@ -43,6 +43,7 @@ body {
 .logout-btn{
     float: right;
     margin: 20px;
+    display: none;
 }
 .target-msg-container{
     float: left;
