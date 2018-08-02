@@ -16,6 +16,14 @@
         <servlet-class>server.servlets.JoinGameServlet</servlet-class>
     </servlet>
     <servlet>
+        <servlet-name>LeaveGameServlet</servlet-name>
+        <servlet-class>server.servlets.LeaveGameServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ResetGameServlet</servlet-name>
+        <servlet-class>server.servlets.ResetGameServlet</servlet-class>
+    </servlet>
+    <servlet>
         <servlet-name>GameListServlet</servlet-name>
         <servlet-class>server.servlets.GameListServlet</servlet-class>
     </servlet>
@@ -26,6 +34,10 @@
     <servlet>
         <servlet-name>LoginServlet</servlet-name>
         <servlet-class>server.servlets.LoginServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>LogoutServlet</servlet-name>
+        <servlet-class>server.servlets.LogoutServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>AliesListServlet</servlet-name>
@@ -44,12 +56,24 @@
         <url-pattern>/pages/games/joingame</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
+        <servlet-name>ResetGameServlet</servlet-name>
+        <url-pattern>/pages/games/resetgame</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>LeaveGameServlet</servlet-name>
+        <url-pattern>/pages/games/leavegame</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
         <servlet-name>NewGameServlet</servlet-name>
         <url-pattern>/pages/games/newgame</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>LoginServlet</servlet-name>
         <url-pattern>/pages/signup/login</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>LogoutServlet</servlet-name>
+        <url-pattern>/pages/games/logout</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>AliesListServlet</servlet-name>

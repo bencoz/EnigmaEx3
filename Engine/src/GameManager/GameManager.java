@@ -141,7 +141,34 @@ public class GameManager {
         playingUboats.put(userName , uboat);
     }
 
-    public void setAliesTaskSize(String usernameFromSession, Integer taskSize) {
-        playingAlies.get(usernameFromSession).setTaskSize(taskSize);
+    public void setAliesTaskSize(String usernameFromSession, Integer _taskSize) {
+        Alies alies = playingAlies.get(usernameFromSession);
+        alies.setTaskSize(_taskSize);
+    }
+
+    public void removePlayer(String usernameFromSession) {
+        if(playingUboats.containsKey(usernameFromSession)){
+            //remove the game that uboat upload
+            Uboat uboat = playingUboats.get(usernameFromSession);
+            String gameName = uboat.getGameName();
+            games.remove(gameName);
+            //remove the player
+            playingUboats.remove(usernameFromSession);
+        }
+        else if(playingAlies.containsKey(usernameFromSession)){
+            playingAlies.remove(usernameFromSession);
+        }
+    }
+
+    public void resetGame(String usernameFromSession, String battleNameRequested) {
+        Game game = games.get(battleNameRequested);
+        game.reset();
+    }
+
+    public void removeAliesFromGame(String usernameFromSession, String battleNameRequested) {
+        Game game = games.get(battleNameRequested);
+        Alies alies = playingAlies.get(usernameFromSession);
+        game.removeAlies(alies);
+        alies.resetGameDetails();
     }
 }

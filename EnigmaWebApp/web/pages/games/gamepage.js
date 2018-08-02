@@ -160,8 +160,57 @@ function postAliesSettings() {
             console.error("Failed to submit");
         },
         success: function(data) {
-            console.log("success")
+            console.log("success");
             disableAliesConfig();
+        }
+    });
+    return false;
+}
+
+
+//TODO:: connect to X button
+function AliesClickXbutton() { //(alies)
+    console.log("alies leave game");
+    $.ajax({
+        method:'POST',
+        url: './leavegame',
+        error: function(xhr) {
+            console.error("Failed to submit");
+        },
+        success: function(data) {
+            console.log("success");
+        }
+    });
+    return false;
+}
+
+//TODO:: connect to logout button
+function UboatClickLogout() { //(uboat)
+    console.log("uboat logout");
+    $.ajax({
+        method:'POST',
+        url: './logout',
+        error: function(xhr) {
+            console.error("Failed to submit");
+        },
+        success: function(data) {
+            console.log("success");
+        }
+    });
+    return false;
+}
+
+//TODO:: connect to Reset button
+function UboatClickResetGame() { //(uboat)
+    console.log("uboat reset game");
+    $.ajax({
+        method:'POST',
+        url: './resetgame',
+        error: function(xhr) {
+            console.error("Failed to submit");
+        },
+        success: function(data) {
+            console.log("success");
         }
     });
     return false;

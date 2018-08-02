@@ -245,4 +245,11 @@ public class Alies implements Serializable {
     public boolean isReady() {
         return ready;
     }
+
+    public void resetGameDetails() {
+        machine = null;
+        answersFromAlies_Queue = null;
+        candidacies = null;
+        status = null;
+    }
 }

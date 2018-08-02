@@ -1,5 +1,6 @@
 package server.servlets;
 
+import GameManager.GameManager;
 import Users.UserManager;
 import server.utils.ServletUtils;
 import server.utils.SessionUtils;
@@ -11,7 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet(name = "LogoutServlet", urlPatterns = {"/chat/logout"})
+@WebServlet(name = "LogoutServlet", urlPatterns = {"/pages/games/logout"})
 public class LogoutServlet extends HttpServlet {
 
 
@@ -19,10 +20,13 @@ public class LogoutServlet extends HttpServlet {
             throws ServletException, IOException {
         String usernameFromSession = SessionUtils.getUsername(request);
         UserManager userManager = ServletUtils.getUserManager(getServletContext());
+        GameManager gameManager = ServletUtils.getGameManager(getServletContext());
 
         if (usernameFromSession != null) {
             System.out.println("Clearing session for " + usernameFromSession);
             userManager.removeUser(usernameFromSession);
+            //both exit requests (uboat and alies) handled here (in the same way)
+            gameManager.removePlayer(usernameFromSession);
             SessionUtils.clearSession(request);
 
             /*

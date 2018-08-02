@@ -72,6 +72,22 @@ function clickOnGame(e)
     return false;
 }
 
+//TODO:: connect to logout button
+function AliesLogout() { //(alies)
+    console.log("alies logout");
+    $.ajax({
+        method:'POST',
+        url: './logout',
+        error: function(xhr) {
+            console.error("Failed to submit");
+        },
+        success: function(data) {
+            console.log("success");
+        }
+    });
+    return false;
+}
+
 $(function() {
 
     //prevent IE from caching ajax calls

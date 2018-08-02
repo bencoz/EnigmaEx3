@@ -105,6 +105,7 @@ public class Game implements Serializable{
                 }
                 else {
                     done = (gameStatus == GameStatus.DONE);  //game Turned off
+                    gameStatus = GameStatus.DONE;
                 }
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -180,5 +181,21 @@ public class Game implements Serializable{
             }
         }
         return res;
+    }
+
+    public void reset() {
+        answersFromAlies_Queue = new ArrayBlockingQueue<>(neededNumOfAlies);
+        playingAlies = new ArrayList<>(); //need to be empty..
+        gameStatus = GameStatus.WAITING;
+        winningAliesName = null;
+        numOfAliesSigned = 0;
+        numOfAliesReady = 0;
+    }
+
+    public void removeAlies(Alies alies) {
+        if(playingAlies.contains(alies)) {
+            playingAlies.remove(alies);
+            numOfAliesSigned--;
+        }
     }
 }
