@@ -8,33 +8,36 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
-    <%@page import="chat.utils.*" %>
-    <%@ page import="chat.constants.Constants" %>
+    <%@page import="server.utils.*" %>
+    <%@ page import="server.constants.Constants" %>
     <%@ page import="server.utils.SessionUtils" %>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Online Chat</title>
-<!--        Link the Bootstrap (from twitter) CSS framework in order to use its classes-->
         <link rel="stylesheet" href="../../common/bootstrap.min.css"/>
-<!--        Link jQuery JavaScript library in order to use the $ (jQuery) method-->
-<!--        <script src="script/jquery-2.0.3.min.js"></script>-->
-<!--        and\or any other scripts you might need to operate the JSP file behind the scene once it arrives to the client-->
+        <link rel="stylesheet" href="../../common/enigmaWars.css">
+        <script type="text/javascript" src="../../common/jquery-2.0.3.min.js"></script>
+        <script type="text/javascript" src="../../common/enigmawars.js"></script>
     </head>
     <body>
-        <div class="sign-up-container">
+    <div class="sign-up-container">
+        <article class="starwars">
+            <section class="intro">
+            A long time ago, in a galaxy far,<br> far away....
+            </section>
+            <img class='logo' src="../../common/images/enigmawars.png">
             <% String usernameFromSession = SessionUtils.getUsername(request);%>
             <% String usernameFromParameter = request.getParameter(Constants.USERNAME) != null ? request.getParameter(Constants.USERNAME) : "";%>
             <% if (usernameFromSession == null) {%>
-            <h1>Welcome to the Online Chat</h1>
-            <br/>
-            <h2>Please enter a unique user name:</h2>
-            <form method="GET" action="login">
-                <input type="text" name="<%=Constants.USERNAME%>" value="<%=usernameFromParameter%>"/>
-                <input type="submit" value="Login"/>
-            </form>
-            <% Object errorMessage = request.getAttribute(Constants.USER_NAME_ERROR);%>
-            <% if (errorMessage != null) {%>
-            <span class="bg-danger" style="color:red;"><%=errorMessage%></span>
+                <form id='loginform'method="GET" action="pages/signup/login">
+                    User Name: <input type="text" name="username" class=""/>
+                    <input type="radio" name="usertype" value="Uboat" checked/> Uboat
+                    <input type="radio" name="usertype" value="Alies"/> Alies
+                </form>
+            <button class="btn btn-info btn-lg active" type="submit" form="loginform" value="submit">Login</button><br/>
+                <% Object errorMessage = request.getAttribute(Constants.USER_NAME_ERROR);%>
+                <% if (errorMessage != null) {%>
+                <span class="bg-danger" style="color:red;"><%=errorMessage%></span>
             <% } %>
             <% } else {%>
             <h1>Welcome back, <%=usernameFromSession%></h1>
@@ -42,6 +45,7 @@
             <br/>
             <a href="login?logout=true" id="logout">logout</a>
             <% }%>
-        </div>
+        </article>
+    </div>
     </body>
 </html>
