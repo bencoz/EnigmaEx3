@@ -35,7 +35,9 @@ public class Agent {
 
     public Agent(String[] addr){
         try {
+            System.out.println("trying to connect with Alies...");
             MyClient = new Socket(addr[0], Integer.parseInt(addr[1]));
+            System.out.println("connected successfully");
             ois = new ObjectInputStream(MyClient.getInputStream());
             oos = new ObjectOutputStream(MyClient.getOutputStream());
         }
@@ -73,15 +75,21 @@ public class Agent {
     }
 
     private void initAgent() {
+        System.out.println("Starting init...");
         this.agentName = ManagementFactory.getRuntimeMXBean().getName();
         try {
             oos.writeObject(agentName);
             oos.writeObject("init");
             machine = (EnigmaMachine)ois.readObject();
+            System.out.println("got machine...");
             code = (String) ois.readObject();
+            System.out.println("got code...");
             tasksAmount = (Integer) ois.readObject();
+            System.out.println("got task size...");
             dictionary = (List<String>) ois.readObject();
+            System.out.println("got dictionary...");
             oos.writeObject("initialized");
+            System.out.println("Initialized !");
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
@@ -90,6 +98,7 @@ public class Agent {
         this.tasksFromDM_Queue = new ArrayBlockingQueue<>(tasksAmount);
         this.setName(agentName);
         this.response = new AgentResponse(agentName);
+        run();
     }
 
     private static String[] getInput(String input) {

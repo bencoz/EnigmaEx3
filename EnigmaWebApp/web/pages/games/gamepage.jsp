@@ -82,6 +82,7 @@
         <div class="alis-setting-container">
             <h2>Alies Configuration</h2>
             <h3>Port Number : ${portNum}</h3>
+            <h3 id="target">Target: </h3>
             <form id='aliesConfig' method="post" class="alies-setting" onsubmit="postAliesSettings()" target="dummyframe">
                 <fieldset id="aliesfieldset">
                     <label title="text">Task Size:</label>
@@ -91,6 +92,11 @@
                     </button>
                 </fieldset>
             </form>
+            <div class="agent-list-container">
+                <h2>Alies Agents:</h2>
+                <ul class='alies-list'>
+                </ul>
+            </div>
             <div class="target-msg-container">
 
             </div>

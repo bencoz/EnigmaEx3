@@ -7,22 +7,23 @@ import Machine.Secret;
 import java.io.Serializable;
 
 public class CandidateForDecoding implements Serializable {
+    private String name;
     private String decoding;
-    private Secret secret;
-    private String agentName;
+    private transient Secret secret;
+
 
 
     public CandidateForDecoding(String _decoding, Secret _position, String _agentName)
     {
         this.decoding = _decoding;
         this.secret = _position;
-        this.agentName = _agentName;
+        this.name = _agentName;
     }
 
     @Override
     public String toString(){
         StringBuilder sb = new StringBuilder();
-        sb.append("Agent: ").append(agentName).append(" Decoded: \'").append(decoding).append("\'");
+        sb.append("Agent: ").append(name).append(" Decoded: \'").append(decoding).append("\'");
         return sb.toString();
     }
 
@@ -43,11 +44,11 @@ public class CandidateForDecoding implements Serializable {
     }
 
     public String getAgentName() {
-        return agentName;
+        return name;
     }
 
     public void setAgentName(String agentName) {
-        this.agentName = agentName;
+        this.name = agentName;
     }
 
 }
