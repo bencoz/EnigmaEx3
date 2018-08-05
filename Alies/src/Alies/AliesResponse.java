@@ -1,20 +1,20 @@
 package Alies;
 
 public class AliesResponse {
-    String candidateForDecoding;
-    String aliesTeamName;
+    String decoding;
+    String name;
 
     public AliesResponse(String _candidateForDecoding, String _aliesTeamName)
     {
-        candidateForDecoding = _candidateForDecoding;
-        aliesTeamName = _aliesTeamName;
+        decoding = _candidateForDecoding;
+        name = _aliesTeamName;
     }
 
     public String getAnswer() {
-        return candidateForDecoding;
+        return decoding;
     }
 
     public String getAliesName() {
-        return aliesTeamName;
+        return name;
     }
 }

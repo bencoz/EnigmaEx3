@@ -12,13 +12,13 @@ import java.net.Socket;
 import java.util.*;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingDeque;
 
 public class Alies implements Serializable {
     private String aliesName;
     private boolean ready = false;
     private Integer taskSize;
     private Integer blockSize; //block of tasks
-    private Integer numOfAgents;
     private transient DecipheringStatus status;
     private transient boolean gameFinished = false;
     private transient String codeToDecipher;
@@ -62,24 +62,13 @@ public class Alies implements Serializable {
     public void start(){
         this.decipheringStartTime = System.currentTimeMillis();
         activateAgents();
-        /*while( !gameFinished){
-            try {
-                AgentResponse response = answersToDM_Queue.take();
-                checkresponse(response);
-
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-        sleep(gameFinishe);
-        killreamaingthreads();*/
     }
 
     public void init(String _code, DifficultyLevel _difficulty){ //task size already Initialized
         mission = new DecipherMission(machine,_difficulty);
         mission.init(machine, taskSize);
         this.codeToDecipher = _code;
-        answersToDM_Queue = new ArrayBlockingQueue<>(numOfAgents);
+        answersToDM_Queue = new LinkedBlockingDeque<>();
 
         //calculate block size
         //TODO:what block size means?!
@@ -89,7 +78,7 @@ public class Alies implements Serializable {
 
     private void activateAgents() {
         //TODO :: Work by number of agents
-        for (int i = 0; i < numOfAgents; ++i) {
+        while (true){
             Socket socket;
             try {
                 socket = agentServer.accept();
@@ -251,5 +240,9 @@ public class Alies implements Serializable {
         answersFromAlies_Queue = null;
         candidacies = null;
         status = null;
+    }
+
+    public int getVersion() {
+        return candidacies.size();
     }
 }
