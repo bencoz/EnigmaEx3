@@ -63,6 +63,7 @@ public class LoadGameSettingsServlet extends HttpServlet {
         }
         gameManager.loadGameSettings(battleNameFromSession, chosenRotorsID, chosenRotorsLoc, chosenReflectorID);
         String encryptedCode = gameManager.setGameCode(usernameFromSession, message);
+        gameManager.setUboatReady(battleNameFromSession,usernameFromSession);
         response.setStatus(200);
         response.getWriter().write(encryptedCode);
     }

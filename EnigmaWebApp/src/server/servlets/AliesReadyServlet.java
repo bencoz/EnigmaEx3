@@ -18,9 +18,11 @@ public class AliesReadyServlet extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String usernameFromSession = SessionUtils.getUsername(request);
+        String battleNameFromSession = SessionUtils.getGameName(request);
         GameManager gameManager = ServletUtils.getGameManager(getServletContext());
         Integer taskSize = Integer.parseInt(request.getParameter("tasksize"));
         gameManager.setAliesTaskSize(usernameFromSession, taskSize);
+        gameManager.setAliesReady(battleNameFromSession,usernameFromSession);
         response.setStatus(200);
     }
 
