@@ -171,4 +171,13 @@ public class GameManager {
         game.removeAlies(alies);
         alies.resetGameDetails();
     }
+
+    public void setAliesReady(String battleName, String username) {
+        Game game = games.get(battleName);
+        game.setAliesAsReady(username);
+    }
+    public void setUboatReady(String battleName, String username) {
+        Game game = games.get(battleName);
+        game.setUboatAsReady(username);
+    }
 }

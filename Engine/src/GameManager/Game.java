@@ -22,7 +22,6 @@ public class Game implements Serializable{
     private transient String winningAliesName = null;
     private Integer neededNumOfAlies;
     private Integer numOfAliesSigned = 0;
-    private Integer numOfAliesReady = 0;
     private GameStatus gameStatus;
     private Factory.DifficultyLevel difficultyLevel;
 
@@ -56,12 +55,13 @@ public class Game implements Serializable{
 
     public void setAliesAsReady(String userName){
         Alies alies = getAliesByName(userName);
-        alies.setAsReady();
-        numOfAliesReady++;
-        boolean needToStart = areAllPlayersReady();
-        if(needToStart){
-            gameStatus = GameStatus.ACTIVE;
-            runGame();
+        if(alies != null) {
+            alies.setAsReady();
+            boolean needToStart = areAllPlayersReady();
+            if (needToStart) {
+                gameStatus = GameStatus.ACTIVE;
+                runGame();
+            }
         }
     }
 
@@ -188,7 +188,6 @@ public class Game implements Serializable{
         gameStatus = GameStatus.WAITING;
         winningAliesName = null;
         numOfAliesSigned = 0;
-        numOfAliesReady = 0;
     }
 
     public void removeAlies(Alies alies) {
