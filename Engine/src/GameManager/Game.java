@@ -69,7 +69,7 @@ public class Game implements Serializable{
         if(managingUboat.isReady() == false)
             return false;
         for (Alies alies : playingAlies ) {
-            if(alies.isReady() != false){
+            if(alies.isReady() == false){
                 return false;
             }
         }
