@@ -1,13 +1,13 @@
-var msgVersion = 0;
+var uboatMsgVersion = 0;
+var aliesMsgVersion = 0;
 var refreshRate = 2000; //mili seconds
-var MSG_LIST_URL = buildUrlWithContextPath("msglist");
+var UBOAT_CANDIDATES_LIST_URL = buildUrlWithContextPath("uboatcandidateslist");
+var ALIES_CANDIDATES_LIST_URL = buildUrlWithContextPath("aliescandidateslist");
 var ALIES_LIST_URL = buildUrlWithContextPath("alieslist");
+var AGENT_LIST_URL = buildUrlWithContextPath("agentlist");
 var aliesIntervalId;
 
 function appendToMsgList(entries) {
-//    $("#chatarea").children(".success").removeClass("success");
-
-    // add the relevant entries
     $.each(entries || [], appendMsgEntry);
 
     // handle the scroller to auto scroll to the end of the chat area
@@ -15,14 +15,14 @@ function appendToMsgList(entries) {
     var height = scroller[0].scrollHeight - $(scroller).height();
     $(scroller).stop().animate({ scrollTop: height }, "slow");
 }
+
 function appendMsgEntry(index, entry){
     var entryElement = createMsgEntry(entry);
     $(".msg-list").append(entryElement).append("<br>");
 }
 
 function createMsgEntry (entry){
-    var date = new Date(entry.time*1000);
-    return $("<span class=\"success\">").append(entry.username + "> " + entry.candidate);
+    return $("<span class=\"success\">").append(entry.name + "> " + entry.decoding);
 }
 
 function ajaxMsgContent() {
@@ -36,8 +36,8 @@ function ajaxMsgContent() {
 
 function ajaxAliesCandidates() {
     $.ajax({
-        url: MSG_LIST_URL, //TODO:: change to agentcandidatesservlet
-        data: "msgVersion=" + msgVersion,
+        url: ALIES_CANDIDATES_LIST_URL, //TODO:: change to agentcandidatesservlet
+        data: "aliesMsgVersion=" + aliesMsgVersion,
         dataType: 'json',
         success: function(data) {
             /*
@@ -45,20 +45,16 @@ function ajaxAliesCandidates() {
              {
                 "entries": [
                     {
-                        "candidate":"Hi",
-                        "username":"bbb",
-                    },
-                    {
-                        "candidate":"Hello",
-                        "username":"bbb",
-                    }
+                        "decoding":"Hi",
+                        "name":"bbb",
+                    }, ...
                 ],
                 "version":1
              }
              */
-            console.log("Server msg version: " + data.version + ", Current msg version: " + msgVersion);
-            if (data.version !== msgVersion) {
-                msgVersion = data.version;
+            console.log("Server msg version: " + data.version + ", Current msg version: " + aliesMsgVersion);
+            if (data.version !== aliesMsgVersion) {
+                aliesMsgVersion = data.version;
                 appendToMsgList(data.entries);
             }
             triggerAjaxMsgContent();
@@ -71,29 +67,13 @@ function ajaxAliesCandidates() {
 
 function ajaxUboatList() {
     $.ajax({
-        url: MSG_LIST_URL,
-        data: "msgVersion=" + msgVersion,
+        url: UBOAT_CANDIDATES_LIST_URL,
+        data: "uboatMsgVersion=" + uboatMsgVersion,
         dataType: 'json',
         success: function(data) {
-            /*
-             data is of the next form:
-             {
-                "entries": [
-                    {
-                        "candidate":"Hi",
-                        "username":"bbb",
-                    },
-                    {
-                        "candidate":"Hello",
-                        "username":"bbb",
-                    }
-                ],
-                "version":1
-             }
-             */
-            console.log("Server msg version: " + data.version + ", Current msg version: " + msgVersion);
-            if (data.version !== msgVersion) {
-                msgVersion = data.version;
+            console.log("Server msg version: " + data.version + ", Current msg version: " + uboatMsgVersion);
+            if (data.version !== uboatMsgVersion) {
+                uboatMsgVersion = data.version;
                 appendToMsgList(data.entries);
             }
             triggerAjaxMsgContent();
@@ -145,6 +125,8 @@ function postMachineConfig() {
                 disableMachineConfig();
                 addOutputText(data);
                 OutputRed(false);
+                $("#target").innerText += data; //TODO:: Send data to alies in game
+                //TODO:: Notify All game users that user is ready.
             }
         });
         return false;
@@ -162,6 +144,7 @@ function postAliesSettings() {
         success: function(data) {
             console.log("success");
             disableAliesConfig();
+            //TODO:: Notify All game users that user is ready.
         }
     });
     return false;
@@ -238,16 +221,50 @@ function refreshParticipatingAlies(alies_list) {
     });
 }
 
+function refreshAgentList(agentList) {
+    $(".agent-list").empty();
+
+    // rebuild the list of alies: scan all alies and add them to the list
+    $.each(agentList || [], function(index, agent) {
+
+        var nameDiv = $('<div>').text("Agent Name: "+ agent.name);
+        var codesChecked = $('<div>').text("Codes Checked: "+ agent.codeschecked);
+        var codesLeft = $('<div>').text("Codes Left: "+ agent.codesleft);
+        var aliesDiv = $('<div>', {class: "AgentObj"});
+        aliesDiv.append(nameDiv);
+        aliesDiv.append(codesChecked);
+        aliesDiv.append(codesLeft);
+
+        aliesDiv.appendTo($(".agent-list"));
+    });
+
+    setTimeout(ajaxAgentList, 2000);
+}
+
 function ajaxAliesList() {
     //TODO :: STOP when alies number.
     $.ajax({
-        url: "./alieslist",
+        url: ALIES_LIST_URL,
         success: function (alies_list) {
             refreshParticipatingAlies(alies_list);
         },
         error: function (xhr) {
             var html = $.parseHTML(xhr.responseText)
             console.error(html[5].innerText.replace("Message",""));
+        }
+    });
+}
+
+function ajaxAgentList() {
+    $.ajax({
+        url: AGENT_LIST_URL,
+        success: function (agent_list) {
+            refreshAgentList(agent_list);
+        },
+        error: function (xhr) {
+            var html = $.parseHTML(xhr.responseText)
+            console.error(html[5].innerText.replace("Message",""));
+            setTimeout(ajaxAgentList, 2000)
         }
     });
 }

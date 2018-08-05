@@ -11,10 +11,7 @@ import Users.User;
 import java.io.InputStream;
 import java.io.Serializable;
 import java.net.ServerSocket;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
@@ -32,7 +29,7 @@ public class Game implements Serializable{
     private transient EnigmaManager enigmaManager;
     private String encryptedCode;
     private transient BlockingQueue<AliesResponse> answersFromAlies_Queue;
-
+    private List<AliesResponse> allCandidates;
     //private machineCopy; // for the playing alies to clone
     //private transient List<String> dictionary;
 
@@ -41,6 +38,7 @@ public class Game implements Serializable{
         neededNumOfAlies = _neededNumOfAlies;
         difficultyLevel = _difficultyLevel;
         answersFromAlies_Queue = new ArrayBlockingQueue<>(neededNumOfAlies);
+        allCandidates = new LinkedList<>();
         playingAlies = new ArrayList<>();
         gameStatus = GameStatus.UNINITIALIZED;
     }
@@ -98,6 +96,7 @@ public class Game implements Serializable{
         while (!done) {
             try {
                 AliesResponse response = answersFromAlies_Queue.take();
+                allCandidates.add(response);
                 if(isRightAnswer(response.getAnswer())){
                     winningAliesName = response.getAliesName();
                     stopGame();
@@ -197,5 +196,13 @@ public class Game implements Serializable{
             playingAlies.remove(alies);
             numOfAliesSigned--;
         }
+    }
+
+    public List<AliesResponse> getAllCandidates() {
+        return allCandidates;
+    }
+
+    public int getVersion() {
+        return allCandidates.size();
     }
 }
