@@ -4,6 +4,10 @@
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
          version="3.1">
     <servlet>
+        <servlet-name>ReadyServlet</servlet-name>
+        <servlet-class>server.servlets.ReadyServlet</servlet-class>
+    </servlet>
+    <servlet>
         <servlet-name>AgentCandidatesServlet</servlet-name>
         <servlet-class>server.servlets.AgentCandidatesServlet</servlet-class>
     </servlet>
@@ -56,6 +60,10 @@
         <servlet-class>server.servlets.AliesListServlet</servlet-class>
     </servlet>
     <servlet-mapping>
+        <servlet-name>ReadyServlet</servlet-name>
+        <url-pattern>/pages/games/ready</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
         <servlet-name>AgentCandidatesServlet</servlet-name>
         <url-pattern>/pages/games/aliescandidateslist</url-pattern>
     </servlet-mapping>
@@ -65,7 +73,7 @@
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>AliesReadyServlet</servlet-name>
-        <url-pattern>/pages/games/ready</url-pattern>
+        <url-pattern>/pages/games/aliesready</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>LoadGameSettingsServlet</servlet-name>

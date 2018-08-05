@@ -28,15 +28,14 @@ public class JoinGameServlet extends HttpServlet {
         request.getSession(true).setAttribute(Constants.GAMENAME, battleNameRequested);
         gameManager.addAliesToGame(usernameFromSession, battleNameRequested);
         int port = gameManager.getAliesPort(usernameFromSession);
-
+        String target = gameManager.getGame(battleNameRequested).getTarget();
+        if (target != null){
+            request.setAttribute("target", target);
+        }
         request.setAttribute("portNum", port);
         request.setAttribute("battlefield", battleNameRequested);
         request.setAttribute("uboatdisplay", "none");
         request.setAttribute("aliesdisplay","inline-flex");
-        request.setAttribute("rotors", null);
-        request.setAttribute("rotors", null); // This will be available as ${rotors}
-        request.setAttribute("rotorsLocation", null); // This will be available as ${rotorsLocation}
-        request.setAttribute("reflectors", null); // This will be available as ${reflectors}
         request.getRequestDispatcher("gamepage.jsp").forward(request, response);
     }
 }

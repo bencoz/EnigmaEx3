@@ -2,20 +2,17 @@ package GameManager;
 
 import Alies.Alies;
 import Alies.AliesResponse;
-import Alies.DifficultyLevel;
 import Enigma.EnigmaManager;
+import Factory.DifficultyLevel;
 import Machine.EnigmaMachine;
 import Uboat.Uboat;
-import Users.User;
 
-import java.io.InputStream;
 import java.io.Serializable;
-import java.net.ServerSocket;
 import java.util.*;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
-public class Game implements Serializable{
+public class Game extends Thread{
     private String battlefieldName;
     private Uboat managingUboat;
     private transient List<Alies> playingAlies ;
@@ -24,9 +21,8 @@ public class Game implements Serializable{
     private Integer numOfAliesSigned = 0;
     private GameStatus gameStatus;
     private Factory.DifficultyLevel difficultyLevel;
-
     private transient EnigmaManager enigmaManager;
-    private String encryptedCode;
+    private String encryptedCode = null;
     private transient BlockingQueue<AliesResponse> answersFromAlies_Queue;
     private List<AliesResponse> allCandidates;
     //private machineCopy; // for the playing alies to clone
@@ -41,8 +37,6 @@ public class Game implements Serializable{
         playingAlies = new ArrayList<>();
         gameStatus = GameStatus.UNINITIALIZED;
     }
-
-
 
     public void addPlayingAlies(Alies _alies){
         if(numOfAliesSigned != neededNumOfAlies)
@@ -60,20 +54,22 @@ public class Game implements Serializable{
             boolean needToStart = areAllPlayersReady();
             if (needToStart) {
                 gameStatus = GameStatus.ACTIVE;
-                runGame();
             }
         }
     }
 
     private boolean areAllPlayersReady() {
-        if(managingUboat.isReady() == false)
-            return false;
+        boolean res = true;
+        if(!managingUboat.isReady())
+            res = false;
+        if (playingAlies.size() != neededNumOfAlies)
+            res = false;
         for (Alies alies : playingAlies ) {
-            if(alies.isReady() == false){
-                return false;
+            if(!alies.isReady()){
+                res = false;
             }
         }
-        return true;
+        return res;
     }
 
     public void setUboatAsReady(String userName){
@@ -83,14 +79,14 @@ public class Game implements Serializable{
             boolean needToStart = areAllPlayersReady();
             if (needToStart) {
                 gameStatus = GameStatus.ACTIVE;
-                runGame();
             }
         }
     }
 
-
-    private void runGame()
+    @Override
+    public void run()
     {
+        this.gameStatus = GameStatus.RUNNING;
         boolean done = false;
         activateAlies();
         while (!done) {
@@ -203,5 +199,47 @@ public class Game implements Serializable{
 
     public int getVersion() {
         return allCandidates.size();
+    }
+
+    public String getTarget() {
+        return encryptedCode;
+    }
+
+    public List<String> getAllReadyNames() {
+        List<String> result = new LinkedList<>();
+        if (managingUboat.isReady())
+            result.add(managingUboat.getName());
+        for (Alies alies : playingAlies){
+            if (alies.isReady())
+                result.add(alies.getName());
+        }
+        return result;
+    }
+
+    public Integer getWantedNumOfAlies() {
+        return neededNumOfAlies;
+    }
+
+    public boolean isRunnable() {
+        if (gameStatus == GameStatus.ACTIVE)
+            return true;
+        else
+            return false;
+    }
+
+    public String getMakerName() {
+        return managingUboat.getName();
+    }
+
+    public DifficultyLevel getLevel() {
+        return difficultyLevel;
+    }
+
+    public Integer getNeededNumOfAlies() {
+        return neededNumOfAlies;
+    }
+
+    public GameStatus getStatus() {
+        return gameStatus;
     }
 }

@@ -16,18 +16,18 @@ function refreshGamesList(games) {
         //{battlefieldName : name, managerName: managerName, isActive:is/isn't(true/false), difficulty:difficulty,
         //actualNumOfUsers:actualNumOfUsers , neededNumOfUsers:neededNumOfUsers}
         var id = game.battlefieldName;
-        var nameDiv = $('<div>').text("Battlefield Name: "+ game.battlefieldName);
-        var managerDiv = $('<div>').text("Manager Name: "+ game.managingUboat.uboatName);
-        var difficultyDiv = $('<div>').text("Difficulty Level: " + game.difficultyLevel);
+        var nameDiv = $('<div>').text("Battlefield Name: "+ game.name);
+        var managerDiv = $('<div>').text("Manager Name: "+ game.makerName);
+        var difficultyDiv = $('<div>').text("Difficulty Level: " + game.level);
         var signedDiv = $('<div>').text("In game alies:" + game.numOfAliesSigned + "/" + game.neededNumOfAlies);
-        var statusDiv = $('<div>').text("Status: " + game.gameStatus);
+        var statusDiv = $('<div>').text("Status: " + game.status);
 
         var btn = $('<button>', {
             type: "button",
             class: "gameObj",
             id: id
             });
-        btn.on("click", {name: game.battlefieldName},clickOnGame);
+        btn.on("click", {name: game.name},clickOnGame);
         btn.append(nameDiv);
         btn.append(managerDiv);
         btn.append(difficultyDiv);

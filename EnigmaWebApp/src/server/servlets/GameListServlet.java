@@ -11,7 +11,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.Serializable;
 import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 
 public class GameListServlet extends HttpServlet {
@@ -23,13 +26,39 @@ public class GameListServlet extends HttpServlet {
         try (PrintWriter out = response.getWriter()) {
             Gson gson = new Gson();
             GameManager gameManager = ServletUtils.getGameManager(getServletContext());
-            Collection<Game> gamesList = gameManager.getGames();
-            String json = gson.toJson(gamesList);
+            List<gameInfo> gameInfoList = createGameInfoList(gameManager.getGames());
+            String json = gson.toJson(gameInfoList);
             out.println(json);
             out.flush();
         }
     }
 
+    private List<gameInfo> createGameInfoList(Collection<Game> games) {
+        List<gameInfo> result = new LinkedList<>();
+        for (Game game : games){
+            gameInfo newgame = new gameInfo(game);
+            result.add(newgame);
+        }
+        return result;
+    }
+
+    public class gameInfo implements Serializable {
+        String name;
+        String makerName;
+        Factory.DifficultyLevel level;
+        Integer numOfAliesSigned;
+        Integer neededNumOfAlies;
+        GameStatus status;
+
+        gameInfo(Game game){
+            name = game.getBattlefieldName();
+            makerName = game.getMakerName();
+            level = game.getLevel();
+            numOfAliesSigned = game.getAlies().size();
+            neededNumOfAlies = game.getNeededNumOfAlies();
+            status = game.getStatus();
+        }
+    }
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.

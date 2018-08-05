@@ -6,6 +6,8 @@ var ALIES_CANDIDATES_LIST_URL = buildUrlWithContextPath("aliescandidateslist");
 var ALIES_LIST_URL = buildUrlWithContextPath("alieslist");
 var AGENT_LIST_URL = buildUrlWithContextPath("agentlist");
 var aliesIntervalId;
+var g_readyUsers = [];
+var readyUserIntervalId;
 
 function appendToMsgList(entries) {
     $.each(entries || [], appendMsgEntry);
@@ -90,12 +92,17 @@ function triggerAjaxMsgContent() {
 
 function disableMachineConfig() {
     $('#uboatfieldset').attr('disabled', 'disabled');
+    $('.uboat-ready-btn').attr("disabled", true);
 }
 function disableAliesConfig() {
     $('#aliesfieldset').attr('disabled', 'disabled');
+    $('.uboat-ready-btn').attr("disabled", true);
 }
 function addOutputText(text) {
     $('.target-msg-value').text(text);
+}
+function addAliesTarget(text) {
+    $('#target').text("Target: "+text);
 }
 function OutputRed(cond) {
     if (cond) {
@@ -136,7 +143,7 @@ function postAliesSettings() {
     console.log("posting alies settings");
     $.ajax({
         method:'POST',
-        url: './ready',
+        url: './aliesready',
         data : $('#aliesConfig').serialize(),
         error: function(xhr) {
             console.error("Failed to submit");
@@ -244,7 +251,7 @@ function refreshAgentList(agentList) {
 function ajaxAliesList() {
     //TODO :: STOP when alies number.
     $.ajax({
-        url: ALIES_LIST_URL,
+        url: './alieslist',
         success: function (alies_list) {
             refreshParticipatingAlies(alies_list);
         },
@@ -268,6 +275,39 @@ function ajaxAgentList() {
         }
     });
 }
+function arrayInclude(arr, name) {
+    var result = false;
+    for (var i = 0; i< arr.length; i++){
+        if (arr[i] == name)
+            result = true;
+    }
+    return result;
+}
+function setReadyUsers(readyUsers) {
+    var namesArray = readyUsers.names;
+    var needNum = readyUsers.numOfUsers;
+    for (var i = 0; i < namesArray.length; i++) {
+        if (!arrayInclude(g_readyUsers,namesArray[i])){
+            g_readyUsers.push(namesArray[i]);
+            alert(namesArray[i] + " is ready !");
+        }
+    }
+    if (g_readyUsers.length == needNum){
+        clearInterval(readyUserIntervalId);
+        alert("All users are ready - Starting Game !");
+    }
+}
+function ajaxReady() {
+    $.ajax({
+        url: './ready',
+        success: function (readyUsers) {
+            setReadyUsers(readyUsers);
+            if (readyUsers.target != null){
+                addAliesTarget(readyUsers.target);
+            }
+        },
+    });
+}
 //activate the timer calls after the page is loaded
 $(function() {
 
@@ -277,6 +317,7 @@ $(function() {
     //The users list is refreshed automatically every second
     aliesIntervalId = setInterval(ajaxAliesList, refreshRate);
 
+    readyUserIntervalId = setInterval(ajaxReady, refreshRate);
     //The chat content is refreshed only once (using a timeout) but
     //on each call it triggers another execution of itself later (1 second later)
     //triggerAjaxMsgContent();

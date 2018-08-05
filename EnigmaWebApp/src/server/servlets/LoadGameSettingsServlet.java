@@ -1,7 +1,7 @@
 package server.servlets;
 
 import Enigma.EnigmaManager;
-import GameManager.GameManager;
+import GameManager.*;
 import com.sun.net.httpserver.HttpServer;
 import server.utils.ServletUtils;
 import server.utils.SessionUtils;
@@ -63,9 +63,13 @@ public class LoadGameSettingsServlet extends HttpServlet {
         }
         gameManager.loadGameSettings(battleNameFromSession, chosenRotorsID, chosenRotorsLoc, chosenReflectorID);
         String encryptedCode = gameManager.setGameCode(usernameFromSession, message);
-        gameManager.setUboatReady(battleNameFromSession,usernameFromSession);
-        response.setStatus(200);
+        gameManager.setUboatReady(battleNameFromSession, usernameFromSession);
+        Game game = gameManager.getGame(battleNameFromSession);
+        if (game.isRunnable()){
+            game.start();
+        }
         response.getWriter().write(encryptedCode);
+        response.setStatus(200);
     }
 
 // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

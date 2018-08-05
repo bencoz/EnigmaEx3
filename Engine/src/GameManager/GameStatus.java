@@ -4,5 +4,6 @@ public enum GameStatus {
     UNINITIALIZED,
     WAITING,
     ACTIVE,
+    RUNNING,
     DONE
 }
