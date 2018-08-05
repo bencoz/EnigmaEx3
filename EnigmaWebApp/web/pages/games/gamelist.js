@@ -38,11 +38,33 @@ function refreshGamesList(games) {
     });
 }
 
+function refreshAliesDetails(aliesDetails) {
+    //clear all current users
+    $("#alies-details").empty();
+
+    var nameLi = $('<li>' + "Name:" + aliesDetails.aliesName + '</li>');
+    var portLi = $('<li>' + "Port:" + aliesDetails.portNumber + '</li>');
+
+    nameLi.appendTo($("#alies-details"));
+    portLi.appendTo($("#alies-details"));
+}
+
 function ajaxGamesList() {
     $.ajax({
         url: "./gamelist",
         success: function(games) {
             refreshGamesList(games);
+        }
+    });
+
+
+}
+
+function ajaxAliesDetails() {
+    $.ajax({
+        url: "./aliesDetails",
+        success: function(aliesDetails) {
+            refreshAliesDetails(aliesDetails);
         }
     });
 
@@ -94,6 +116,7 @@ $(function() {
     $.ajaxSetup({cache: false});
 
     //The games list is refreshed automatically every second
+    ajaxAliesDetails();
     setInterval(ajaxGamesList, refreshRate);
 
     //The chat content is refreshed only once (using a timeout) but

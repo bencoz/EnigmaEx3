@@ -30,3 +30,25 @@ h2,h1 {
     margin: 8px 8px;
     cursor: pointer;
 }
+
+.alies-details-container{
+    background-color: black;
+    border-style: solid;
+    border-color: rgb(75, 213, 238);
+    color: rgb(75, 213, 238);
+    list-style-type: none;
+    padding: 15px 20px;
+    text-align: left;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 11px;
+    position: fixed;
+    top: 1px;
+    left: 1px;
+    cursor: pointer;
+}
+#alies-details{
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
