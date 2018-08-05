@@ -172,6 +172,13 @@ public class GameManager {
         alies.resetGameDetails();
     }
 
+    public Alies getAliesByName(String username) {
+        if(playingAlies.containsKey(username)){
+            return playingAlies.get(username);
+        }
+        return null;
+    }
+
     public void setAliesReady(String battleName, String username) {
         Game game = games.get(battleName);
         game.setAliesAsReady(username);
