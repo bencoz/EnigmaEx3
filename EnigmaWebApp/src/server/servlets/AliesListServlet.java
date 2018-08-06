@@ -13,6 +13,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.Serializable;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -30,13 +32,29 @@ public class AliesListServlet extends HttpServlet {
                 response.sendError(403,"game has not been created yet...");
                 return;
             }
-            List<Alies> aliesList = game.getAlies();
-            String json = gson.toJson(aliesList);
+            List<aliesInfo> aliesInfoList = generateAliesInfo(game.getAlies());
+            String json = gson.toJson(aliesInfoList);
             out.println(json);
             out.flush();
         }
     }
+    public List<aliesInfo> generateAliesInfo(List<Alies> aliesList){
+        List<aliesInfo> result = new LinkedList<>();
+        for (Alies alies : aliesList){
+            result.add(new aliesInfo(alies));
+        }
+        return result;
+    }
 
+    public class aliesInfo implements Serializable {
+        private String name;
+        private Integer numOfAgents;
+
+        public aliesInfo(Alies alies){
+            name = alies.getAliesName();
+            numOfAgents = alies.getNumOfAgents();
+        }
+    }
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.

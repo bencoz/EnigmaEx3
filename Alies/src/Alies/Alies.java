@@ -5,16 +5,13 @@ import Machine.*;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.*;
-import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
 
-public class Alies implements Serializable {
+public class Alies extends Thread {
     private String aliesName;
     private boolean ready = false;
     private Integer taskSize;
@@ -47,7 +44,7 @@ public class Alies implements Serializable {
         portNumber = agentServer.getLocalPort(); //the only port
     }
 
-    public String getName() {
+    public String getAliesName() {
         return aliesName;
     }
     public void setNewGameDetails(EnigmaMachine em, BlockingQueue<AliesResponse> _answersFromAlies_Queue){
@@ -58,8 +55,8 @@ public class Alies implements Serializable {
         status = new DecipheringStatus();
     }
 
-
-    public void start(){
+    @Override
+    public void run(){
         this.decipheringStartTime = System.currentTimeMillis();
         activateAgents();
     }
@@ -106,16 +103,40 @@ public class Alies implements Serializable {
         boolean done = false;
         while (!done) {
             giveAgentBlockOfTasks(agentName);
+            loopAgentDetails(agentName);
             getAgentResponses(agentName); //maybe just return response (instead of get and poll)
             AgentResponse response = answersToDM_Queue.poll();
             if (response != null) {
                 handleAgentResponse(response);
                 handledTasksAmount++;
             }
+            updateAgentDetails(agentName);
             done = mission.isDone() || !status.checkIfToContinue();
             sendDecipherStatus(agentName);
         }
         status.stopDeciphering();
+    }
+
+    private void loopAgentDetails(String agentName) {
+        AgentAliesSocket agentAliesSocket = socketHandler.get(agentName);
+        try {
+            while (true){
+                    String request = (String) agentAliesSocket.getOIS().readObject();
+                    if (request.equals("end")){
+                        break;
+                    }
+                    AgentDetails details = (AgentDetails) agentAliesSocket.getOIS().readObject();
+                    socketHandler.updateAgentDetails(agentName, details);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void updateAgentDetails(String agentName) {//TODO :: IMPLENMENT !!!
+
     }
 
 
@@ -244,5 +265,11 @@ public class Alies implements Serializable {
 
     public int getVersion() {
         return candidacies.size();
+    }
+
+    public int getNumOfAgents() {return socketHandler.getNumOfAgents(); }
+
+    public Collection<AgentDetails> getAgentsDetails() {
+        return socketHandler.getAgentsDetails();
     }
 }

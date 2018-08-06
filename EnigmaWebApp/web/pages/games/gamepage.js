@@ -214,7 +214,7 @@ function refreshParticipatingAlies(alies_list) {
     $.each(alies_list || [], function(index, alies) {
 
         var id = alies.aliesName;
-        var nameDiv = $('<div>').text("Alies Name: "+ alies.aliesName);
+        var nameDiv = $('<div>').text("Alies Name: "+ alies.name);
         var numOfAgentDiv = $('<div>').text("Number Of Agent: "+ alies.numOfAgents);
 
         var aliesDiv = $('<div>', {
@@ -235,7 +235,7 @@ function refreshAgentList(agentList) {
     $.each(agentList || [], function(index, agent) {
 
         var nameDiv = $('<div>').text("Agent Name: "+ agent.name);
-        var codesChecked = $('<div>').text("Codes Checked: "+ agent.codeschecked);
+        var codesChecked = $('<div>').text("Candidates: "+ agent.candidates);
         var codesLeft = $('<div>').text("Codes Left: "+ agent.codesleft);
         var aliesDiv = $('<div>', {class: "AgentObj"});
         aliesDiv.append(nameDiv);
@@ -264,7 +264,7 @@ function ajaxAliesList() {
 
 function ajaxAgentList() {
     $.ajax({
-        url: AGENT_LIST_URL,
+        url: './agentDetails',
         success: function (agent_list) {
             refreshAgentList(agent_list);
         },

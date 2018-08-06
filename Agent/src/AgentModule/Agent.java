@@ -32,7 +32,7 @@ public class Agent {
     private Socket MyClient;
     private ObjectInputStream ois;
     private ObjectOutputStream oos;
-
+    private Integer numOfCandidates = 0;
     public Agent(String[] addr){
         try {
             System.out.println("trying to connect with Alies...");
@@ -128,6 +128,17 @@ public class Agent {
             this.currentTask = tasks.get(i);
             currentTaskInd = i;
             doCurrentTask();
+            try {
+                oos.writeChars("details");
+                oos.writeObject(makeAgentDetails());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        try {
+            oos.writeChars("end");
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -140,6 +151,7 @@ public class Agent {
             handledOptionsAmount++;
 
             if(isCandidaciesForDecoding(decoding)) {
+                numOfCandidates++;
                 CandidateForDecoding candidate = new CandidateForDecoding(decoding, currentTask.getSecret(), agentName);
                 response.addDecoding(candidate);
             }
@@ -225,6 +237,10 @@ public class Agent {
             //TODO:: HANDLE STUFF AFTER INTERRUPT
             return;
         }
+    }
+
+    private AgentDetails makeAgentDetails() {
+        return new AgentDetails(this.agentName, this.numOfCandidates, tasks.size() - currentTaskInd);
     }
 
     private boolean pullDMStatus() {
