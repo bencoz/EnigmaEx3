@@ -40,8 +40,8 @@
         <servlet-class>server.servlets.GameListServlet</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>AliesDetailsServlet</servlet-name>
-        <servlet-class>server.servlets.AliesDetailsServlet</servlet-class>
+        <servlet-name>AgentDetailsServlet</servlet-name>
+        <servlet-class>server.servlets.AgentDetailsServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>NewGameServlet</servlet-name>
@@ -112,8 +112,8 @@
         <url-pattern>/pages/games/gamelist</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>AliesDetailsServlet</servlet-name>
-        <url-pattern>/pages/games/aliesDetails</url-pattern>
+        <servlet-name>AgentDetailsServlet</servlet-name>
+        <url-pattern>/pages/games/agentDetails</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

@@ -18,7 +18,7 @@ import static server.constants.Constants.USERTYPE;
 public class LoginServlet extends HttpServlet {
 
     // urls that starts with forward slash '/' are considered absolute
-    // urls that doesn't start with forward slash '/' are considered relative to the place where this servlet request comes from
+    // urls that doesn't run with forward slash '/' are considered relative to the place where this servlet request comes from
     // you can use absolute paths, but then you need to build them from scratch, starting from the context path
     // ( can be fetched from request.getContextPath() ) and then the 'absolute' path from it.
     // Each method with it's pros and cons...
@@ -26,7 +26,7 @@ public class LoginServlet extends HttpServlet {
     private final String NEW_GAME_URL = "../games/uploadgame.html";
     private final String CHAT_ROOM_URL = "../chatroom/chatroom.html";
     private final String SIGN_UP_URL = "../signup/singup.html";
-    private final String LOGIN_ERROR_URL = "/pages/loginerror/login_attempt_after_error.jsp";  // must start with '/' since will be used in request dispatcher...
+    private final String LOGIN_ERROR_URL = "/pages/loginerror/login_attempt_after_error.jsp";  // must run with '/' since will be used in request dispatcher...
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.

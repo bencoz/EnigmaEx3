@@ -7,7 +7,6 @@ import Factory.DifficultyLevel;
 import Machine.EnigmaMachine;
 import Uboat.Uboat;
 
-import java.io.Serializable;
 import java.util.*;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
@@ -111,7 +110,7 @@ public class Game extends Thread{
 
     private void activateAlies() {//TODO:add init
         for (Alies alies: playingAlies ) {
-            alies.start();
+            alies.run();
         }
     }
 
@@ -154,7 +153,7 @@ public class Game extends Thread{
     public Set<String> getAliesNames() {
         Set<String> res = new HashSet<>();
         for (Alies alies : playingAlies){
-            res.add(alies.getName());
+            res.add(alies.getAliesName());
         }
         return res;
     }
@@ -170,7 +169,7 @@ public class Game extends Thread{
     public Alies getAliesByName(String aliesName) {
         Alies res = null;
         for (Alies alies : playingAlies){
-            if (alies.getName() == aliesName){
+            if (alies.getAliesName() == aliesName){
                 res = alies;
                 break;
             }
@@ -211,7 +210,7 @@ public class Game extends Thread{
             result.add(managingUboat.getName());
         for (Alies alies : playingAlies){
             if (alies.isReady())
-                result.add(alies.getName());
+                result.add(alies.getAliesName());
         }
         return result;
     }
