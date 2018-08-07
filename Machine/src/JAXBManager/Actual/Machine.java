@@ -58,8 +58,8 @@ public class Machine implements Serializable {
     public int getRotorPositionByChar(int rotorID, char rotorPosition) {
         Rotor rotor = rotors.stream().
         filter(r -> r.getID() == rotorID).
-                findAny().
-                get();
+        findFirst().orElse(null);
+        //TODO:: IF ROTOR = NULL ITS A BUG !
         return rotor.getMapFromPositionByChar(rotorPosition);
     }
 
