@@ -47,8 +47,18 @@ h2,h1 {
     left: 1px;
     cursor: pointer;
 }
-#alies-details{
+#alies-details {
     list-style-type: none;
     margin: 0;
     padding: 0;
+}
+.logout-container{
+    width: 100%;
+    position: absolute;
+    top: 0px;
+}
+.logout-btn{
+    float: right;
+    margin: 20px;
+    display: none;
 }

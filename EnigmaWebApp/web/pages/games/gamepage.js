@@ -8,6 +8,7 @@ var AGENT_LIST_URL = buildUrlWithContextPath("agentlist");
 var aliesIntervalId;
 var g_readyUsers = [];
 var readyUserIntervalId;
+var gameStatusIntervaId;
 
 function appendToMsgList(entries) {
     $.each(entries || [], appendMsgEntry);
@@ -28,7 +29,7 @@ function createMsgEntry (entry){
 }
 
 function ajaxMsgContent() {
-    var uboatDisplay = $('#uboat-game').css('display');
+    var uboatDisplay = $('.uboat-game').css('display');
     if (uboatDisplay == 'none'){
         ajaxAliesCandidates();
     } else {
@@ -38,7 +39,7 @@ function ajaxMsgContent() {
 
 function ajaxAliesCandidates() {
     $.ajax({
-        url: ALIES_CANDIDATES_LIST_URL, //TODO:: change to agentcandidatesservlet
+        url: './aliescandidateslist', //ALIES_CANDIDATES_LIST_URL,
         data: "aliesMsgVersion=" + aliesMsgVersion,
         dataType: 'json',
         success: function(data) {
@@ -69,7 +70,7 @@ function ajaxAliesCandidates() {
 
 function ajaxUboatList() {
     $.ajax({
-        url: UBOAT_CANDIDATES_LIST_URL,
+        url: './uboatcandidateslist',//UBOAT_CANDIDATES_LIST_URL,
         data: "uboatMsgVersion=" + uboatMsgVersion,
         dataType: 'json',
         success: function(data) {
@@ -298,6 +299,22 @@ function setReadyUsers(readyUsers) {
         alert("All users are ready - Starting Game !");
     }
 }
+function ajaxGameStatus() {
+    console.log("requesting status...");
+    $.ajax({
+        url: './status',
+        success: function (res) {
+            console.log(res.responseText);
+            if (res.responseText == 'DONE'){
+                $('#myModal').css('display','block')
+            }
+            clearInterval(gameStatusIntervaId);
+            clearInterval(aliesIntervalId);
+            clearInterval(readyUserIntervalId);
+            //TODO :: Clear Msg-conent timeout and agent info timeout !
+        }
+    });
+}
 function ajaxReady() {
     $.ajax({
         url: './ready',
@@ -309,6 +326,15 @@ function ajaxReady() {
         },
     });
 }
+
+function initEndingPopup() {
+    var uboatDisplay = $('.uboat-game').css('display');
+    if (uboatDisplay == 'none'){
+        $('.modal-footer').css("display", "none");
+    } else {
+        $('.close').css("display", "none");
+    }
+}
 //activate the timer calls after the page is loaded
 $(function() {
 
@@ -317,9 +343,12 @@ $(function() {
 
     //The users list is refreshed automatically every second
     aliesIntervalId = setInterval(ajaxAliesList, refreshRate);
-
+    gameStatusIntervaId = setInterval(ajaxGameStatus, refreshRate);
     readyUserIntervalId = setInterval(ajaxReady, refreshRate);
     //The chat content is refreshed only once (using a timeout) but
     //on each call it triggers another execution of itself later (1 second later)
-    //triggerAjaxMsgContent();
+    triggerAjaxMsgContent();
+
+
+    initEndingPopup()
 });

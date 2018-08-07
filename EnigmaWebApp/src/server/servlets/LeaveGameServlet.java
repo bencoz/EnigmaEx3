@@ -20,7 +20,7 @@ public class LeaveGameServlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String usernameFromSession = SessionUtils.getUsername(request);
-        String battleNameRequested = request.getParameter("battleName");
+        String battleNameRequested = SessionUtils.getGameName(request);
         GameManager gameManager = ServletUtils.getGameManager(getServletContext());
         gameManager.removeAliesFromGame(usernameFromSession, battleNameRequested);
         response.sendRedirect(GAMES_LIST_URL);

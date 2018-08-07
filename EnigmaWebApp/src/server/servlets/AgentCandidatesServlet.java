@@ -34,11 +34,14 @@ public class AgentCandidatesServlet extends HttpServlet{
                 Game game = gameManager.getGame(SessionUtils.getGameName(request));
                 Alies alies = game.getAliesByName(username);
                 List<CandidateForDecoding> agentList = alies.getCandidacies();
-                MsgAndVersion mav = new MsgAndVersion(agentList, alies.getVersion());
-                String json = gson.toJson(mav);
-                out.println(json);
-                out.flush();
+                if (agentList.size() != 0){
+                    MsgAndVersion mav = new MsgAndVersion(agentList, alies.getVersion());
+                    String json = gson.toJson(mav);
+                    out.println(json);
+                    out.flush();
+                }
             }
+            response.setStatus(200);
         }
     }
 

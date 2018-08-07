@@ -29,7 +29,7 @@ public class Alies extends Thread {
     private transient SocketHandler socketHandler;
     private Integer portNumber;
     private transient BlockingQueue<AliesResponse> answersFromAlies_Queue;
-
+    private Integer numOfIteretion = 0;
     //TODO: change? need to get en and dic according to the chosen game
     public Alies(String _name) {
         aliesName = _name;
@@ -102,7 +102,7 @@ public class Alies extends Thread {
     }
 
     private void runConnection(String agentName) {
-        boolean done = false;
+        Boolean done = false;
         while (!done) {
             giveAgentBlockOfTasks(agentName);
             //loopAgentDetails(agentName);
@@ -113,7 +113,9 @@ public class Alies extends Thread {
                 handledTasksAmount++;
             }
             updateAgentDetails(agentName);
+            System.out.println("checking if to continue");
             done = mission.isDone() || !status.checkIfToContinue();
+            System.out.println("done = " + done.toString());
             sendDecipherStatus(agentName);
         }
         status.stopDeciphering();
@@ -209,7 +211,9 @@ public class Alies extends Thread {
     private void sendDecipherStatus(String agentName) {
         AgentAliesSocket agentAliesSocket = socketHandler.get(agentName);
         try{
+            System.out.println("writing status...");
             agentAliesSocket.getOOS().writeObject(status);
+            System.out.println("wrote status of iteration "+ numOfIteretion++);
         } catch (IOException e) {
             e.printStackTrace();
         }

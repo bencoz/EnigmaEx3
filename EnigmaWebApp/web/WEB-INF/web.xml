@@ -4,6 +4,10 @@
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
          version="3.1">
     <servlet>
+        <servlet-name>GameStatusServlet</servlet-name>
+        <servlet-class>server.servlets.GameStatusServlet</servlet-class>
+    </servlet>
+    <servlet>
         <servlet-name>AliesDetailsServlet</servlet-name>
         <servlet-class>server.servlets.AliesDetailsServlet</servlet-class>
     </servlet>
@@ -63,6 +67,10 @@
         <servlet-name>AliesListServlet</servlet-name>
         <servlet-class>server.servlets.AliesListServlet</servlet-class>
     </servlet>
+    <servlet-mapping>
+        <servlet-name>GameStatusServlet</servlet-name>
+        <url-pattern>/pages/games/status</url-pattern>
+    </servlet-mapping>
     <servlet-mapping>
         <servlet-name>AliesDetailsServlet</servlet-name>
         <url-pattern>/pages/games/aliesDetails</url-pattern>

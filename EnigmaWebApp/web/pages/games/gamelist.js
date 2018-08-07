@@ -92,7 +92,6 @@ function clickOnGame(e)
     return false;
 }
 
-//TODO:: connect to logout button
 function AliesLogout() { //(alies)
     console.log("alies logout");
     $.ajax({
@@ -117,7 +116,4 @@ $(function() {
     ajaxAliesDetails();
     setInterval(ajaxGamesList, refreshRate);
 
-    //The chat content is refreshed only once (using a timeout) but
-    //on each call it triggers another execution of itself later (1 second later)
-    //triggerAjaxChatContent();
 });

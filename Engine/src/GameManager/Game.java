@@ -10,6 +10,7 @@ import Uboat.Uboat;
 import java.util.*;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingDeque;
 
 public class Game extends Thread{
     private String battlefieldName;
@@ -31,7 +32,7 @@ public class Game extends Thread{
         battlefieldName = _battlefieldName;
         neededNumOfAlies = _neededNumOfAlies;
         difficultyLevel = _difficultyLevel;
-        answersFromAlies_Queue = new ArrayBlockingQueue<>(neededNumOfAlies);
+        answersFromAlies_Queue = new LinkedBlockingDeque<AliesResponse>();
         allCandidates = new LinkedList<>();
         playingAlies = new ArrayList<>();
         gameStatus = GameStatus.UNINITIALIZED;
@@ -94,12 +95,7 @@ public class Game extends Thread{
                 allCandidates.add(response);
                 if(isRightAnswer(response.getAnswer())){
                     winningAliesName = response.getAliesName();
-                    stopGame();
                     done = true;
-                }
-                else {
-                    done = (gameStatus == GameStatus.DONE);  //game Turned off
-                    gameStatus = GameStatus.DONE;
                 }
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -116,6 +112,7 @@ public class Game extends Thread{
     }
 
     private void stopGame() {
+        gameStatus = GameStatus.DONE;
         for (Alies alies: playingAlies ) {
             alies.stopDeciphering();
         }

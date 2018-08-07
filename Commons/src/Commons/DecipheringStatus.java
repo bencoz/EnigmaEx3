@@ -38,4 +38,8 @@ public class DecipheringStatus implements Serializable{
     public void stopDeciphering() {
         this.isStopped = true;
     }
+
+    public String toString(){
+        return "isPaused: "+this.isPaused+" isStoped: "+this.isStopped;
+    }
 }

@@ -45,7 +45,6 @@ body {
 }
 .alies-info-container{
     height: 40%;
-    display: inline-flex;
     float: left;
     position: absolute;
     top: 60%;
@@ -54,16 +53,7 @@ body {
     width: 100%;
     height: 100%;
 }
-.logout-container{
-    width: 100%;
-    position: absolute;
-    top: 0px;
-}
-.logout-btn{
-    float: right;
-    margin: 20px;
-    display: none;
-}
+
 .target-msg-container{
     float: left;
     padding-left: 10px;
@@ -78,6 +68,7 @@ body {
 .msg-list{
     position: fixed;
     padding-top: 50px;
+    text-align: left;
 }
 .header-container{
     width: 100%;

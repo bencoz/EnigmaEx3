@@ -36,11 +36,14 @@ public class CandidatesListServlet extends HttpServlet {
             if (msgVersion > Constants.INT_PARAMETER_ERROR) {
                 Game game = gameManager.getGame(SessionUtils.getGameName(request));
                 List<AliesResponse> allCandidates = game.getAllCandidates();
-                MsgAndVersion mav = new MsgAndVersion(allCandidates, game.getVersion());
-                String json = gson.toJson(mav);
-                out.println(json);
-                out.flush();
+                if (allCandidates.size() != 0) {
+                    MsgAndVersion mav = new MsgAndVersion(allCandidates, game.getVersion());
+                    String json = gson.toJson(mav);
+                    out.println(json);
+                    out.flush();
+                }
             }
+            response.setStatus(200);
         }
     }
 

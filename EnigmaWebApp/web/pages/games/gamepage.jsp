@@ -14,11 +14,6 @@
     <div class="header-container">
         <h1>Battle of ${battlefield}</h1>
     </div>
-    <div class="logout-container">
-        <button class="logout-btn">
-            Logout
-        </button>
-    </div>
     <div class="uboat-game" style="display: ${uboatdisplay};">
         <div class="uboat-settings-container">
             <h2>Machine Configuration</h2>
@@ -81,8 +76,8 @@
     <div class="alies-game" style="display: ${aliesdisplay};">
         <div class="alis-setting-container">
             <h2>Alies Configuration</h2>
-            <h3>Port Number : ${portNum}</h3>
-            <h3 id="target">Target: </h3>
+            <h5>Port Number : ${portNum}</h5>
+            <h5 id="target">Target: </h5>
             <form id='aliesConfig' method="post" class="alies-setting" onsubmit="postAliesSettings()" target="dummyframe">
                 <fieldset id="aliesfieldset">
                     <label title="text">Task Size:</label>
@@ -96,9 +91,6 @@
                 <h2>Alies Agents:</h2>
                 <ul class='agent-list'>
                 </ul>
-            </div>
-            <div class="target-msg-container">
-
             </div>
             <div class="agent-info-container">
             </div>
@@ -121,15 +113,15 @@
         <!-- Modal content -->
         <div class="modal-content">
             <div class="modal-header">
-                <span class="close">&times;</span>
+                <span class="close" onclick="AliesClickXbutton()">&times;</span>
                 <h3>Wining Alies: </h3>
             </div>
             <div class="modal-body">
                 <p>Agent Name: </p>
             </div>
             <div class="modal-footer">
-                <button id="btncontinue">Continue</button>
-                <button id="btnlogout">Logout</button>
+                <button id="btncontinue" onclick="UboatClickResetGame()">Continue</button>
+                <button id="btnlogout" onclick="UboatClickLogout()">Logout</button>
             </div>
 
     </div>

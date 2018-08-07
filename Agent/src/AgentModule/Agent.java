@@ -57,9 +57,11 @@ public class Agent {
                 return;
         }
         Agent agent = new Agent(ip);
-        agent.initAgent();
         System.out.println("Agent working with " + ip[0] + ":" + ip[1]);
-        agent.run();
+        while (aliesAgentConnectionIsAlive()){
+            agent.initAgent();
+            agent.run();
+        }
         try {
             agent.ois.close();
             agent.oos.close();
@@ -69,6 +71,10 @@ public class Agent {
         }
     }
 
+    private static boolean aliesAgentConnectionIsAlive() {
+        return true; //TODO:: WORK GOOD
+    }
+
     public void setName(String agentName) {
         this.agentName = agentName;
     }
@@ -76,7 +82,6 @@ public class Agent {
     private void initAgent() {
         String init = "init";
         String initialized = "initialized";
-
         System.out.println("Starting init...");
         this.agentName = ManagementFactory.getRuntimeMXBean().getName();
         try {
@@ -235,8 +240,8 @@ public class Agent {
                 reset();
                 System.out.println("Agent did reset");
                 //TODO:: pull dm status
-                done = pullDMStatus();
-                System.out.println("Agent got DM Status "+ done.toString());
+                done = !pullDMStatus();
+                System.out.println("Agent is stopping: "+ done.toString());
             }
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
@@ -252,6 +257,7 @@ public class Agent {
     private boolean pullDMStatus() {
         try {
             DMstatus = (DecipheringStatus) ois.readObject();
+            System.out.println(DMstatus.toString());
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {

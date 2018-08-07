@@ -67,12 +67,12 @@ public class DecipherMission {
 
     private void setEasyTasks(Double rotorsPositionsSize, Secret secret) {
         for (int i = 0; i < rotorsPositionsSize; i += taskSize) {
+            if (i + taskSize >= rotorsPositionsSize){//only in last iteration
+                tasks.add(new AgentTask(secret,rotorsPositionsSize.intValue() - i));
+                break;
+            }
             tasks.add(new AgentTask(secret,taskSize));
             secret = secret.advanceBy(taskSize);
-            if (i + taskSize >= rotorsPositionsSize){//only in last iteration
-                secret = secret.advanceBy(taskSize);
-                tasks.add(new AgentTask(secret,rotorsPositionsSize.intValue() - i));
-            }
         }
     }
 
