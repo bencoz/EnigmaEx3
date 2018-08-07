@@ -1,11 +1,24 @@
 html {
     height: 100%;
     width: 100%;
+    font: 700 1em "News Cycle", sans-serif;
+    letter-spacing: .15em;
+    background: #000;
+    overflow: hidden;
+    margin: 0;
+    text-align: center;
 }
 body {
     float: left;
     height: 100%;
     width: 100%;
+    width: 100%;
+    /* font-size: 200%; */
+    /* font-weight: 400; */
+    color: rgb(75, 213, 238);
+    opacity: 100;
+    text-align: center;
+    display: block;
 }
 #source-msg-container{
     margin:2px;
@@ -25,7 +38,11 @@ body {
 }
 .msg-container{
     width: 50%;
+    height: 80%;
     display: inline-flex;
+    position: fixed;
+    bottom: 35%;
+    padding-left: 25px;
 }
 .alies-info-container{
     height: 40%;
@@ -48,9 +65,11 @@ body {
 .target-msg-container{
     float: left;
     padding-left: 10px;
+    margin: 12px;
 }
 .uboat-ready-btn{
     float: left;
+    margin: 10px;
 }
 .alies-list{
     position: fixed;
@@ -64,7 +83,7 @@ body {
     width: 100%;
 }
 .header-container > h1 {
-    padding-left: 40%;
+
 }
 #dummyframe{
     display: none;

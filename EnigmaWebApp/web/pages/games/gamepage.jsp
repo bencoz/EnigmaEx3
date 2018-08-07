@@ -12,7 +12,7 @@
 <body>
 <div class="game-container">
     <div class="header-container">
-        <h1>${battlefield}</h1>
+        <h1>Battle of ${battlefield}</h1>
     </div>
     <div class="logout-container">
         <button class="logout-btn">
@@ -94,7 +94,7 @@
             </form>
             <div class="agent-list-container">
                 <h2>Alies Agents:</h2>
-                <ul class='alies-list'>
+                <ul class='agent-list'>
                 </ul>
             </div>
             <div class="target-msg-container">
