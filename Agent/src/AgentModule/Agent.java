@@ -38,14 +38,12 @@ public class Agent {
             System.out.println("trying to connect with Alies...");
             MyClient = new Socket(addr[0], Integer.parseInt(addr[1]));
             System.out.println("connected successfully");
-            ois = new ObjectInputStream(MyClient.getInputStream());
+            //ois = new ObjectInputStream(MyClient.getInputStream());
             oos = new ObjectOutputStream(MyClient.getOutputStream());
         }
         catch (IOException e) {
             System.out.println(e);
         }
-
-        initAgent();
     }
 
     public static void main(String[] args) throws FileNotFoundException {
@@ -59,6 +57,7 @@ public class Agent {
                 return;
         }
         Agent agent = new Agent(ip);
+        agent.initAgent();
         System.out.println("Agent working with " + ip[0] + ":" + ip[1]);
         agent.run();
         try {
@@ -75,11 +74,16 @@ public class Agent {
     }
 
     private void initAgent() {
+        String init = "init";
+        String initialized = "initialized";
+
         System.out.println("Starting init...");
         this.agentName = ManagementFactory.getRuntimeMXBean().getName();
         try {
             oos.writeObject(agentName);
-            oos.writeObject("init");
+            oos.flush();
+            oos.writeObject(init);
+            ois = new ObjectInputStream(MyClient.getInputStream());
             machine = (EnigmaMachine)ois.readObject();
             System.out.println("got machine...");
             code = (String) ois.readObject();
@@ -88,7 +92,7 @@ public class Agent {
             System.out.println("got task size...");
             dictionary = (List<String>) ois.readObject();
             System.out.println("got dictionary...");
-            oos.writeObject("initialized");
+            oos.writeObject(initialized);
             System.out.println("Initialized !");
         } catch (IOException e) {
             e.printStackTrace();
@@ -98,7 +102,6 @@ public class Agent {
         this.tasksFromDM_Queue = new ArrayBlockingQueue<>(tasksAmount);
         this.setName(agentName);
         this.response = new AgentResponse(agentName);
-        run();
     }
 
     private static String[] getInput(String input) {
@@ -128,17 +131,13 @@ public class Agent {
             this.currentTask = tasks.get(i);
             currentTaskInd = i;
             doCurrentTask();
-            try {
-                oos.writeChars("details");
-                oos.writeObject(makeAgentDetails());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        try {
-            oos.writeChars("end");
-        } catch (IOException e) {
-            e.printStackTrace();
+//            try {
+//                oos.writeObject("details");
+//                oos.writeObject(makeAgentDetails());
+//                oos.writeObject("end");
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
         }
     }
 
@@ -202,7 +201,9 @@ public class Agent {
 
     //agent wait and listen to pipe until he gets new mission from DM and start to work
     public void run() {
-        boolean done = false;
+        Integer taskId = 0;
+        System.out.println("Starting to run...");
+        Boolean done = false;
         try {
             while (!done) {
                 AgentTask task;
@@ -211,6 +212,7 @@ public class Agent {
                     //TODO:: get tasks from socket
                     try {
                         task = (AgentTask) ois.readObject();
+                        System.out.println("Got task id: " + ++taskId);
                         if (task == null){
                             break;
                         }
@@ -221,16 +223,20 @@ public class Agent {
                         e.printStackTrace();
                     }
                 }
+                System.out.println("Starting to do Tasks...");
                 doTasks();
                 //TODO:: send dm response through socket
                 try {
                     oos.writeObject(response);
+                    System.out.println("response was written...");
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
                 reset();
+                System.out.println("Agent did reset");
                 //TODO:: pull dm status
                 done = pullDMStatus();
+                System.out.println("Agent got DM Status "+ done.toString());
             }
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();

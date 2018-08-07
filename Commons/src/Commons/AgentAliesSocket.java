@@ -10,11 +10,11 @@ public class AgentAliesSocket {
     private ObjectInputStream ois;
     private ObjectOutputStream oos;
 
-    public AgentAliesSocket(Socket i_socket) {
+    public AgentAliesSocket(Socket i_socket, ObjectInputStream i_ois) {
         socket = i_socket;
         try {
-            ois = new ObjectInputStream(i_socket.getInputStream());
             oos = new ObjectOutputStream(i_socket.getOutputStream());
+            ois = i_ois;
         } catch (IOException e) {
             e.printStackTrace();
         }

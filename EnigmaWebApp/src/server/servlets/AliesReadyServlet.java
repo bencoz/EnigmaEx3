@@ -1,8 +1,6 @@
 package server.servlets;
 
-import Enigma.EnigmaManager;
 import GameManager.*;
-import com.sun.net.httpserver.HttpServer;
 import server.utils.ServletUtils;
 import server.utils.SessionUtils;
 
@@ -11,8 +9,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.LinkedList;
-import java.util.List;
 
 public class AliesReadyServlet extends HttpServlet {
 
@@ -24,9 +20,7 @@ public class AliesReadyServlet extends HttpServlet {
         gameManager.setAliesTaskSize(usernameFromSession, taskSize);
         gameManager.setAliesReady(battleNameFromSession,usernameFromSession);
         Game game = gameManager.getGame(battleNameFromSession);
-        if (game.isRunnable()){
-            game.start();
-        }
+        game.checkRunnableAndRun();
         response.setStatus(200);
     }
 

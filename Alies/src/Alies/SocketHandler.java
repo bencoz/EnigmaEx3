@@ -3,6 +3,7 @@ package Alies;
 import Commons.AgentAliesSocket;
 import Commons.AgentDetails;
 
+import java.io.ObjectInputStream;
 import java.net.Socket;
 import java.util.Collection;
 import java.util.HashMap;
@@ -14,10 +15,11 @@ public class SocketHandler {
     private Map<String, AgentDetails> agentDetails;
     SocketHandler(){
         agentSockets = new HashMap<>();
+        agentDetails = new HashMap<>();
     }
 
-    public void put(String key, Socket value){
-        agentSockets.put(key,new AgentAliesSocket(value));
+    public void put(String key, Socket value, ObjectInputStream ois){
+        agentSockets.put(key, new AgentAliesSocket(value, ois));
         agentDetails.put(key, new AgentDetails(key,0,0));
     }
 

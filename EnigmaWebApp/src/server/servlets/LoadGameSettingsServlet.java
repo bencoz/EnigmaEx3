@@ -2,7 +2,6 @@ package server.servlets;
 
 import Enigma.EnigmaManager;
 import GameManager.*;
-import com.sun.net.httpserver.HttpServer;
 import server.utils.ServletUtils;
 import server.utils.SessionUtils;
 
@@ -65,9 +64,7 @@ public class LoadGameSettingsServlet extends HttpServlet {
         String encryptedCode = gameManager.setGameCode(usernameFromSession, message);
         gameManager.setUboatReady(battleNameFromSession, usernameFromSession);
         Game game = gameManager.getGame(battleNameFromSession);
-        if (game.isRunnable()){
-            game.start();
-        }
+        game.checkRunnableAndRun();
         response.getWriter().write(encryptedCode);
         response.setStatus(200);
     }

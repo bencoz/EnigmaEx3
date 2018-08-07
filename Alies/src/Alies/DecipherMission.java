@@ -12,13 +12,13 @@ public class DecipherMission {
     private double size;
     private Integer taskSize;
     private boolean done;
-    private DifficultyLevel difficulty;
+    private Factory.DifficultyLevel difficulty;
     private List<AgentTask> tasks;
     private Iterator<AgentTask> taskIterator;
 
 
     //gets all mission details, and divide into sub-tasks(saved in tasks)
-    public DecipherMission(EnigmaMachine machine, DifficultyLevel _difficulty){
+    public DecipherMission(EnigmaMachine machine, Factory.DifficultyLevel _difficulty){
         difficulty = _difficulty;
         setSize(difficulty, machine.getABC().length(), machine.getRotors().size(), machine.getRotorsCount(), machine.getNumOfReflectors());
     }
@@ -114,11 +114,11 @@ public class DecipherMission {
         return done;
     }
 
-    private void setSize(DifficultyLevel difficulty, Integer abcSize, Integer rotorsSize, Integer rotorsCount, Integer numOfRelectors) {
+    private void setSize(Factory.DifficultyLevel difficulty, Integer abcSize, Integer rotorsSize, Integer rotorsCount, Integer numOfRelectors) {
         size = DecipherMission.calcMissionSize(difficulty, abcSize, rotorsSize, rotorsCount, numOfRelectors);
     }
 
-    public static double calcMissionSize(DifficultyLevel difficulty,Integer abcSize, Integer rotorsSize, Integer rotorsCount, Integer numOfRelectors){
+    public static double calcMissionSize(Factory.DifficultyLevel difficulty,Integer abcSize, Integer rotorsSize, Integer rotorsCount, Integer numOfRelectors){
     double missionSize = 0;
         switch (difficulty){
             case Easy:

@@ -58,10 +58,11 @@ public class Alies extends Thread {
     @Override
     public void run(){
         this.decipheringStartTime = System.currentTimeMillis();
+        init(codeToDecipher, machine.getBattlefield().getLevel());
         activateAgents();
     }
 
-    public void init(String _code, DifficultyLevel _difficulty){ //task size already Initialized
+    public void init(String _code, Factory.DifficultyLevel _difficulty){ //task size already Initialized
         mission = new DecipherMission(machine,_difficulty);
         mission.init(machine, taskSize);
         this.codeToDecipher = _code;
@@ -81,9 +82,10 @@ public class Alies extends Thread {
                 socket = agentServer.accept();
                 new Thread(() -> {
                     try {
+                        this.setName("agent1");
                         ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
                         String agentName = (String) ois.readObject();
-                        socketHandler.put(agentName, socket);
+                        socketHandler.put(agentName, socket, ois);
                         initAgent(agentName);
                         runConnection(agentName);
                         closeConnection(agentName);
@@ -103,7 +105,7 @@ public class Alies extends Thread {
         boolean done = false;
         while (!done) {
             giveAgentBlockOfTasks(agentName);
-            loopAgentDetails(agentName);
+            //loopAgentDetails(agentName);
             getAgentResponses(agentName); //maybe just return response (instead of get and poll)
             AgentResponse response = answersToDM_Queue.poll();
             if (response != null) {
@@ -127,6 +129,7 @@ public class Alies extends Thread {
                     }
                     AgentDetails details = (AgentDetails) agentAliesSocket.getOIS().readObject();
                     socketHandler.updateAgentDetails(agentName, details);
+
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -147,7 +150,7 @@ public class Alies extends Thread {
         try {
             AgentAliesSocket agentAliesSocket = socketHandler.get(agentName);
             AgentTask task;
-            for (int i = 0; i < blockSize; i++) {
+            for (int i = 0; i < taskSize; i++) {
                 task = mission.getNextTask();
                 if (task == null)
                     break;
@@ -168,7 +171,7 @@ public class Alies extends Thread {
                     case "init":
                         agentAliesSocket.getOOS().writeObject(machine);
                         agentAliesSocket.getOOS().writeObject(codeToDecipher);
-                        agentAliesSocket.getOOS().writeObject(blockSize);
+                        agentAliesSocket.getOOS().writeObject(taskSize);
                         agentAliesSocket.getOOS().writeObject(machine.getDecipher().getDictionary());
                         break;
                     case "initialized":
@@ -271,5 +274,9 @@ public class Alies extends Thread {
 
     public Collection<AgentDetails> getAgentsDetails() {
         return socketHandler.getAgentsDetails();
+    }
+
+    public void setTarget(String target) {
+        this.codeToDecipher = target;
     }
 }

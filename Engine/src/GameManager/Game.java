@@ -110,7 +110,8 @@ public class Game extends Thread{
 
     private void activateAlies() {//TODO:add init
         for (Alies alies: playingAlies ) {
-            alies.run();
+            alies.setTarget(this.encryptedCode);
+            alies.start();
         }
     }
 
@@ -219,11 +220,14 @@ public class Game extends Thread{
         return neededNumOfAlies;
     }
 
-    public boolean isRunnable() {
-        if (gameStatus == GameStatus.ACTIVE)
+    public boolean checkRunnableAndRun() {
+        if (gameStatus == GameStatus.ACTIVE) {
+            this.setName("game "+ this.battlefieldName);
+            this.start();
             return true;
-        else
+        } else {
             return false;
+        }
     }
 
     public String getMakerName() {
