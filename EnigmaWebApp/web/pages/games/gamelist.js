@@ -67,8 +67,6 @@ function ajaxAliesDetails() {
             refreshAliesDetails(aliesDetails);
         }
     });
-
-
 }
 
 function clickOnGame(e)

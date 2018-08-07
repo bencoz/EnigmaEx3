@@ -80,7 +80,8 @@ public class LoginServlet extends HttpServlet {
                         response.sendRedirect(NEW_GAME_URL);
                     }
                     else {
-                        gameManager.addAlies(usernameFromParameter);
+                        Integer port = gameManager.addAlies(usernameFromParameter);
+                        request.getSession(true).setAttribute(Constants.PORTNUM, port);
                         response.sendRedirect(GAMES_LIST_URL);
                     }
                 }

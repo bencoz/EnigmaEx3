@@ -131,9 +131,10 @@ public class GameManager {
         return alies.getPortNumber();
     }
 
-    public void addAlies(String userName){
+    public Integer addAlies(String userName){
         Alies alies = new Alies(userName);
         playingAlies.put(userName,alies);
+        return alies.getPortNumber();
     }
 
     public  void addUboat(String userName){

@@ -100,6 +100,7 @@ function disableAliesConfig() {
 }
 function addOutputText(text) {
     $('.target-msg-value').text(text);
+    $('.target-msg-value').css("color", "rgb(75, 213, 238)");
 }
 function addAliesTarget(text) {
     $('#target').text("Target: "+text);

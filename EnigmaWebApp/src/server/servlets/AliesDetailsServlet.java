@@ -1,36 +1,34 @@
 package server.servlets;
 
-import Alies.Alies;
-import GameManager.GameManager;
+import GameManager.*;
 import com.google.gson.Gson;
 import server.utils.ServletUtils;
 import server.utils.SessionUtils;
-
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Collection;
+import java.io.Serializable;
 
 public class AliesDetailsServlet extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        //returning JSON objects, not HTML
+            throws ServletException  {
         response.setContentType("application/json");
-        try (PrintWriter out = response.getWriter()) {
-            Gson gson = new Gson();
-            String usernameFromSession = SessionUtils.getUsername(request);
-            GameManager gameManager = ServletUtils.getGameManager(getServletContext());
-            Alies alies = gameManager.getAliesByName(usernameFromSession);
-            String json = gson.toJson(alies);
+        String usernameFromSession = SessionUtils.getUsername(request);
+        GameManager gameManager = ServletUtils.getGameManager(getServletContext());
+        Integer port = gameManager.getAliesPort(usernameFromSession);
+        Gson gson = new Gson();
+        try (PrintWriter out = response.getWriter()){
+            String json = gson.toJson(new aliesDetails(usernameFromSession, port));
             out.println(json);
             out.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
-
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
@@ -69,4 +67,13 @@ public class AliesDetailsServlet extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
+
+    public class aliesDetails implements Serializable{
+        private String aliesName;
+        private Integer portNumber;
+        aliesDetails(String name, Integer portNum){
+            aliesName = name;
+            portNumber = portNum;
+        }
+    }
 }

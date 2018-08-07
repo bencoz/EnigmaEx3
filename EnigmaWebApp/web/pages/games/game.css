@@ -31,6 +31,7 @@ body {
 .uboat-game{
     width: 40%;
     display: inline-flex;
+    float: left;
 }
 .alies-game{
     width: 40%;
@@ -40,13 +41,14 @@ body {
     width: 50%;
     height: 80%;
     display: inline-flex;
-    position: fixed;
-    bottom: 35%;
     padding-left: 25px;
 }
 .alies-info-container{
     height: 40%;
     display: inline-flex;
+    float: left;
+    position: absolute;
+    top: 60%;
 }
 .game-container {
     width: 100%;
@@ -72,8 +74,6 @@ body {
     margin: 10px;
 }
 .alies-list{
-    position: fixed;
-    padding-top: 35px;
 }
 .msg-list{
     position: fixed;
