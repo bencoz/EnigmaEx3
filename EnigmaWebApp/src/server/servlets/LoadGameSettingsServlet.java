@@ -27,7 +27,7 @@ public class LoadGameSettingsServlet extends HttpServlet {
         message = message.toUpperCase();
         boolean buildIsOk = true;
         String error = "";
-        for (int i =0; i < enigmaManager.getMachine().getNumOfRotors(); i++){
+        for (int i =0; i < enigmaManager.getMachine().getRotorsCount(); i++){
             Integer id = Integer.parseInt(request.getParameter("rotor"+(i+1)));
             if (chosenRotorsID.contains(id)){
                 buildIsOk = false;
@@ -39,8 +39,8 @@ public class LoadGameSettingsServlet extends HttpServlet {
         }
         if (buildIsOk) {
             String ABC = enigmaManager.getMachine().getABC();
-            for (int i = 0; i < enigmaManager.getMachine().getNumOfRotors(); i++) {
-                Character loc = request.getParameter("rotor" + (i + 1) + "_loc").charAt(0);
+            for (int i = 0; i < enigmaManager.getMachine().getRotorsCount(); i++) {
+                Character loc = request.getParameter("rotor" + (i + 1) + "_loc").toUpperCase().charAt(0);
                 if (ABC.indexOf(loc) != -1)
                     chosenRotorsLoc.add(loc);
                 else {
@@ -64,7 +64,12 @@ public class LoadGameSettingsServlet extends HttpServlet {
         String encryptedCode = gameManager.setGameCode(usernameFromSession, message);
         gameManager.setUboatReady(battleNameFromSession, usernameFromSession);
         Game game = gameManager.getGame(battleNameFromSession);
-        game.checkRunnableAndRun();
+        if (game.isRunnable()) {
+            game.giveAllAliesSecret();
+            Thread gameThread = new Thread(game);
+            gameThread.setName(battleNameFromSession);
+            gameThread.start();
+        }
         response.getWriter().write(encryptedCode);
         response.setStatus(200);
     }

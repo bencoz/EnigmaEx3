@@ -7,8 +7,10 @@ var ALIES_LIST_URL = buildUrlWithContextPath("alieslist");
 var AGENT_LIST_URL = buildUrlWithContextPath("agentlist");
 var aliesIntervalId;
 var g_readyUsers = [];
+var g_started = false;
 var readyUserIntervalId;
 var gameStatusIntervaId;
+var candidatesTimeoutId;
 
 function appendToMsgList(entries) {
     $.each(entries || [], appendMsgEntry);
@@ -88,9 +90,12 @@ function ajaxUboatList() {
 }
 
 function triggerAjaxMsgContent() {
-    setTimeout(ajaxMsgContent, refreshRate);
+    candidatesTimeoutId = setTimeout(ajaxMsgContent, refreshRate);
 }
-
+function enableMachineConfig() {
+    $('#uboatfieldset').attr('disabled', '');
+    $('.uboat-ready-btn').attr("disabled", false);
+}
 function disableMachineConfig() {
     $('#uboatfieldset').attr('disabled', 'disabled');
     $('.uboat-ready-btn').attr("disabled", true);
@@ -110,7 +115,7 @@ function OutputRed(cond) {
     if (cond) {
         $('.target-msg-value').css('color', 'red');
     } else {
-        $('.target-msg-value').css('color', 'black');
+        $('.target-msg-value').css('color', 'rgb(238, 75, 75)');
     }
 }
 
@@ -134,8 +139,8 @@ function postMachineConfig() {
                 disableMachineConfig();
                 addOutputText(data);
                 OutputRed(false);
-                $("#target").innerText += data; //TODO:: Send data to alies in game
-                //TODO:: Notify All game users that user is ready.
+                $("#target").text = "Out: "+ data;
+                //$("#target").css("color", "rgb(238, 75, 75)");
             }
         });
         return false;
@@ -153,14 +158,12 @@ function postAliesSettings() {
         success: function(data) {
             console.log("success");
             disableAliesConfig();
-            //TODO:: Notify All game users that user is ready.
         }
     });
     return false;
 }
 
 
-//TODO:: connect to X button
 function AliesClickXbutton() { //(alies)
     console.log("alies leave game");
     $.ajax({
@@ -176,7 +179,6 @@ function AliesClickXbutton() { //(alies)
     return false;
 }
 
-//TODO:: connect to logout button
 function UboatClickLogout() { //(uboat)
     console.log("uboat logout");
     $.ajax({
@@ -192,7 +194,6 @@ function UboatClickLogout() { //(uboat)
     return false;
 }
 
-//TODO:: connect to Reset button
 function UboatClickResetGame() { //(uboat)
     console.log("uboat reset game");
     $.ajax({
@@ -203,6 +204,9 @@ function UboatClickResetGame() { //(uboat)
         },
         success: function(data) {
             console.log("success");
+            appendToMsgList();
+            $('#myModal').css('display','none');
+            enableMachineConfig();
         }
     });
     return false;
@@ -300,18 +304,21 @@ function setReadyUsers(readyUsers) {
     }
 }
 function ajaxGameStatus() {
-    console.log("requesting status...");
     $.ajax({
         url: './status',
         success: function (res) {
-            console.log(res.responseText);
-            if (res.responseText == 'DONE'){
+            console.log("game status is: "+res);
+            if (res == 'DONE'){
                 $('#myModal').css('display','block')
+                clearInterval(gameStatusIntervaId);
+                clearInterval(aliesIntervalId);
+                clearInterval(readyUserIntervalId);
+                clearTimeout(candidatesTimeoutId);
+                //TODO :: Clear Msg-conent timeout and agent info timeout !
+            } else if (res == 'RUNNING' && !g_started){
+                g_started = true;
+                triggerAjaxMsgContent();
             }
-            clearInterval(gameStatusIntervaId);
-            clearInterval(aliesIntervalId);
-            clearInterval(readyUserIntervalId);
-            //TODO :: Clear Msg-conent timeout and agent info timeout !
         }
     });
 }
@@ -347,8 +354,6 @@ $(function() {
     readyUserIntervalId = setInterval(ajaxReady, refreshRate);
     //The chat content is refreshed only once (using a timeout) but
     //on each call it triggers another execution of itself later (1 second later)
-    triggerAjaxMsgContent();
-
 
     initEndingPopup()
 });

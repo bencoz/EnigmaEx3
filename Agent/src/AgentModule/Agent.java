@@ -131,18 +131,18 @@ public class Agent {
 
     //work on block of task that got from DM, solves each one, update the agent response (add the Candidacies For Decoding to it)
     private void doTasks() throws InterruptedException {
-        for(int i=0;i<tasks.size();i++)
-        {
-            this.currentTask = tasks.get(i);
-            currentTaskInd = i;
-            doCurrentTask();
-//            try {
-//                oos.writeObject("details");
-//                oos.writeObject(makeAgentDetails());
-//                oos.writeObject("end");
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
+        try {
+            for (int i = 0; i < tasks.size(); i++) {
+                this.currentTask = tasks.get(i);
+                currentTaskInd = i;
+                doCurrentTask();
+                oos.writeObject("details");
+                oos.writeObject(makeAgentDetails());
+            }
+
+            oos.writeObject("end");
+        }catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -206,7 +206,6 @@ public class Agent {
 
     //agent wait and listen to pipe until he gets new mission from DM and start to work
     public void run() {
-        Integer taskId = 0;
         System.out.println("Starting to run...");
         Boolean done = false;
         try {
@@ -217,7 +216,6 @@ public class Agent {
                     //TODO:: get tasks from socket
                     try {
                         task = (AgentTask) ois.readObject();
-                        System.out.println("Got task id: " + ++taskId);
                         if (task == null){
                             break;
                         }

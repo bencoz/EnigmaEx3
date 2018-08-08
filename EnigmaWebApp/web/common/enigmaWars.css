@@ -14,7 +14,7 @@ body {
 
 .intro {
     width: 100%;
-    font-size: 200%;
+    font-size: 350%;
     font-weight: 400;
     color: rgb(75, 213, 238);
     opacity: 100;
@@ -22,16 +22,29 @@ body {
     display: block;
 }
 .logo {
-    width: 60%;
-    opacity: 0;
+    opacity: 100;
     position: inherit;
-
+    display: inline-block;
 }
 .btn-info{
     margin: 5px;
     font-weight: bold;
 }
 #loginform {
-    color: rgb(75, 213, 238);
+    color: rgb(255, 255, 102);
     font-size: 1.25em;
+}
+#click{
+    font: 700 2em "News Cycle", sans-serif;
+    text-align: center;
+    padding-top: 110px;
+    color: rgb(75, 213, 238);
+    cursor: pointer;
+    font-size: 100px;
+}
+.dark{
+    color: rgb(238, 75, 75);
+}
+.light{
+    color: rgb(75, 213, 238);
 }

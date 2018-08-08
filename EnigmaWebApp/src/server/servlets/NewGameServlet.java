@@ -47,8 +47,8 @@ public class NewGameServlet extends HttpServlet {
 
         gameManager.createGame(usernameFromSession, enigmaManager);
 
-        String rotorsHTML = generateRotorsHTML(enigmaManager.getMachine().getRotors().size());
-        String rotorsLocation = generateRotorsLocationHTML(enigmaManager.getMachine().getRotors().size());
+        String rotorsHTML = generateRotorsHTML(enigmaManager.getMachine().getRotorsCount());
+        String rotorsLocation = generateRotorsLocationHTML(enigmaManager.getMachine().getRotorsCount());
         String reflectors = generateReflectorsHTML(enigmaManager.getMachine().getReflectors().size());
         request.setAttribute("battlefield", gameName);
         request.setAttribute("uboatdisplay", "inline-flex");

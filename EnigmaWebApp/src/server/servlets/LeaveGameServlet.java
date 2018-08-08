@@ -12,7 +12,7 @@ import java.io.IOException;
 
 public class LeaveGameServlet extends HttpServlet {
 
-    private final String GAMES_LIST_URL = "../gamelist.html";
+    private final String GAMES_LIST_URL = "./gamelist.html";
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.sendRedirect("pages/games/leavegame.html");

@@ -12,7 +12,7 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
 
-public class Game extends Thread{
+public class Game implements Runnable {
     private String battlefieldName;
     private Uboat managingUboat;
     private transient List<Alies> playingAlies ;
@@ -107,7 +107,9 @@ public class Game extends Thread{
     private void activateAlies() {//TODO:add init
         for (Alies alies: playingAlies ) {
             alies.setTarget(this.encryptedCode);
-            alies.start();
+            Thread thread = new Thread(alies);
+            thread.setName(alies.getAliesName());
+            thread.start();
         }
     }
 
@@ -217,10 +219,9 @@ public class Game extends Thread{
         return neededNumOfAlies;
     }
 
-    public boolean checkRunnableAndRun() {
+    public boolean isRunnable() {
         if (gameStatus == GameStatus.ACTIVE) {
-            this.setName("game "+ this.battlefieldName);
-            this.start();
+            //this.setName("game "+ this.battlefieldName);
             return true;
         } else {
             return false;
@@ -241,5 +242,11 @@ public class Game extends Thread{
 
     public GameStatus getStatus() {
         return gameStatus;
+    }
+
+    public void giveAllAliesSecret() {
+        for (Alies alies : playingAlies){
+            alies.setMachineCopy(enigmaManager.getMachine().deepCopy());
+        }
     }
 }

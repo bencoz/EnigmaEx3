@@ -11,7 +11,7 @@ import java.util.*;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
 
-public class Alies extends Thread {
+public class Alies implements Runnable {
     private String aliesName;
     private boolean ready = false;
     private Integer taskSize;
@@ -30,6 +30,7 @@ public class Alies extends Thread {
     private Integer portNumber;
     private transient BlockingQueue<AliesResponse> answersFromAlies_Queue;
     private Integer numOfIteretion = 0;
+
     //TODO: change? need to get en and dic according to the chosen game
     public Alies(String _name) {
         aliesName = _name;
@@ -57,6 +58,10 @@ public class Alies extends Thread {
 
     @Override
     public void run(){
+        if (machine.getSecret() == null){
+            System.out.println("no secret !");
+            return;
+        }
         this.decipheringStartTime = System.currentTimeMillis();
         init(codeToDecipher, machine.getBattlefield().getLevel());
         activateAgents();
@@ -82,7 +87,6 @@ public class Alies extends Thread {
                 socket = agentServer.accept();
                 new Thread(() -> {
                     try {
-                        this.setName("agent1");
                         ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
                         String agentName = (String) ois.readObject();
                         socketHandler.put(agentName, socket, ois);
@@ -105,7 +109,7 @@ public class Alies extends Thread {
         Boolean done = false;
         while (!done) {
             giveAgentBlockOfTasks(agentName);
-            //loopAgentDetails(agentName);
+            loopAgentDetails(agentName);
             getAgentResponses(agentName); //maybe just return response (instead of get and poll)
             AgentResponse response = answersToDM_Queue.poll();
             if (response != null) {
@@ -113,20 +117,22 @@ public class Alies extends Thread {
                 handledTasksAmount++;
             }
             updateAgentDetails(agentName);
-            System.out.println("checking if to continue");
+
             done = mission.isDone() || !status.checkIfToContinue();
-            System.out.println("done = " + done.toString());
+            System.out.println("alies is done: " + done.toString());
             sendDecipherStatus(agentName);
         }
         status.stopDeciphering();
     }
 
     private void loopAgentDetails(String agentName) {
+        Boolean done = false;
         AgentAliesSocket agentAliesSocket = socketHandler.get(agentName);
         try {
-            while (true){
+            while (!done){
                     String request = (String) agentAliesSocket.getOIS().readObject();
                     if (request.equals("end")){
+                        done = true;
                         break;
                     }
                     AgentDetails details = (AgentDetails) agentAliesSocket.getOIS().readObject();

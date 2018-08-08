@@ -14,17 +14,13 @@ public class GameStatusServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        String usernameFromSession = SessionUtils.getUsername(request);
         String battleNameRequested = SessionUtils.getGameName(request);
         GameManager gameManager = ServletUtils.getGameManager(getServletContext());
         Game game = gameManager.getGame(battleNameRequested);
         if (game == null){
-            System.out.println("game is null");
         }else {
             GameStatus status = game.getStatus();
-            if (status == GameStatus.DONE) {
-                response.getWriter().write(status.toString());
-            }
+            response.getWriter().write(status.toString());
         }
         response.setStatus(200);
     }

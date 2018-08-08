@@ -14,6 +14,7 @@
     <!-- and\or any other scripts you might need to operate the JSP file behind the scene once it arrives to the client-->
 </head>
 <body>
+<div id="click" onclick="startMovie()">Click Here !</div>
 <article class="starwars">
     <section class="intro">
         A long time ago, in a galaxy far,<br> far away....
@@ -21,10 +22,10 @@
     <img class='logo' src="common/images/enigmawars.png">
     <form id='loginform'method="GET" action="pages/signup/login">
         User Name: <input type="text" name="username" class=""/>
-        <input type="radio" name="usertype" value="Uboat" checked/> Uboat
-        <input type="radio" name="usertype" value="Alies"/> Alies
+        <input type="radio" name="usertype" value="Uboat" checked/><span class='dark'> Uboat (Dark Side)</span>
+        <input type="radio" name="usertype" value="Alies"/><span class='light'> Alies (Light Side)</span>
     </form>
-    <button class="btn btn-info btn-lg active" type="submit" form="loginform" value="submit">Login</button>
+    <button id='loginBtn' class="btn btn-info btn-lg active" type="submit" form="loginform" value="submit">Login</button>
 </article>
 </body>
 </html>

@@ -37,7 +37,7 @@ public class LogoutServlet extends HttpServlet {
             (from some reason this call works as well; response.sendRedirect("../../../index.html"); not sure why. the request uri is '/pages/chatroom/chat/logout')
              */
 
-            response.sendRedirect(request.getContextPath() + "/index.html");
+            response.sendRedirect("../../index.html");
         }
     }
 

@@ -3,7 +3,7 @@
 var GAME_LIST_URL = buildUrlWithContextPath("../games/gameslist");
 var JOIN_GAME_URL = buildUrlWithContextPath("gamepage");
 var refreshRate = 2000; //mili seconds
-
+var gameListInvervalId;
 function refreshGamesList(games) {
     //clear all current users
     $("#game-list").empty();
@@ -83,6 +83,7 @@ function clickOnGame(e)
         },
         success: function(data) {
             console.log("success");
+            clearInterval(gameListInvervalId);
             document.write(data);
             document.close();
         }
@@ -101,6 +102,7 @@ function AliesLogout() { //(alies)
             console.error("Failed to submit");
         },
         success: function(data) {
+            clearInterval(gameListInvervalId);
             console.log("success");
         }
     });
@@ -114,6 +116,6 @@ $(function() {
 
     //The games list is refreshed automatically every second
     ajaxAliesDetails();
-    setInterval(ajaxGamesList, refreshRate);
+    gameListInvervalId = setInterval(ajaxGamesList, refreshRate);
 
 });

@@ -76,17 +76,17 @@
     <div class="alies-game" style="display: ${aliesdisplay};">
         <div class="alis-setting-container">
             <h2>Alies Configuration</h2>
-            <h5>Port Number : ${portNum}</h5>
-            <h5 id="target">Target: </h5>
             <form id='aliesConfig' method="post" class="alies-setting" onsubmit="postAliesSettings()" target="dummyframe">
+                <p>Port Number : ${portNum}</p>
+                <p id="target">Target: </p>
                 <fieldset id="aliesfieldset">
                     <label title="text">Task Size:</label>
                     <input name="tasksize" type="text" value="10" />
-                    <button class="alies-ready-btn" type="submit" form="aliesConfig">
-                        Ready
-                    </button>
                 </fieldset>
             </form>
+            <button class="alies-ready-btn" type="submit" form="aliesConfig">
+                Ready
+            </button>
             <div class="agent-list-container">
                 <h2>Alies Agents:</h2>
                 <ul class='agent-list'>
