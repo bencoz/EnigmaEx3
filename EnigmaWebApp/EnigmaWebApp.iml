@@ -20,10 +20,10 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="com.google.code.gson:gson:2.1" level="project" />
-    <orderEntry type="module" module-name="Engine" />
-    <orderEntry type="library" name="lib" level="project" />
-    <orderEntry type="module" module-name="Machine" />
+    <orderEntry type="library" name="Java EE 6-Java EE 6" level="project" />
+    <orderEntry type="module" module-name="EnigmaEngine" />
+    <orderEntry type="module" module-name="EnigmaMachine" />
     <orderEntry type="module" module-name="Alies" />
-    <orderEntry type="module" module-name="Commons" />
+    <orderEntry type="module" module-name="EnigmaCommons" />
   </component>
 </module>

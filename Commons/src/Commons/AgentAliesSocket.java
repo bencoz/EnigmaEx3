@@ -33,4 +33,13 @@ public class AgentAliesSocket {
     }
 
 
+    public void closeConnection() {
+        try {
+            ois.close();
+            oos.close();
+            socket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

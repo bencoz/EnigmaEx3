@@ -36,4 +36,9 @@ public class SocketHandler {
     public Collection<AgentDetails> getAgentsDetails(){
         return agentDetails.values();
     }
+
+    public void removeAgent(String agentName) {
+        agentSockets.remove(agentName);
+        agentDetails.remove(agentName);
+    }
 }

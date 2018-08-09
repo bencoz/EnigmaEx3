@@ -109,7 +109,6 @@ public class Alies implements Runnable {
         Boolean done = false;
         while (!done) {
             giveAgentBlockOfTasks(agentName);
-            //loopAgentDetails(agentName);
             getAgentResponses(agentName); //maybe just return response (instead of get and poll)
             AgentResponse response = answersToDM_Queue.poll();
             if (response != null) {
@@ -117,28 +116,21 @@ public class Alies implements Runnable {
                 handledTasksAmount++;
             }
             updateAgentDetails(agentName);
-
             done = mission.isDone() || !status.checkIfToContinue();
-            System.out.println("alies is done: " + done.toString());
+            if (done == true) {
+                System.out.println("alies is done");
+                status.stopDeciphering();
+            }
             sendDecipherStatus(agentName);
         }
-        status.stopDeciphering();
     }
 
-    private void loopAgentDetails(String agentName) {
-        Boolean done = false;
+
+    private void updateAgentDetails(String agentName) {
         AgentAliesSocket agentAliesSocket = socketHandler.get(agentName);
         try {
-            while (!done){
-                    String request = (String) agentAliesSocket.getOIS().readObject();
-                    if (request.equals("end")){
-                        done = true;
-                        break;
-                    }
-                    AgentDetails details = (AgentDetails) agentAliesSocket.getOIS().readObject();
-                    socketHandler.updateAgentDetails(agentName, details);
-
-            }
+                AgentDetails details = (AgentDetails) agentAliesSocket.getOIS().readObject();
+                socketHandler.updateAgentDetails(agentName, details);
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
@@ -146,12 +138,11 @@ public class Alies implements Runnable {
         }
     }
 
-    private void updateAgentDetails(String agentName) {//TODO :: IMPLENMENT !!!
-
-    }
-
 
     private void closeConnection(String agentName) { //TODO :: IMPLENMENT !!!
+        AgentAliesSocket agentAliesSocket = socketHandler.get(agentName);
+        agentAliesSocket.closeConnection();
+        socketHandler.removeAgent(agentName);
     }
 
     private void giveAgentBlockOfTasks(String agentName) {
@@ -217,7 +208,6 @@ public class Alies implements Runnable {
     private void sendDecipherStatus(String agentName) {
         AgentAliesSocket agentAliesSocket = socketHandler.get(agentName);
         try{
-            System.out.println("writing status...");
             agentAliesSocket.getOOS().writeObject(status);
             System.out.println("wrote status of iteration "+ numOfIteretion++);
         } catch (IOException e) {
@@ -249,9 +239,9 @@ public class Alies implements Runnable {
         status.stopDeciphering();
     }
 
-    /*public void setMachineCopy(EnigmaMachine _machineCopy) {
+    public void setMachineCopy(EnigmaMachine _machineCopy) {
         machine = _machineCopy;
-    }*/
+    }
 
     public int getPortNumber() {
         return portNumber;

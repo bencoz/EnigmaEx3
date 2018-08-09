@@ -4,12 +4,10 @@ import Commons.*;
 import Machine.EnigmaMachine;
 
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.lang.management.ManagementFactory;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ArrayBlockingQueue;
@@ -33,6 +31,7 @@ public class Agent {
     private ObjectInputStream ois;
     private ObjectOutputStream oos;
     private Integer numOfCandidates = 0;
+
     public Agent(String[] addr){
         try {
             System.out.println("trying to connect with Alies...");
@@ -58,22 +57,22 @@ public class Agent {
         }
         Agent agent = new Agent(ip);
         System.out.println("Agent working with " + ip[0] + ":" + ip[1]);
-        while (aliesAgentConnectionIsAlive()){
-            agent.initAgent();
-            agent.run();
-        }
+
+        agent.initAgent();
+        agent.run();
+
+        System.out.println("Agent has finished working bye bye...");
         try {
             agent.ois.close();
             agent.oos.close();
             agent.MyClient.close();
+        } catch (SocketException e){
+            // ITS OK THAT ALIES SERVER CLOSED SOCKET BEFORE ME...
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private static boolean aliesAgentConnectionIsAlive() {
-        return true; //TODO:: WORK GOOD
-    }
 
     public void setName(String agentName) {
         this.agentName = agentName;
@@ -131,18 +130,10 @@ public class Agent {
 
     //work on block of task that got from DM, solves each one, update the agent response (add the Candidacies For Decoding to it)
     private void doTasks() throws InterruptedException {
-        try {
-            for (int i = 0; i < tasks.size(); i++) {
-                this.currentTask = tasks.get(i);
-                currentTaskInd = i;
-                doCurrentTask();
-                oos.writeObject("details");
-                oos.writeObject(makeAgentDetails());
-            }
-
-            oos.writeObject("end");
-        }catch (IOException e) {
-            e.printStackTrace();
+        for (int i = 0; i < tasks.size(); i++) {
+            this.currentTask = tasks.get(i);
+            currentTaskInd = i;
+            doCurrentTask();
         }
     }
 
@@ -171,7 +162,7 @@ public class Agent {
     //gets code decoding and return true if all words in the dictionary and false otherwise
     private boolean isCandidaciesForDecoding(String decoding){
         boolean found;
-        String[] words = removeExcludeCharsFromString(decoding, machine.getDecipher().getExcludeChars()).split(" ");
+        String[] words = decoding.split(" ");
         for (String word : words){
             found = false;
             for (int i = 0; i < dictionary.size() && !found; i++) {
@@ -184,19 +175,6 @@ public class Agent {
                 return false;
         }
         return true;
-    }
-
-    private String removeExcludeCharsFromString(String words, String excludeChars) {
-        StringBuilder sb = new StringBuilder(words);
-        for(int i = 0; i < sb.length(); i++)
-        {
-            Character temp = sb.charAt(i);
-            if(excludeChars.contains(temp.toString()))
-            {
-                sb.deleteCharAt(sb.indexOf(temp.toString()));
-            }
-        }
-        return sb.toString();
     }
 
     public BlockingQueue<AgentTask> getTasksQueue()
@@ -213,15 +191,11 @@ public class Agent {
                 AgentTask task;
                 tasks = new ArrayList<>();
                 for (int i = 0; i < tasksAmount; i++) {
-                    //TODO:: get tasks from socket
                     try {
-                        System.out.println("taking task...");
                         task = (AgentTask) ois.readObject();
-                        System.out.println("OK!...");
-                        if (task == null){
-                            break;
-                        }
                         tasks.add(task);
+                    } catch (EOFException e) {
+                        break;
                     } catch (IOException e) {
                         e.printStackTrace();
                     } catch (ClassNotFoundException e) {
@@ -230,22 +204,23 @@ public class Agent {
                 }
                 System.out.println("Starting to do Tasks...");
                 doTasks();
-                //TODO:: send dm response through socket
                 try {
                     oos.writeObject(response);
                     System.out.println("response was written...");
+                    oos.writeObject(makeAgentDetails());
+                } catch (SocketException e) {
+                    break;
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
                 reset();
                 System.out.println("Agent did reset");
-                //TODO:: pull dm status
-                done = !pullDMStatus();
+                pullDMStatus();
+                done = !DMstatus.checkIfToContinue();
                 System.out.println("Agent is stopping: "+ done.toString());
             }
-        } catch (InterruptedException e) {
+        }  catch (InterruptedException e) {
             Thread.currentThread().interrupt();
-            //TODO:: HANDLE STUFF AFTER INTERRUPT
             return;
         }
     }
@@ -254,16 +229,14 @@ public class Agent {
         return new AgentDetails(this.agentName, this.numOfCandidates, tasks.size() - currentTaskInd);
     }
 
-    private boolean pullDMStatus() {
+    private void pullDMStatus() {
         try {
             DMstatus = (DecipheringStatus) ois.readObject();
-            System.out.println(DMstatus.toString());
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
-        return DMstatus.checkIfToContinue();
     }
 
     private void reset()

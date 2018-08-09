@@ -1,16 +1,17 @@
 var uboatMsgVersion = 0;
 var aliesMsgVersion = 0;
 var refreshRate = 2000; //mili seconds
-/*var UBOAT_CANDIDATES_LIST_URL = buildUrlWithContextPath("uboatcandidateslist");
+var UBOAT_CANDIDATES_LIST_URL = buildUrlWithContextPath("uboatcandidateslist");
 var ALIES_CANDIDATES_LIST_URL = buildUrlWithContextPath("aliescandidateslist");
 var ALIES_LIST_URL = buildUrlWithContextPath("alieslist");
-var AGENT_LIST_URL = buildUrlWithContextPath("agentlist");*/
+var AGENT_LIST_URL = buildUrlWithContextPath("agentlist");
 var aliesIntervalId;
 var g_readyUsers = [];
 var g_started = false;
 var readyUserIntervalId;
 var gameStatusIntervaId;
 var candidatesTimeoutId;
+var agentsIntervalId;
 
 function appendToMsgList(entries) {
     $.each(entries || [], appendMsgEntry);
@@ -89,23 +90,21 @@ function ajaxUboatList() {
     });
 }
 
+function clearPage(){
+    $(".msg-list").empty();
+    $(".alies-list").empty();
+    $('.modal-body').empty();
+}
+
 function triggerAjaxMsgContent() {
     candidatesTimeoutId = setTimeout(ajaxMsgContent, refreshRate);
 }
 function enableMachineConfig() {
     $('#uboatfieldset').removeAttr('disabled');
     $('.uboat-ready-btn').removeAttr('disabled');
-    //$('.uboat-ready-btn').attr("disabled", false);
-}
-
-function clearPage(){
-    //TODO:::::
-    $(".msg-list").empty();
-    $(".alies-list").empty();
-    $('.modal-body').empty();
 }
 function disableMachineConfig() {
-    $('#uboatfieldset').attr('disabled', true);
+    $('#uboatfieldset').attr('disabled', 'disabled');
     $('.uboat-ready-btn').attr("disabled", true);
 }
 function disableAliesConfig() {
@@ -181,12 +180,9 @@ function AliesClickXbutton() { //(alies)
             console.error("Failed to submit");
         },
         success: function(data) {
-            $('#myModal').css('display','none');
-            //$.redirect("pages/games/gamelist")
             console.log("success");
             location.reload()
             console.log("reload");
-
         }
     });
     return false;
@@ -211,7 +207,6 @@ function UboatClickLogout() { //(uboat)
             window.location.reload();
             location.replace("../../index.html")
             location.reload();*/
-
         }
     });
     return false;
@@ -229,6 +224,7 @@ function UboatClickResetGame() { //(uboat)
             console.log("success");
             appendToMsgList();
             $('#myModal').css('display','none');
+            clearPage();
             enableMachineConfig();
             reloadIntervals();
         }
@@ -237,12 +233,9 @@ function UboatClickResetGame() { //(uboat)
 }
 
 function reloadIntervals(){
-
     aliesIntervalId = setInterval(ajaxAliesList, refreshRate);
     gameStatusIntervaId = setInterval(ajaxGameStatus, refreshRate);
     readyUserIntervalId = setInterval(ajaxReady, refreshRate);
-
-
 }
 
 function refreshParticipatingAlies(alies_list) {
@@ -301,6 +294,13 @@ function ajaxAliesList() {
     });
 }
 
+function triggerAjaxAgentForAlies() {
+    var uboatDisplay = $('.uboat-game').css('display');
+    if (uboatDisplay == 'none'){
+        ajaxAgentList();
+    }
+}
+
 function ajaxAgentList() {
     $.ajax({
         url: './agentDetails',
@@ -340,7 +340,6 @@ function ajaxGameStatus() {
     $.ajax({
         url: './status',
         success: function (endGameDatails) {
-            //console.log("game status is: "+res);
             if (endGameDatails.statusStr === 'DONE'){
                 $('#myModal').css('display','block')
                 var winnerDiv = $('<div>').text(endGameDatails.winningAliesName);
@@ -349,27 +348,18 @@ function ajaxGameStatus() {
                 $('.modal-body').append(winnerDiv);
                 clearInterval(gameStatusIntervaId);
                 clearInterval(aliesIntervalId);
-                clearInterval(readyUserIntervalId);
+                clearInterval(agentsIntervalId);
                 clearTimeout(candidatesTimeoutId);
                 //TODO :: Clear Msg-conent timeout and agent info timeout !
-                clearPage();
-            } else if (endGameDatails.statusStr == 'RUNNING' && !g_started){
+            } else if (res == 'RUNNING' && !g_started){
                 g_started = true;
+                clearInterval(readyUserIntervalId);
                 triggerAjaxMsgContent();
             }
         }
     });
 }
 
-function loadWinnerName(){
-    $.ajax({
-        url: './endGame',
-        success: function (res) {
-            var nameDiv = $('<div>').text(res);
-            nameDiv.appendTo($(".modal-body"));
-        }
-    });
-}
 function ajaxReady() {
     $.ajax({
         url: './ready',
@@ -398,6 +388,7 @@ $(function() {
 
     //The users list is refreshed automatically every second
     aliesIntervalId = setInterval(ajaxAliesList, refreshRate);
+    agentsIntervalId = setInterval(triggerAjaxAgentForAlies, refreshRate);
     gameStatusIntervaId = setInterval(ajaxGameStatus, refreshRate);
     readyUserIntervalId = setInterval(ajaxReady, refreshRate);
     //The chat content is refreshed only once (using a timeout) but

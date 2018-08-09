@@ -20,11 +20,13 @@ body {
     opacity: 100;
     text-align: center;
     display: block;
+    padding-top: 150px;
 }
 .logo {
     opacity: 100;
     position: inherit;
     display: inline-block;
+    padding-top: 50px;
 }
 .btn-info{
     margin: 5px;

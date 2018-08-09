@@ -35,7 +35,7 @@ public class DecipheringStatus implements Serializable{
     }
 
 
-    public void stopDeciphering() {
+    public synchronized void stopDeciphering() {
         this.isStopped = true;
     }
 
