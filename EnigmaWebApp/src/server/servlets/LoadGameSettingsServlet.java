@@ -61,11 +61,12 @@ public class LoadGameSettingsServlet extends HttpServlet {
             return;
         }
         gameManager.loadGameSettings(battleNameFromSession, chosenRotorsID, chosenRotorsLoc, chosenReflectorID);
+        //TODO:check why return diffrent code in the second time(for the same settings)
         String encryptedCode = gameManager.setGameCode(usernameFromSession, message);
         gameManager.setUboatReady(battleNameFromSession, usernameFromSession);
         Game game = gameManager.getGame(battleNameFromSession);
         if (game.isRunnable()) {
-            game.giveAllAliesSecret();
+            //game.giveAllAliesSecret();
             Thread gameThread = new Thread(game);
             gameThread.setName(battleNameFromSession);
             gameThread.start();

@@ -1,7 +1,6 @@
 package server.servlets;
 
-import GameManager.*;
-import com.google.gson.Gson;
+import GameManager.GameManager;
 import server.utils.ServletUtils;
 import server.utils.SessionUtils;
 
@@ -10,30 +9,19 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.io.Serializable;
 
-public class GameStatusServlet extends HttpServlet {
+public class EndGameServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("application/json");
+        response.setContentType("text/html;charset=UTF-8");
         String battleNameRequested = SessionUtils.getGameName(request);
         GameManager gameManager = ServletUtils.getGameManager(getServletContext());
-        Game game = gameManager.getGame(battleNameRequested);
-        if (game == null){
-        }else {
-            Gson gson = new Gson();
-            try (PrintWriter out = response.getWriter()){
-                EndGameDetails details = new EndGameDetails(game.getStatus(),game.getWinningAliesName());
-                String json = gson.toJson(details);
-                out.println(json);
-                out.flush();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
+        String winningAliesName = gameManager.getWinningAliesName(battleNameRequested);
+        response.getWriter().write(winningAliesName);
         response.setStatus(200);
     }
+
 
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -76,13 +64,12 @@ public class GameStatusServlet extends HttpServlet {
     }// </editor-fold>
 
     public class EndGameDetails implements Serializable {
-        private String statusStr;
         private String winningAliesName;
+        private String agentName;
 
-        EndGameDetails(GameStatus _status, String _winnerName) {
-            statusStr = _status.toString();
-            winningAliesName = _winnerName;
+        EndGameDetails(String aliesName, String _agentName) {
+            winningAliesName = aliesName;
+            agentName = agentName;
         }
     }
-
 }

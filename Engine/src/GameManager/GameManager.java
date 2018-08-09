@@ -152,6 +152,8 @@ public class GameManager {
             //remove the game that uboat upload
             Uboat uboat = playingUboats.get(usernameFromSession);
             String gameName = uboat.getGameName();
+            Game game = games.get(gameName);
+            game.removeAllAlies(); //need to remove all alies from game
             games.remove(gameName);
             //remove the player
             playingUboats.remove(usernameFromSession);
@@ -168,9 +170,12 @@ public class GameManager {
 
     public void removeAliesFromGame(String usernameFromSession, String battleNameRequested) {
         Game game = games.get(battleNameRequested);
-        Alies alies = playingAlies.get(usernameFromSession);
-        game.removeAlies(alies);
-        alies.resetGameDetails();
+        if((game!=null) && (game.getStatus() != GameStatus.UNINITIALIZED)) { //not reset yet
+            Alies alies = playingAlies.get(usernameFromSession);
+            alies.resetGameDetails();
+            game.removeAlies(alies);
+        }
+
     }
 
     public Alies getAliesByName(String username) {
@@ -188,4 +193,10 @@ public class GameManager {
         Game game = games.get(battleName);
         game.setUboatAsReady(username);
     }
+
+    public String getWinningAliesName(String battleName) {
+        Game game = games.get(battleName);
+        return game.getWinningAliesName();
+    }
+
 }

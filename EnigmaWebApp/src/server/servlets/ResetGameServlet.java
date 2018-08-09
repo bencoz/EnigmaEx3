@@ -18,9 +18,11 @@ public class ResetGameServlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String usernameFromSession = SessionUtils.getUsername(request);
-        String battleNameRequested = request.getParameter("battleName");
+        //TODO:get battle Name From Session
+        String battleNameFromSession = SessionUtils.getGameName(request);
         GameManager gameManager = ServletUtils.getGameManager(getServletContext());
 
-        gameManager.resetGame(usernameFromSession, battleNameRequested);
+        gameManager.resetGame(usernameFromSession, battleNameFromSession);
+        response.setStatus(200);
     }
 }
