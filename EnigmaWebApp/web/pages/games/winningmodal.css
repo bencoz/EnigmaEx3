@@ -28,7 +28,8 @@ body {font-family: Helvetica, Arial , sans-serif;}
     -webkit-animation-name: animatetop;
     -webkit-animation-duration: 0.4s;
     animation-name: animatetop;
-    animation-duration: 0.4s
+    animation-duration: 0.4s;
+    body: black;
 }
 
 /* Add Animation */
@@ -59,15 +60,18 @@ body {font-family: Helvetica, Arial , sans-serif;}
 
 .modal-header {
     padding: 2px 16px;
-    background-color: #5cb85c;
+    background-color: rgb(75, 213, 238);
     color: white;
 }
 
-.modal-body {padding: 2px 16px;}
+.modal-body {
+    padding: 2px 16px;
+    color: black;
+}
 
 .modal-footer {
     padding: 2px 16px;
-    background-color: #5cb85c;
+    background-color: rgb(75, 213, 238);
     color: white;
     text-align: center;
 }

@@ -48,6 +48,10 @@
         <servlet-class>server.servlets.GameListServlet</servlet-class>
     </servlet>
     <servlet>
+        <servlet-name>EndGameServlet</servlet-name>
+        <servlet-class>server.servlets.EndGameServlet</servlet-class>
+    </servlet>
+    <servlet>
         <servlet-name>AgentDetailsServlet</servlet-name>
         <servlet-class>server.servlets.AgentDetailsServlet</servlet-class>
     </servlet>
@@ -126,6 +130,10 @@
     <servlet-mapping>
         <servlet-name>GameListServlet</servlet-name>
         <url-pattern>/pages/games/gamelist</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>EndGameServlet</servlet-name>
+        <url-pattern>/pages/games/endgame</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>AgentDetailsServlet</servlet-name>

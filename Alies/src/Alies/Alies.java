@@ -109,7 +109,7 @@ public class Alies implements Runnable {
         Boolean done = false;
         while (!done) {
             giveAgentBlockOfTasks(agentName);
-            loopAgentDetails(agentName);
+            //loopAgentDetails(agentName);
             getAgentResponses(agentName); //maybe just return response (instead of get and poll)
             AgentResponse response = answersToDM_Queue.poll();
             if (response != null) {
@@ -249,9 +249,9 @@ public class Alies implements Runnable {
         status.stopDeciphering();
     }
 
-    public void setMachineCopy(EnigmaMachine _machineCopy) {
+    /*public void setMachineCopy(EnigmaMachine _machineCopy) {
         machine = _machineCopy;
-    }
+    }*/
 
     public int getPortNumber() {
         return portNumber;

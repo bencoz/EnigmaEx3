@@ -215,7 +215,9 @@ public class Agent {
                 for (int i = 0; i < tasksAmount; i++) {
                     //TODO:: get tasks from socket
                     try {
+                        System.out.println("taking task...");
                         task = (AgentTask) ois.readObject();
+                        System.out.println("OK!...");
                         if (task == null){
                             break;
                         }

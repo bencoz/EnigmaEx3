@@ -37,8 +37,12 @@ public class LogoutServlet extends HttpServlet {
             (from some reason this call works as well; response.sendRedirect("../../../index.html"); not sure why. the request uri is '/pages/chatroom/chat/logout')
              */
 
+            //TODO:CHANGE
+            //response.sendRedirect("../../index.html");
             response.sendRedirect("../../index.html");
+
         }
+        response.setStatus(200);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

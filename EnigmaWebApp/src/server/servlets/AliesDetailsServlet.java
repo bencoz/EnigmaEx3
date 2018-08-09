@@ -22,7 +22,8 @@ public class AliesDetailsServlet extends HttpServlet {
         Integer port = gameManager.getAliesPort(usernameFromSession);
         Gson gson = new Gson();
         try (PrintWriter out = response.getWriter()){
-            String json = gson.toJson(new aliesDetails(usernameFromSession, port));
+            aliesDetails details = new aliesDetails(usernameFromSession, port);
+            String json = gson.toJson(details);
             out.println(json);
             out.flush();
         } catch (IOException e) {

@@ -54,6 +54,11 @@ public class Game implements Runnable {
             boolean needToStart = areAllPlayersReady();
             if (needToStart) {
                 gameStatus = GameStatus.ACTIVE;
+
+                //TODO:delete
+                /*for debugging
+                winningAliesName ="eden";
+                gameStatus = GameStatus.DONE;*/
             }
         }
     }
@@ -178,11 +183,22 @@ public class Game implements Runnable {
     }
 
     public void reset() {
-        answersFromAlies_Queue = new ArrayBlockingQueue<>(neededNumOfAlies);
-        playingAlies = new ArrayList<>(); //need to be empty..
-        gameStatus = GameStatus.WAITING;
+        if(playingAlies.size() != 0)
+            removeAllAlies();
+
+        answersFromAlies_Queue = new LinkedBlockingDeque<AliesResponse>();
+        playingAlies = new ArrayList<>();
+        gameStatus = GameStatus.UNINITIALIZED;
         winningAliesName = null;
         numOfAliesSigned = 0;
+    }
+
+    public void removeAllAlies() {
+        for (Alies alies : playingAlies) {
+            alies.resetGameDetails();
+            numOfAliesSigned--;
+        }
+        playingAlies = null;
     }
 
     public void removeAlies(Alies alies) {
@@ -244,9 +260,23 @@ public class Game implements Runnable {
         return gameStatus;
     }
 
-    public void giveAllAliesSecret() {
+    /*public void giveAllAliesSecret() {
         for (Alies alies : playingAlies){
             alies.setMachineCopy(enigmaManager.getMachine().deepCopy());
         }
+    }*/
+
+    public String getWinningAliesName() {
+        return winningAliesName;
     }
+
+    public void setStatus(GameStatus _status) {
+        gameStatus = _status;
+    }
+
+    public void setWinningAlies(String name) {
+        winningAliesName = name;
+    }
+
+
 }

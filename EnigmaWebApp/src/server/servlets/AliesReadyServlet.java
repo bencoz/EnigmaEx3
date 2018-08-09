@@ -20,12 +20,13 @@ public class AliesReadyServlet extends HttpServlet {
         gameManager.setAliesTaskSize(usernameFromSession, taskSize);
         gameManager.setAliesReady(battleNameFromSession,usernameFromSession);
         Game game = gameManager.getGame(battleNameFromSession);
-        if (game.isRunnable()) {
-            game.giveAllAliesSecret();
+        //TODO:return
+        /*if (game.isRunnable()) {
+            //game.giveAllAliesSecret();
             Thread gameThread = new Thread(game);
             gameThread.setName(battleNameFromSession);
             gameThread.start();
-        }
+        }*/
         response.setStatus(200);
     }
 

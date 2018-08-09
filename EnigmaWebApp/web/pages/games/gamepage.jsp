@@ -116,14 +116,13 @@
                 <span class="close" onclick="AliesClickXbutton()">&times;</span>
                 <h3>Wining Alies: </h3>
             </div>
-            <div class="modal-body">
-                <p>Agent Name: </p>
-            </div>
+            <div class="modal-body"></div>
             <div class="modal-footer">
                 <button id="btncontinue" onclick="UboatClickResetGame()">Continue</button>
-                <button id="btnlogout" onclick="UboatClickLogout()">Logout</button>
+                <button id="btnlogout" type='button' onclick="UboatClickLogout()">Logout</button>
             </div>
 
+        </div>
     </div>
 </div>
 </body>

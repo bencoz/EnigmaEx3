@@ -1,10 +1,10 @@
 var uboatMsgVersion = 0;
 var aliesMsgVersion = 0;
 var refreshRate = 2000; //mili seconds
-var UBOAT_CANDIDATES_LIST_URL = buildUrlWithContextPath("uboatcandidateslist");
+/*var UBOAT_CANDIDATES_LIST_URL = buildUrlWithContextPath("uboatcandidateslist");
 var ALIES_CANDIDATES_LIST_URL = buildUrlWithContextPath("aliescandidateslist");
 var ALIES_LIST_URL = buildUrlWithContextPath("alieslist");
-var AGENT_LIST_URL = buildUrlWithContextPath("agentlist");
+var AGENT_LIST_URL = buildUrlWithContextPath("agentlist");*/
 var aliesIntervalId;
 var g_readyUsers = [];
 var g_started = false;
@@ -93,11 +93,19 @@ function triggerAjaxMsgContent() {
     candidatesTimeoutId = setTimeout(ajaxMsgContent, refreshRate);
 }
 function enableMachineConfig() {
-    $('#uboatfieldset').attr('disabled', '');
-    $('.uboat-ready-btn').attr("disabled", false);
+    $('#uboatfieldset').removeAttr('disabled');
+    $('.uboat-ready-btn').removeAttr('disabled');
+    //$('.uboat-ready-btn').attr("disabled", false);
+}
+
+function clearPage(){
+    //TODO:::::
+    $(".msg-list").empty();
+    $(".alies-list").empty();
+    $('.modal-body').empty();
 }
 function disableMachineConfig() {
-    $('#uboatfieldset').attr('disabled', 'disabled');
+    $('#uboatfieldset').attr('disabled', true);
     $('.uboat-ready-btn').attr("disabled", true);
 }
 function disableAliesConfig() {
@@ -173,7 +181,12 @@ function AliesClickXbutton() { //(alies)
             console.error("Failed to submit");
         },
         success: function(data) {
+            $('#myModal').css('display','none');
+            //$.redirect("pages/games/gamelist")
             console.log("success");
+            location.reload()
+            console.log("reload");
+
         }
     });
     return false;
@@ -188,7 +201,17 @@ function UboatClickLogout() { //(uboat)
             console.error("Failed to submit");
         },
         success: function(data) {
+            $('#myModal').css('display','none');
             console.log("success");
+            /*
+            //TODO: redirect to index. None of these work:
+            location.href = window.location.origin;
+            location.reload();
+            window.location.href = "../../index.html" , true;
+            window.location.reload();
+            location.replace("../../index.html")
+            location.reload();*/
+
         }
     });
     return false;
@@ -207,9 +230,19 @@ function UboatClickResetGame() { //(uboat)
             appendToMsgList();
             $('#myModal').css('display','none');
             enableMachineConfig();
+            reloadIntervals();
         }
     });
     return false;
+}
+
+function reloadIntervals(){
+
+    aliesIntervalId = setInterval(ajaxAliesList, refreshRate);
+    gameStatusIntervaId = setInterval(ajaxGameStatus, refreshRate);
+    readyUserIntervalId = setInterval(ajaxReady, refreshRate);
+
+
 }
 
 function refreshParticipatingAlies(alies_list) {
@@ -306,19 +339,34 @@ function setReadyUsers(readyUsers) {
 function ajaxGameStatus() {
     $.ajax({
         url: './status',
-        success: function (res) {
-            console.log("game status is: "+res);
-            if (res == 'DONE'){
+        success: function (endGameDatails) {
+            //console.log("game status is: "+res);
+            if (endGameDatails.statusStr === 'DONE'){
                 $('#myModal').css('display','block')
+                var winnerDiv = $('<div>').text(endGameDatails.winningAliesName);
+                winnerDiv.css('color','black');
+                winnerDiv.css('font-size', '150%');
+                $('.modal-body').append(winnerDiv);
                 clearInterval(gameStatusIntervaId);
                 clearInterval(aliesIntervalId);
                 clearInterval(readyUserIntervalId);
                 clearTimeout(candidatesTimeoutId);
                 //TODO :: Clear Msg-conent timeout and agent info timeout !
-            } else if (res == 'RUNNING' && !g_started){
+                clearPage();
+            } else if (endGameDatails.statusStr == 'RUNNING' && !g_started){
                 g_started = true;
                 triggerAjaxMsgContent();
             }
+        }
+    });
+}
+
+function loadWinnerName(){
+    $.ajax({
+        url: './endGame',
+        success: function (res) {
+            var nameDiv = $('<div>').text(res);
+            nameDiv.appendTo($(".modal-body"));
         }
     });
 }
