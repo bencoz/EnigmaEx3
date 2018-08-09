@@ -36,8 +36,11 @@ public class GameListServlet extends HttpServlet {
     private List<gameInfo> createGameInfoList(Collection<Game> games) {
         List<gameInfo> result = new LinkedList<>();
         for (Game game : games){
-            gameInfo newgame = new gameInfo(game);
-            result.add(newgame);
+            GameStatus status = game.getStatus();
+            if (status == GameStatus.UNINITIALIZED || status == GameStatus.WAITING) {
+                gameInfo newgame = new gameInfo(game);
+                result.add(newgame);
+            }
         }
         return result;
     }

@@ -13,7 +13,7 @@
     <%@ page import="server.utils.SessionUtils" %>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Online Chat</title>
+        <title>Enigma Server</title>
         <link rel="stylesheet" href="../../common/bootstrap.min.css"/>
         <link rel="stylesheet" href="../../common/enigmaWars.css">
         <script type="text/javascript" src="../../common/jquery-2.0.3.min.js"></script>
@@ -22,26 +22,23 @@
     <body>
     <div class="sign-up-container">
         <article class="starwars">
-            <section class="intro">
-            A long time ago, in a galaxy far,<br> far away....
-            </section>
             <img class='logo' src="../../common/images/enigmawars.png">
             <% String usernameFromSession = SessionUtils.getUsername(request);%>
             <% String usernameFromParameter = request.getParameter(Constants.USERNAME) != null ? request.getParameter(Constants.USERNAME) : "";%>
             <% if (usernameFromSession == null) {%>
-                <form id='loginform'method="GET" action="pages/signup/login">
+                <form id='loginform'method="GET" action="./login">
                     User Name: <input type="text" name="username" class=""/>
-                    <input type="radio" name="usertype" value="Uboat" checked/> Uboat
-                    <input type="radio" name="usertype" value="Alies"/> Alies
+                    <input type="radio" name="usertype" value="Uboat" checked/><span class='dark'> Uboat (Dark Side)</span>
+                    <input type="radio" name="usertype" value="Alies"/><span class='light'> Alies (Light Side)</span>
                 </form>
-            <button class="btn btn-info btn-lg active" type="submit" form="loginform" value="submit">Login</button><br/>
+            <button id='loginBtn' class="btn btn-info btn-lg active" type="submit" form="loginform" value="submit">Login</button><br/>
                 <% Object errorMessage = request.getAttribute(Constants.USER_NAME_ERROR);%>
                 <% if (errorMessage != null) {%>
                 <span class="bg-danger" style="color:red;"><%=errorMessage%></span>
             <% } %>
             <% } else {%>
             <h1>Welcome back, <%=usernameFromSession%></h1>
-            <a href="../chatroom/chatroom.html">Click here to enter the chat room</a>
+            <a href="./signup/login">Click here to enter the Enigma</a>
             <br/>
             <a href="login?logout=true" id="logout">logout</a>
             <% }%>

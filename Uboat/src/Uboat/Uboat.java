@@ -43,7 +43,7 @@ public class Uboat implements Serializable {
         return uboatName;
     }
 
-    public void setAsReady() {
-        ready = true;
+    public void setReady(boolean value) {
+        ready = value;
     }
 }

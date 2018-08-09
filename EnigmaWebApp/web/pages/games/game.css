@@ -4,9 +4,9 @@ html {
     font: 700 1em "News Cycle", sans-serif;
     letter-spacing: .15em;
     background: #000;
-    overflow: hidden;
     margin: 0;
     text-align: center;
+    overflow-x: hidden;
 }
 body {
     float: left;
@@ -45,15 +45,13 @@ body {
 }
 .msg-container{
     width: 50%;
-    height: 80%;
-    display: inline-flex;
+    height: 60%;
     padding-left: 25px;
+    overflow: auto;
 }
 .alies-info-container{
-    height: 40%;
     float: left;
-    position: absolute;
-    top: 60%;
+    top: 70%;
 }
 .game-container {
     width: 100%;
@@ -75,12 +73,11 @@ body {
 }
 
 .alies-list{
+    font-size: 12px;
 }
 .msg-list{
-    position: fixed;
     padding-top: 50px;
     text-align: left;
-    overflow: auto;
 }
 .header-container{
     width: 100%;
@@ -92,5 +89,8 @@ body {
     display: none;
 }
 .agent-list{
-    font-size: 16px;
+    font-size: 12px;
+}
+.success{
+    font-size: 22px;
 }

@@ -7,10 +7,9 @@ var ALIES_LIST_URL = buildUrlWithContextPath("alieslist");
 var AGENT_LIST_URL = buildUrlWithContextPath("agentlist");
 var aliesIntervalId;
 var g_readyUsers = [];
-var g_started = false;
 var readyUserIntervalId;
 var gameStatusIntervaId;
-var candidatesTimeoutId;
+var candidatesIntervalId;
 var agentsIntervalId;
 
 function appendToMsgList(entries) {
@@ -63,10 +62,6 @@ function ajaxAliesCandidates() {
                 aliesMsgVersion = data.version;
                 appendToMsgList(data.entries);
             }
-            triggerAjaxMsgContent();
-        },
-        error: function(error) {
-            triggerAjaxMsgContent();
         }
     });
 }
@@ -82,22 +77,19 @@ function ajaxUboatList() {
                 uboatMsgVersion = data.version;
                 appendToMsgList(data.entries);
             }
-            triggerAjaxMsgContent();
-        },
-        error: function(error) {
-            triggerAjaxMsgContent();
         }
     });
 }
 
 function clearPage(){
+    g_readyUsers = [];
     $(".msg-list").empty();
     $(".alies-list").empty();
     $('.modal-body').empty();
 }
 
 function triggerAjaxMsgContent() {
-    candidatesTimeoutId = setTimeout(ajaxMsgContent, refreshRate);
+    candidatesIntervalId = setInterval(ajaxMsgContent, refreshRate);
 }
 function enableMachineConfig() {
     $('#uboatfieldset').removeAttr('disabled');
@@ -109,7 +101,7 @@ function disableMachineConfig() {
 }
 function disableAliesConfig() {
     $('#aliesfieldset').attr('disabled', 'disabled');
-    $('.uboat-ready-btn').attr("disabled", true);
+    $('.alies-ready-btn').attr("disabled", true);
 }
 function addOutputText(text) {
     $('.target-msg-value').text(text);
@@ -180,6 +172,7 @@ function AliesClickXbutton() { //(alies)
             console.error("Failed to submit");
         },
         success: function(data) {
+            g_readyUsers = [];
             console.log("success");
             location.reload()
             console.log("reload");
@@ -199,14 +192,7 @@ function UboatClickLogout() { //(uboat)
         success: function(data) {
             $('#myModal').css('display','none');
             console.log("success");
-            /*
-            //TODO: redirect to index. None of these work:
-            location.href = window.location.origin;
-            location.reload();
-            window.location.href = "../../index.html" , true;
-            window.location.reload();
-            location.replace("../../index.html")
-            location.reload();*/
+            window.location.replace("../../index.html");
         }
     });
     return false;
@@ -276,8 +262,6 @@ function refreshAgentList(agentList) {
 
         aliesDiv.appendTo($(".agent-list"));
     });
-
-    setTimeout(ajaxAgentList, 2000);
 }
 
 function ajaxAliesList() {
@@ -306,11 +290,6 @@ function ajaxAgentList() {
         url: './agentDetails',
         success: function (agent_list) {
             refreshAgentList(agent_list);
-        },
-        error: function (xhr) {
-            var html = $.parseHTML(xhr.responseText)
-            console.error(html[5].innerText.replace("Message",""));
-            setTimeout(ajaxAgentList, 2000)
         }
     });
 }
@@ -333,14 +312,18 @@ function setReadyUsers(readyUsers) {
     }
     if (g_readyUsers.length == needNum){
         clearInterval(readyUserIntervalId);
+        triggerAjaxMsgContent();
+        console.log("starting msg content ajax !");
         alert("All users are ready - Starting Game !");
     }
 }
+
 function ajaxGameStatus() {
     $.ajax({
         url: './status',
         success: function (endGameDatails) {
             if (endGameDatails.statusStr === 'DONE'){
+                ajaxMsgContent();
                 $('#myModal').css('display','block')
                 var winnerDiv = $('<div>').text(endGameDatails.winningAliesName);
                 winnerDiv.css('color','black');
@@ -349,12 +332,7 @@ function ajaxGameStatus() {
                 clearInterval(gameStatusIntervaId);
                 clearInterval(aliesIntervalId);
                 clearInterval(agentsIntervalId);
-                clearTimeout(candidatesTimeoutId);
-                //TODO :: Clear Msg-conent timeout and agent info timeout !
-            } else if (res == 'RUNNING' && !g_started){
-                g_started = true;
-                clearInterval(readyUserIntervalId);
-                triggerAjaxMsgContent();
+                clearInterval(candidatesIntervalId);
             }
         }
     });

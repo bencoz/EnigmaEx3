@@ -102,7 +102,7 @@
         </ol>
     </div>
     <div class="alies-info-container">
-        <h2>Participating Alies</h2>
+        <h3>Participating Alies</h3>
         <ul class='alies-list'>
         </ul>
     </div>

@@ -8,7 +8,6 @@ import Machine.EnigmaMachine;
 import Uboat.Uboat;
 
 import java.util.*;
-import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
 
@@ -79,7 +78,7 @@ public class Game implements Runnable {
 
     public void setUboatAsReady(String userName){
         if(managingUboat.getName() == userName) {
-            managingUboat.setAsReady();
+            managingUboat.setReady(true);
             gameStatus = GameStatus.WAITING;
             boolean needToStart = areAllPlayersReady();
             if (needToStart) {
@@ -185,12 +184,13 @@ public class Game implements Runnable {
     public void reset() {
         if(playingAlies.size() != 0)
             removeAllAlies();
-
+        managingUboat.setReady(false);
         answersFromAlies_Queue = new LinkedBlockingDeque<AliesResponse>();
         playingAlies = new ArrayList<>();
         gameStatus = GameStatus.UNINITIALIZED;
         winningAliesName = null;
         numOfAliesSigned = 0;
+        allCandidates.clear();
     }
 
     public void removeAllAlies() {
@@ -198,7 +198,7 @@ public class Game implements Runnable {
             alies.resetGameDetails();
             numOfAliesSigned--;
         }
-        playingAlies = null;
+        playingAlies.clear();
     }
 
     public void removeAlies(Alies alies) {
@@ -260,11 +260,11 @@ public class Game implements Runnable {
         return gameStatus;
     }
 
-    /*public void giveAllAliesSecret() {
+    public void giveAllAliesSecret() {
         for (Alies alies : playingAlies){
             alies.setMachineCopy(enigmaManager.getMachine().deepCopy());
         }
-    }*/
+    }
 
     public String getWinningAliesName() {
         return winningAliesName;

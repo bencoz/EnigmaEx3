@@ -4,6 +4,7 @@ var GAME_LIST_URL = buildUrlWithContextPath("../games/gameslist");
 var JOIN_GAME_URL = buildUrlWithContextPath("gamepage");
 var refreshRate = 2000; //mili seconds
 var gameListInvervalId;
+
 function refreshGamesList(games) {
     //clear all current users
     $("#game-list").empty();
@@ -42,8 +43,8 @@ function refreshAliesDetails(aliesDetails) {
     //clear all current users
     $("#alies-details").empty();
 
-    var nameLi = $('<li>' + "Name:" + aliesDetails.aliesName + '</li>');
-    var portLi = $('<li>' + "Port:" + aliesDetails.portNumber + '</li>');
+    var nameLi = $('<li>' + "Name: " + aliesDetails.aliesName + '</li>');
+    var portLi = $('<li>' + "Port: " + aliesDetails.portNumber + '</li>');
 
     nameLi.appendTo($("#alies-details"));
     portLi.appendTo($("#alies-details"));
@@ -55,9 +56,7 @@ function ajaxGamesList() {
         success: function(games) {
             refreshGamesList(games);
         }
-    });
-
-
+    })
 }
 
 function ajaxAliesDetails() {
@@ -82,8 +81,9 @@ function clickOnGame(e)
             console.error("Failed to submit");
         },
         success: function(data) {
-            console.log("success");
+            console.log("success " + gameListInvervalId);
             clearInterval(gameListInvervalId);
+            console.log("games interval removed...");
             document.write(data);
             document.close();
         }
@@ -104,18 +104,18 @@ function AliesLogout() { //(alies)
         success: function(data) {
             clearInterval(gameListInvervalId);
             console.log("success");
+            window.location.replace("../../index.html");
         }
     });
     return false;
 }
 
 $(function() {
-
     //prevent IE from caching ajax calls
     $.ajaxSetup({cache: false});
-
     //The games list is refreshed automatically every second
     ajaxAliesDetails();
-    gameListInvervalId = setInterval(ajaxGamesList, refreshRate);
-
+    if (!gameListInvervalId) {
+        gameListInvervalId = setInterval(ajaxGamesList, refreshRate);
+    }
 });

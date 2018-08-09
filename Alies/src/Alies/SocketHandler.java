@@ -41,4 +41,11 @@ public class SocketHandler {
         agentSockets.remove(agentName);
         agentDetails.remove(agentName);
     }
+
+    public void removeAllAgents(){
+        for (String agentName : agentSockets.keySet()){
+            agentSockets.remove(agentName);
+            agentDetails.remove(agentName);
+        }
+    }
 }

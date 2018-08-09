@@ -24,6 +24,7 @@ public class AliesReadyServlet extends HttpServlet {
             game.giveAllAliesSecret();
             Thread gameThread = new Thread(game);
             gameThread.setName(battleNameFromSession);
+            System.out.println(battleNameFromSession+ " is starting...");
             gameThread.start();
         }
         response.setStatus(200);

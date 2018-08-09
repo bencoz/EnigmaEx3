@@ -1,15 +1,15 @@
 var audio;
 
 function showLogo() {
-    $(".logo").fadeIn(3500);
+    $(".logo").fadeIn(5500);
     $('#loginform').show();
     $('button').show();
     //$(".logo").animate({height: '350px', width: '650px'});
-    setTimeout(stopMusic, 9000);
+    setTimeout(stopMusic, 11000);
 }
 
 function hideIntro() {
-    $(".intro").fadeOut(6500,showLogo);
+    $(".intro").fadeOut(5500,showLogo);
 }
 
 function startMovie() {
@@ -33,6 +33,8 @@ function stopMusic() {
 }
 
 $(function() {
-    $('body > :not(#click)').hide();  //hide all nodes directly under the body
-    $('#click').appendTo('body');  // move #myDiv up to the body
+    if ($('.bg-danger').length === 0) {
+        $('body > :not(#click)').hide();  //hide all nodes directly under the body
+        $('#click').appendTo('body');  // move #myDiv up to the body
+    }
 })

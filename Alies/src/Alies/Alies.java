@@ -261,9 +261,11 @@ public class Alies implements Runnable {
 
     public void resetGameDetails() {
         machine = null;
-        answersFromAlies_Queue = null;
-        candidacies = null;
+        answersFromAlies_Queue.clear();
+        candidacies.clear();
         status = null;
+        ready = false;
+        socketHandler.removeAllAgents();
     }
 
     public int getVersion() {

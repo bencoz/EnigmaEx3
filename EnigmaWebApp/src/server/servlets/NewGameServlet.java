@@ -47,7 +47,7 @@ public class NewGameServlet extends HttpServlet {
 
         gameManager.createGame(usernameFromSession, enigmaManager);
 
-        String rotorsHTML = generateRotorsHTML(enigmaManager.getMachine().getRotorsCount());
+        String rotorsHTML = generateRotorsHTML(enigmaManager.getMachine().getRotorsCount(), enigmaManager.getMachine().getRotors().size());
         String rotorsLocation = generateRotorsLocationHTML(enigmaManager.getMachine().getRotorsCount());
         String reflectors = generateReflectorsHTML(enigmaManager.getMachine().getReflectors().size());
         request.setAttribute("battlefield", gameName);
@@ -87,7 +87,7 @@ public class NewGameServlet extends HttpServlet {
         return res.toString();
     }
 
-    private String generateRotorsHTML(int size) {
+    private String generateRotorsHTML(int size, int maxSize) {
         StringBuilder res = new StringBuilder();
         for (int i = 0; i < size; i++) {
             res.append("<input type=\"number\" form=\"config\" name=\"rotor");
@@ -95,7 +95,7 @@ public class NewGameServlet extends HttpServlet {
             res.append("\" size=\"3\" maxlength=\"1\" value=\"");
             res.append(i+1);
             res.append("\" min=\"1\" max=\"");
-            res.append(size+1);
+            res.append(maxSize);
             res.append("\"/>");
         }
 
